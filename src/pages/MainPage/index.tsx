@@ -13,26 +13,23 @@ import GuestGrassBox from '@/pages/MainPage/GuestGrassBox';
 
 const MainPage = () => {
   const { data: myInfo } = useMyInfo();
-
   return (
-    <>
-      <Flex
-        position="relative"
-        w="100%"
-        flex="1"
-        margin="0 auto"
-        direction="column"
-      >
-        <MainHeader />
-        <MainPageBody>
-          {myInfo ? <LoginProfile myInfo={myInfo} /> : <GuestProfile />}
-          <Dday myInfo={myInfo} />
-          {!myInfo ? <GuestGrassBox /> : <LoginGrassBox myInfo={myInfo} />}
-          <BoardListPreview />
-        </MainPageBody>
-        <Footer />
-      </Flex>
-    </>
+    <Flex
+      position="relative"
+      w="100%"
+      flex="1"
+      margin="0 auto"
+      direction="column"
+    >
+      <MainHeader />
+      <MainPageBody>
+        {myInfo ? <LoginProfile myInfo={myInfo} /> : <GuestProfile />}
+        <Dday myInfo={myInfo} />
+        {!myInfo ? <GuestGrassBox /> : <LoginGrassBox myInfo={myInfo} />}
+        <BoardListPreview />
+      </MainPageBody>
+      <Footer />
+    </Flex>
   );
 };
 

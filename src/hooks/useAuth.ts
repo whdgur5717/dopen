@@ -152,7 +152,6 @@ export const useMyInfo = ({ onSuccessFn }: AuthProps = {}) => {
     },
   });
 };
-
 export const useCheckUserAuth = () => {
   return useQuery([AUTH], checkUserAuthentication, {
     suspense: true,
@@ -167,5 +166,6 @@ export const useCheckUserAuth = () => {
       errorMessage: '로그인이 필요한 페이지입니다',
     },
     cacheTime: 0,
+    staleTime: 0,
   });
 };

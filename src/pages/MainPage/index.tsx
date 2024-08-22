@@ -7,7 +7,7 @@ import Footer from '@/components/Footer';
 import GuestProfile from '@/pages/MainPage/GuestProfile';
 import LoginProfile from '@/pages/MainPage/LoginProfile';
 import Dday from '@/pages/MainPage/Dday';
-import BoardListPreview from '@/pages/MainPage/BoardListPreview';
+// import BoardListPreview from '@/pages/MainPage/BoardListPreview';
 import LoginGrassBox from '@/pages/MainPage/LoginGrassBox';
 import GuestGrassBox from '@/pages/MainPage/GuestGrassBox';
 
@@ -26,7 +26,7 @@ const MainPage = () => {
         {myInfo ? <LoginProfile myInfo={myInfo} /> : <GuestProfile />}
         <Dday myInfo={myInfo} />
         {!myInfo ? <GuestGrassBox /> : <LoginGrassBox myInfo={myInfo} />}
-        <BoardListPreview />
+        {/* <BoardListPreview /> */}
       </MainPageBody>
       <Footer />
     </Flex>

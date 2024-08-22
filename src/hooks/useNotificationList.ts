@@ -1,4 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import {
   checkNotification,
@@ -24,13 +28,13 @@ export const messageByTypes: { [key in NotificationType]: string } = {
 };
 
 export const useNotificationList = () => {
-  const { data } = useQuery<
+  const { data } = useSuspenseQuery<
     Notification[],
     AxiosError,
     MyNotificationListItem[]
-  >([NOTIFICATION_LIST], getUserNotificationList, {
-    suspense: true,
-    useErrorBoundary: true,
+  >({
+    queryKey: [NOTIFICATION_LIST],
+    queryFn: getUserNotificationList,
     refetchOnWindowFocus: true,
 
     select: (data) => {
@@ -62,9 +66,10 @@ export const useNotificationList = () => {
 
 export const usePushNotification = () => {
   const queryClient = useQueryClient();
-  const { mutate } = useMutation(pushNotification, {
+  const { mutate } = useMutation({
+    mutationFn: pushNotification,
     onSettled: () => {
-      queryClient.invalidateQueries(NOTIFICATION_LIST);
+      queryClient.invalidateQueries({ queryKey: [NOTIFICATION_LIST] });
     },
   });
   return mutate;
@@ -72,9 +77,10 @@ export const usePushNotification = () => {
 
 export const useCheckNotification = () => {
   const queryClient = useQueryClient();
-  const { mutate } = useMutation(checkNotification, {
+  const { mutate } = useMutation({
+    mutationFn: checkNotification,
     onSettled: () => {
-      queryClient.invalidateQueries(NOTIFICATION_LIST);
+      queryClient.invalidateQueries({ queryKey: [NOTIFICATION_LIST] });
     },
   });
   return mutate;

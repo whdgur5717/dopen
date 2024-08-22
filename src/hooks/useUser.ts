@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getUserList } from '@/apis/userInfo';
 import { USER_LIST } from '@/constants/queryKeys';
 
@@ -8,14 +8,13 @@ interface UserListProps {
 }
 
 export const useGetUsersList = ({ offset, limit }: UserListProps = {}) => {
-  return useQuery(
-    USER_LIST,
-    async () => {
+  return useQuery({
+    queryKey: [USER_LIST],
+    queryFn: async () => {
       if (offset && limit) {
         return await getUserList({ offset, limit });
       }
       return await getUserList({});
     },
-    {},
-  );
+  });
 };

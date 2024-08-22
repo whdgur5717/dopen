@@ -2,7 +2,11 @@ import PostList from '@/components/PostList';
 import { TEST_CHANNEL_ID } from '@/constants/apiTest';
 import { Meta, StoryObj } from '@storybook/react';
 import { AxiosError } from 'axios';
-import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
   defaultOptions: {

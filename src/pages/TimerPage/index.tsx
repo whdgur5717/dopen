@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react';
 import { MdPause, MdPlayArrow } from 'react-icons/md';
-import { UseQueryResult, useMutation } from 'react-query';
+import { UseQueryResult, useMutation } from '@tanstack/react-query';
 import TimerSettingModal from './TimerSettingModal';
 import { stringTimeToSeconds } from '@/utils/stringTimeToSeconds';
 import { useTodayTimePost } from '@/hooks/useTodayTimePost';

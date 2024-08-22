@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { useQuery } from 'react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getMessageList } from '@/apis/message';
 import { Conversation } from '@/apis/type';
 import { calculateTimeDiff } from '@/utils/calculateTimeDiff';
@@ -9,14 +9,10 @@ import { useCheckUserAuth } from './useAuth';
 export const useMessageList = () => {
   const { data: myInfo } = useCheckUserAuth();
 
-  const { data } = useQuery<Conversation[], AxiosError>(
-    [MESSAGE_LIST, myInfo?._id],
-    getMessageList,
-    {
-      useErrorBoundary: true,
-      suspense: true,
-    },
-  );
+  const { data } = useSuspenseQuery<Conversation[], AxiosError>({
+    queryKey: [MESSAGE_LIST, myInfo?._id],
+    queryFn: getMessageList,
+  });
 
   const messageLogList = data?.map(
     ({ createdAt, message, sender, receiver }) => {

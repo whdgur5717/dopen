@@ -11,7 +11,6 @@ import Footer from '@/components/Footer';
 
 const MyPage = () => {
   const navigator = useNavigate();
-
   const menuListBg = useColorModeValue('#fff', '#1c1c1c');
 
   const onSuccessFn = () => {

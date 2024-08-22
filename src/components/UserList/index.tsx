@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { getUserList } from '@/apis/userInfo';
 import { User } from '@/apis/type';
@@ -25,23 +25,20 @@ const UserList = ({
 }: UserListProps) => {
   const navigate = useNavigate();
   const queryKey = keyword ? [USER_LIST, keyword] : [USER_LIST];
-  const { data } = useQuery<User[], AxiosError>(
-    queryKey,
-    async () => {
+  const { data } = useQuery<User[], AxiosError>({
+    queryKey: [queryKey],
+    queryFn: async () => {
       return await getUserList({ offset, limit });
     },
-    {
-      refetchOnWindowFocus: false,
-      meta: {
-        errorMessage: '유저 목록 가져올때 에러 발생하였습니다',
-      },
-      /* 옵셔널 두번... */
-      select: (data) =>
-        keyword
-          ? data.filter((user) => user.username?.includes(keyword))
-          : data,
+
+    refetchOnWindowFocus: false,
+    meta: {
+      errorMessage: '유저 목록 가져올때 에러 발생하였습니다',
     },
-  );
+    select: (data) =>
+      keyword ? data.filter((user) => user.username?.includes(keyword)) : data,
+  });
+
   if (data && !data.length) {
     return (
       <Box

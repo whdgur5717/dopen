@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import {
   changePassword,
@@ -47,7 +47,8 @@ interface SignUpProps {
 }
 
 export const useLogin = ({ onSuccessFn, onErrorFn, isSavedId }: LoginProps) => {
-  return useMutation<UserResponse, AxiosError, LogInPayload, unknown>(logIn, {
+  return useMutation<UserResponse, AxiosError, LogInPayload, unknown>({
+    mutationFn: logIn,
     onSuccess: (result) => {
       if (onSuccessFn) {
         saveLoginId(isSavedId, result.user?.email);
@@ -64,7 +65,8 @@ export const useLogin = ({ onSuccessFn, onErrorFn, isSavedId }: LoginProps) => {
 };
 
 export const useLogOut = ({ onSuccessFn }: AuthProps) => {
-  return useMutation(logOut, {
+  return useMutation({
+    mutationFn: logOut,
     onSuccess: () => {
       if (onSuccessFn) {
         onSuccessFn();
@@ -78,8 +80,8 @@ export const useSignUp = ({
   onErrorFn,
   userInfo,
 }: SignUpProps) => {
-  return useMutation(
-    async () => {
+  return useMutation({
+    mutationFn: async () => {
       const { username, fullName } = userInfo;
 
       const { _id: id } = await createChannel(username);
@@ -91,18 +93,18 @@ export const useSignUp = ({
 
       return data;
     },
-    {
-      onSuccess: (data) => onSuccessFn?.(data),
-      onError: (error: AxiosError) => {
-        if (onErrorFn) {
-          onErrorFn(error);
-        }
-      },
-      meta: {
-        errorMessage: '회원가입 과정에서 오류가 발생했습니다.',
-      },
+
+    onSuccess: (data) => onSuccessFn?.(data),
+
+    onError: (error: AxiosError) => {
+      if (onErrorFn) {
+        onErrorFn(error);
+      }
     },
-  );
+    meta: {
+      errorMessage: '회원가입 과정에서 오류가 발생했습니다.',
+    },
+  });
 };
 
 export const useUpdateInfo = ({
@@ -110,8 +112,8 @@ export const useUpdateInfo = ({
   profileImageFile,
   newUserInfo,
 }: UpdateUserInfoProps) => {
-  return useMutation(
-    async () => {
+  return useMutation({
+    mutationFn: async () => {
       const { fullName, username, password, timerChannelId } = newUserInfo;
 
       // 1차 내 정보 변경
@@ -133,18 +135,7 @@ export const useUpdateInfo = ({
         });
       }
     },
-    {
-      onSuccess: () => {
-        if (onSuccessFn) {
-          onSuccessFn();
-        }
-      },
-    },
-  );
-};
 
-export const useMyInfo = ({ onSuccessFn }: AuthProps = {}) => {
-  return useQuery(MY_INFO, checkAuthenticated, {
     onSuccess: () => {
       if (onSuccessFn) {
         onSuccessFn();
@@ -152,20 +143,20 @@ export const useMyInfo = ({ onSuccessFn }: AuthProps = {}) => {
     },
   });
 };
+
+export const useMyInfo = () => {
+  return useQuery({ queryKey: [MY_INFO], queryFn: checkAuthenticated });
+};
+
 export const useCheckUserAuth = () => {
-  return useQuery([AUTH], checkUserAuthentication, {
-    suspense: true,
-    useErrorBoundary: ({ query }) => {
-      if (!query) {
-        return false;
-      }
-      return true;
-    },
+  return useSuspenseQuery({
+    queryKey: [AUTH],
+    queryFn: checkUserAuthentication,
+
     retry: 0,
     meta: {
       errorMessage: '로그인이 필요한 페이지입니다',
     },
-    cacheTime: 0,
     staleTime: 0,
   });
 };

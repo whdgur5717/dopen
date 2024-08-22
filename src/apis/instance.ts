@@ -12,7 +12,7 @@ export const axiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
-//TODO : 추후에 merge된 이후 상수로 바꾸기
+
 axiosInstance.interceptors.request.use((config) => {
   const token = getItem(LOGIN_TOKEN, '');
   if (token && config.headers) {
@@ -20,6 +20,15 @@ axiosInstance.interceptors.request.use((config) => {
   }
   return config;
 });
+
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    return Promise.reject(error);
+  },
+);
 
 export const getRequest = async <T>(
   url: string,
@@ -46,7 +55,7 @@ export const putRequest = async <T, U>(
   const { data } = await axiosInstance.put<T>(url, body, config);
   return data;
 };
-//TODO: 추후 테스트 필요(현재는 데이터가 없어서 테스트 힘듦)
+
 export const deleteRequest = async <T, U>(
   url: string,
   body?: U,

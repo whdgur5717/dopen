@@ -1,11 +1,12 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createComment, deleteComment } from '@/apis/comment';
 import { pushNotification } from '@/apis/notifications';
 import { MY_COMMENT_LIST, POST_DETAIL } from '@/constants/queryKeys';
 
 export const useCreateComment = (author: string) => {
   const queryClient = useQueryClient();
-  const { mutate, isSuccess } = useMutation(createComment, {
+  const { mutate, isSuccess } = useMutation({
+    mutationFn: createComment,
     onSuccess: async (data) => {
       await pushNotification({
         notificationType: 'COMMENT',
@@ -13,7 +14,7 @@ export const useCreateComment = (author: string) => {
         userId: author,
         postId: data.post,
       });
-      queryClient.invalidateQueries([POST_DETAIL, data.post]);
+      queryClient.invalidateQueries({ queryKey: [POST_DETAIL, data.post] });
     },
     onError: () => {
       alert('저장에 실패했습니다. 다시 시도해주세요');
@@ -27,10 +28,11 @@ export const useCreateComment = (author: string) => {
 
 export const useDeleteComment = () => {
   const queryClient = useQueryClient();
-  const { mutate } = useMutation(deleteComment, {
+  const { mutate } = useMutation({
+    mutationFn: deleteComment,
     onSuccess: () => {
-      queryClient.invalidateQueries(POST_DETAIL);
-      queryClient.invalidateQueries(MY_COMMENT_LIST);
+      queryClient.invalidateQueries({ queryKey: [POST_DETAIL] });
+      queryClient.invalidateQueries({ queryKey: [MY_COMMENT_LIST] });
     },
     onError: () => {
       alert('삭제에 실패했습니다. 다시 시도해주세요');

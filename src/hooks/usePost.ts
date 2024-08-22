@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { MYPOST_LIST, POST_DETAIL } from '@/constants/queryKeys';
 import { checkAuthenticated } from '@/apis/authentication';
 import {
@@ -21,35 +21,33 @@ interface PostingProps {
 }
 
 export const useMyPostList = () => {
-  return useQuery(MYPOST_LIST, async () => {
-    const { posts } = await checkAuthenticated();
-
-    return posts;
+  return useQuery({
+    queryKey: [MYPOST_LIST],
+    queryFn: async () => {
+      const { posts } = await checkAuthenticated();
+      return posts;
+    },
   });
 };
 
-export const usePostDetail = ({ id, enabled }: PostDetailProps) => {
-  const { data, isSuccess } = useQuery(
-    [POST_DETAIL, id],
-    async () => await getPostDetail(id),
-    {
-      enabled,
-      suspense: true,
-      useErrorBoundary: true,
-      select: (data) => {
-        if (!data) {
-          throw new Error('해당하는 포스트가 존재하지 않습니다');
-        } else {
-          return data;
-        }
-      },
+export const usePostDetail = ({ id }: PostDetailProps) => {
+  const { data, isSuccess } = useSuspenseQuery({
+    queryKey: [POST_DETAIL, id],
+    queryFn: async () => await getPostDetail(id),
+    select: (data) => {
+      if (!data) {
+        throw new Error('해당하는 포스트가 존재하지 않습니다');
+      } else {
+        return data;
+      }
     },
-  );
+  });
   return { data: data!, isSuccess };
 };
 
 export const usePosting = ({ onSuccessFn }: PostingProps) => {
-  return useMutation(createPost, {
+  return useMutation({
+    mutationFn: createPost,
     onSuccess: () => {
       if (onSuccessFn) {
         onSuccessFn();
@@ -62,7 +60,8 @@ export const usePosting = ({ onSuccessFn }: PostingProps) => {
 };
 
 export const useEditPost = ({ onSuccessFn }: PostingProps) => {
-  return useMutation(editPost, {
+  return useMutation({
+    mutationFn: editPost,
     onSuccess: () => onSuccessFn?.(),
     //인증관련 에러일때만 useBoundaryTrue로
   });
@@ -77,8 +76,11 @@ export const useFirstPost = ({
     data = [],
     isError,
     isLoading,
-  } = useQuery<Post[], AxiosError>(`${channelId}`, async () => {
-    return await getPostListByChannel({ channelId, offset, limit });
+  } = useQuery<Post[], AxiosError>({
+    queryKey: [`${channelId}`],
+    queryFn: async () => {
+      return await getPostListByChannel({ channelId, offset, limit });
+    },
   });
 
   const firstPost = data[0];

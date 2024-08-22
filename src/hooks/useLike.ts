@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createLike, deleteLike } from '@/apis/post';
 import { AUTH, POST_DETAIL } from '@/constants/queryKeys';
 import { usePostDetail } from './usePost';
@@ -14,24 +14,23 @@ export const useLike = (postId: string) => {
     enabled: !!postId,
   });
   const clicked = likes.filter((like) => like.user === myInfo?._id);
-  const mutate = useMutation(
-    async () => {
+  const mutate = useMutation({
+    mutationFn: async () => {
       if (!clicked.length) {
         return await createLike(postId);
       } else {
         return await deleteLike(clicked[0]._id);
       }
     },
-    {
-      onError: () => {
-        alert('잠시 후에 시도해주세요');
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries([POST_DETAIL, postId]);
-        queryClient.invalidateQueries(AUTH);
-      },
+
+    onError: () => {
+      alert('잠시 후에 시도해주세요');
     },
-  );
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [POST_DETAIL, postId] });
+      queryClient.invalidateQueries({ queryKey: [AUTH] });
+    },
+  });
 
   return {
     countLike: likes.length,

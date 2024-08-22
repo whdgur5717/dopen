@@ -20,46 +20,53 @@ import PrivateRoute from '@/components/common/PrivateRoute';
 import ReflectionViewPage from '@/pages/ReflectionViewPage';
 import ReflectionPostEditPage from '@/pages/ReflectionPostEditPage';
 
-export const routes = createBrowserRouter([
-  {
-    element: <PageLayout />,
-    children: [
-      {
-        path: '/',
-        element: <MainPage />,
-      },
-      { path: '/login', element: <Login /> },
-      { path: '/signup', element: <SignUp /> },
-      { path: '/mypage', element: <MyPage /> },
-      {
-        element: <PrivateRoute />,
-        children: [
-          { path: '/mypage/account', element: <Account /> },
-          { path: '/mypage/mycommentlist', element: <MyCommentList /> },
-          { path: '/mypage/myboardlist', element: <MyBoardList /> },
-          { path: '/message', element: <MessageListPage /> },
-          { path: '/message/:userId', element: <MessagePage /> },
-          {
-            path: '/board/reflection/:postId',
-            element: <ReflectionViewPage />,
-          },
-          { path: '/board/:boardName/:postId', element: <PostViewPage /> },
-          { path: '/notification', element: <NotificationPage /> },
-          { path: '/timer', element: <TimerPage /> },
-        ],
-      },
-      { path: '/:username', element: <UserInfo /> },
-      { path: '/search', element: <SearchPage /> },
-      { path: '/board', element: <BoardEnterPage /> },
-      { path: '/board/reflection/post', element: <ReflectionPostEditPage /> },
-      { path: '*', element: <ErrorPage /> },
-      //   ...(channelListData?.map((board) => [
-      //     { path: `/board/${board.name}`, element: <BoardPage /> },
-      //     { path: `/board/${board.name}/post`, element: <PostEditPage /> },
-      //   ]).flat() || []),
-      // ],
-    ],
-  },
-]);
+export const routes = () =>
+  createBrowserRouter([
+    {
+      element: <PageLayout />,
+      children: [
+        {
+          path: '/',
+          element: <MainPage />,
+        },
+        { path: '/login', element: <Login /> },
+        { path: '/signup', element: <SignUp /> },
+        {
+          path: '/mypage',
+          element: <MyPage />,
+        },
+        {
+          element: <PrivateRoute />,
+          children: [
+            {
+              path: '/mypage/account',
+              element: <Account />,
+            },
+            { path: '/mypage/mycommentlist', element: <MyCommentList /> },
+            { path: '/mypage/myboardlist', element: <MyBoardList /> },
+            { path: '/message', element: <MessageListPage /> },
+            { path: '/message/:userId', element: <MessagePage /> },
+            {
+              path: '/board/reflection/:postId',
+              element: <ReflectionViewPage />,
+            },
+            { path: '/board/:boardName/:postId', element: <PostViewPage /> },
+            { path: '/notification', element: <NotificationPage /> },
+            { path: '/timer', element: <TimerPage /> },
+          ],
+        },
+        { path: '/:username', element: <UserInfo /> },
+        { path: '/search', element: <SearchPage /> },
+        { path: '/board', element: <BoardEnterPage /> },
+        { path: '/board/reflection/post', element: <ReflectionPostEditPage /> },
+        { path: '*', element: <ErrorPage /> },
+        //   ...(channelListData?.map((board) => [
+        //     { path: `/board/${board.name}`, element: <BoardPage /> },
+        //     { path: `/board/${board.name}/post`, element: <PostEditPage /> },
+        //   ]).flat() || []),
+        // ],
+      ],
+    },
+  ]);
 
 export default routes;

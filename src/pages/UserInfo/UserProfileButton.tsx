@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Flex, Button } from '@chakra-ui/react';
 import { useCreateFollow, useDeleteFollow } from '@/hooks/useFollow';
 

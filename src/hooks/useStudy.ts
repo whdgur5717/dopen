@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getPostListByChannel } from '@/apis/post';
 import { STUDY_POST } from '@/constants/queryKeys';
 
@@ -7,11 +7,14 @@ interface StudyProps {
 }
 
 export const useStudyPost = ({ channelId }: StudyProps) => {
-  const { data } = useQuery(STUDY_POST, async () => {
-    if (!channelId) {
-      return [];
-    }
-    return await getPostListByChannel({ channelId });
+  const { data } = useQuery({
+    queryKey: [STUDY_POST],
+    queryFn: async () => {
+      if (!channelId) {
+        return [];
+      }
+      return await getPostListByChannel({ channelId });
+    },
   });
 
   return {

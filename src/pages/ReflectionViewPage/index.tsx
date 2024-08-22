@@ -4,7 +4,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { Spinner } from '@chakra-ui/react';
 import { Suspense } from 'react';
 import ErrorFallback from '../PostViewPage/ErrorFallback';
-import { useQueryErrorResetBoundary } from 'react-query';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 
 const ReflectionViewPage = () => {
   const { reset } = useQueryErrorResetBoundary();

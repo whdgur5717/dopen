@@ -1,7 +1,7 @@
 import { ChannelPayload, getPostListByChannel } from '@/apis/post';
 import { Post } from '@/apis/type';
 import { AxiosError } from 'axios';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import PostListItem from './PostListItem';
 import {
   AbsoluteCenter,
@@ -27,24 +27,25 @@ const PostList = ({
   limit,
   ...props
 }: PostListProps) => {
-  const { data, isLoading } = useQuery<Post[], AxiosError>(
-    [channelId],
-    async () => {
+  const navigate = useNavigate();
+
+  const { data, isLoading } = useQuery<Post[], AxiosError>({
+    queryKey: [channelId],
+    queryFn: async () => {
       return await getPostListByChannel({ channelId, offset, limit });
     },
-    {
-      refetchOnWindowFocus: false,
-      meta: {
-        errorMessage: '게시글 목록 가져올때 에러 발생하였습니다',
-      },
-      select: (data) => {
-        return keyword
-          ? data.filter((post) => post.title.includes(keyword))
-          : data;
-      },
+
+    refetchOnWindowFocus: false,
+    meta: {
+      errorMessage: '게시글 목록 가져올때 에러 발생하였습니다',
     },
-  );
-  const navigate = useNavigate();
+    select: (data) => {
+      return keyword
+        ? data.filter((post) => post.title.includes(keyword))
+        : data;
+    },
+  });
+
   if (data && !data.length) {
     return (
       <Box

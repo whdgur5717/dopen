@@ -1,7 +1,11 @@
 import Comment from '@/components/Comment';
 import { Meta, StoryObj } from '@storybook/react';
 import { AxiosError } from 'axios';
-import { QueryCache, QueryClient, QueryClientProvider } from 'react-query';
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
   defaultOptions: {

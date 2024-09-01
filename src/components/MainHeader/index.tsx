@@ -16,7 +16,7 @@ import {
   MdOutlineNotifications,
   MdOutlineSearch,
 } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 
 const MainHeader = ({ ...props }: FlexProps) => {
   const { toggleColorMode } = useColorMode();
@@ -45,17 +45,17 @@ const MainHeader = ({ ...props }: FlexProps) => {
     {
       icon: MdMailOutline,
       description: 'message',
-      onClick: () => navigate('/message'),
+      onClick: () => navigate({ to: '/message' }),
     },
     {
       icon: MdOutlineSearch,
       description: 'search',
-      onClick: () => navigate('/search'),
+      onClick: () => navigate({ to: '/search' }),
     },
     {
       icon: MdOutlineNotifications,
       description: 'notification',
-      onClick: () => navigate('/notification'),
+      onClick: () => navigate({ to: '/notification' }),
     },
   ];
 

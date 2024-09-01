@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Image, Portal, Text } from '@chakra-ui/react';
 import { ArrowDownIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { MdArticle, MdFavoriteBorder } from 'react-icons/md';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useRouter } from '@tanstack/react-router';
 import { useRef, useState } from 'react';
 import { useCheckUserAuth } from '@/hooks/useAuth';
 import { useLike } from '@/hooks/useLike';
@@ -20,8 +20,12 @@ import { convertDateToString } from '@/utils/convertDateToString';
 import { usePushNotification } from '@/hooks/useNotificationList';
 
 const PostDetail = () => {
-  const { boardName, postId } = useParams();
+  const { boardName, postId } = useParams({
+    from: '/_auth/Board/_boardlayout/$boardName/$postId',
+  });
+
   const navigate = useNavigate();
+  const { history } = useRouter();
   const [isFold, setIsFold] = useState<boolean>(false);
   const { data: myInfo } = useCheckUserAuth();
   const {
@@ -57,7 +61,7 @@ const PostDetail = () => {
       confirmText: '수정하시겠습니까?',
       icon: <EditIcon />,
       onClick: () => {
-        navigate(`/board/${boardName}/post?id=${postId}`);
+        navigate({ to: `/board/${boardName}/post?id=${postId}` });
       },
     },
     {
@@ -67,7 +71,7 @@ const PostDetail = () => {
       icon: <DeleteIcon />,
       onClick: async () => {
         await deletePost(postId!);
-        navigate(-1);
+        history.back();
       },
     },
   ];
@@ -110,7 +114,7 @@ const PostDetail = () => {
             username={author.username}
             userImage={author.image}
             content={`${date} ${time}`}
-            onImageClick={() => navigate(`/${author.username}`)}
+            onImageClick={() => navigate({ to: `/${author.username}` })}
           />
           <Post.Content paddingTop="10px" paddingBottom="10px">
             <Image

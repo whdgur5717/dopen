@@ -1,6 +1,6 @@
 import { useFirstPost } from '@/hooks/usePost';
 import { Box, Flex } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 
 interface BoardListPreviewItemProps {
   boardName: string;
@@ -20,7 +20,7 @@ const BoardListPreviewItem = ({
     <Flex
       alignItems="center"
       cursor="pointer"
-      onClick={() => navigate(`/board/${channel}`)}
+      onClick={() => navigate({ to: `/board/${channel}` })}
     >
       <Box width="140px" fontSize="1.5rem" fontWeight="medium">
         {boardName}

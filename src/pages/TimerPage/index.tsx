@@ -25,7 +25,7 @@ import { secondsToStringTime } from '@/utils/secondsToStringTime';
 import { convertDateToString } from '@/utils/convertDateToString';
 import { getCurrentStringTime } from '@/utils/getCurrentStringTime';
 import { TIME_OUT_VALUE } from '@/constants/time';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext } from '@tanstack/react-router';
 import { User } from '@/apis/type';
 
 const timerIconStyle: IconButtonProps = {

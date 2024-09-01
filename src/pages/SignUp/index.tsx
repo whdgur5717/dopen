@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from '@tanstack/react-router';
 import styled from '@emotion/styled';
 import { Box, Text, Heading, Image, useColorModeValue } from '@chakra-ui/react';
 
@@ -65,7 +65,7 @@ const SignUp = () => {
     setItem(LOGIN_TOKEN, data.token);
     isSignedUp.current = true;
     alert('회원가입 성공');
-    setTimeout(() => navigate('/', { replace: true }), 0);
+    setTimeout(() => navigate({ to: '/' }));
   };
 
   const onErrorFn = (error: AxiosError) => {

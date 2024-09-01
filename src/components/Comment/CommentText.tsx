@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import { User } from '@/apis/type';
@@ -40,7 +40,7 @@ const CommentText = ({ id, comment, author, username }: CommentTextProps) => {
         padding={0}
         alignItems="none"
         cursor="default"
-        onImageClick={() => navigate(`/${author.username}`)}
+        onImageClick={() => navigate({ to: `/${author.username}` })}
         onSubContentClick={() => setIsConfirm(true)}
       />
 

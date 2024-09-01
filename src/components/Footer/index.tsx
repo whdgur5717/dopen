@@ -7,7 +7,7 @@ import {
   MdPersonOutline,
 } from 'react-icons/md';
 import TextIconButton from '../common/TextIconButton';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from '@tanstack/react-router';
 import { useEffect, useMemo, useState } from 'react';
 import { getInteractiveMap } from '@/utils/getInteractiveMap';
 
@@ -83,7 +83,7 @@ const Footer = ({ ...props }: FlexProps) => {
           key={text}
           TheIcon={icon}
           textContent={text}
-          onClick={() => navigate(`/${footerIconPath.get(text)}`)}
+          onClick={() => navigate({ to: `/${footerIconPath.get(text)}` })}
           {...matchedPageNameStyle(currentPageName, text)}
         />
       ))}

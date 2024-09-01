@@ -17,7 +17,7 @@ import {
   MdOutlineSearch,
 } from 'react-icons/md';
 // import Badge from '../common/Badge';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useRouter } from '@tanstack/react-router';
 
 interface PageHeaderProps extends FlexProps {
   pageName: string;
@@ -25,7 +25,8 @@ interface PageHeaderProps extends FlexProps {
 
 const PageHeader = ({ pageName, ...props }: PageHeaderProps) => {
   const navigate = useNavigate();
-  const goBack = () => navigate(-1);
+  const router = useRouter();
+  const goBack = () => router.history.back();
 
   const DarkModeIcon = useColorModeValue(MdOutlineDarkMode, MdOutlineLightMode);
   const { toggleColorMode } = useColorMode();
@@ -66,14 +67,14 @@ const PageHeader = ({ pageName, ...props }: PageHeaderProps) => {
           color="inherit"
           aria-label="search"
           bg="transparent"
-          onClick={() => navigate('/search')}
+          onClick={() => navigate({ to: '/search' })}
           icon={<Icon as={MdOutlineSearch} boxSize="icon" />}
         />
         <IconButton
           color="inherit"
           aria-label="notify"
           bg="transparent"
-          onClick={() => navigate('/notification')}
+          onClick={() => navigate({ to: '/notification' })}
           icon={<Icon as={MdOutlineNotifications} boxSize="icon" />}
           // icon={
           //   <Badge count={1}>

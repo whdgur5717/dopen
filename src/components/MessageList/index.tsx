@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import { AbsoluteCenter, Flex, FlexProps, Text } from '@chakra-ui/react';
 import { useMessageList } from '@/hooks/useMessageList';
 import UserContentBlock from '../common/UserContentBlock';
@@ -21,7 +21,7 @@ const MessageList = ({ ...props }: MessageListProps) => {
                 username={username}
                 content={content}
                 subContent={subContent}
-                onClick={() => navigate(`./${userId}`)}
+                onClick={() => navigate({ to: `./${userId}` })}
                 ellipsis={2}
               ></UserContentBlock>
             );

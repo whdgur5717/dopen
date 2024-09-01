@@ -48,18 +48,10 @@ export class AuthError extends Error {
 }
 
 export const checkUserAuthentication = async (): Promise<User> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(async () => {
-      try {
-        const data = await checkAuthenticated();
-        // if (!data) {
-        //   reject(new AuthError('권한 없음'));
-        // }
-        resolve(data);
-      } catch (error) {
-        reject(error);
-      }
-    }, 5000); // 5초 (5000 밀리초) 지연
-  });
+  const data = await checkAuthenticated();
+  if (!data) {
+    throw new AuthError('권한 없음');
+  }
+  return data;
 };
 //FIX : 현재 두 함수를 둘다 사용하는게있음

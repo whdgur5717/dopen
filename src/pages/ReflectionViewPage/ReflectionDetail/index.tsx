@@ -1,4 +1,9 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import {
+  redirect,
+  useNavigate,
+  useParams,
+  useRouter,
+} from '@tanstack/react-router';
 import { usePostDetail } from '@/hooks/usePost';
 import TextCard from './TextCard';
 import Post from '@/pages/PostViewPage/PostDetail/Container';
@@ -20,8 +25,12 @@ import { useConfirmModal } from '@/hooks/useConfirmModal';
 import Confirm from '@/components/common/Confirm';
 
 const ReflectionDetail = () => {
-  const { postId } = useParams();
   const navigate = useNavigate();
+  const { history } = useRouter();
+  const { postId } = useParams({
+    from: '/_auth/Board/_boardlayout/Reflection/$postId',
+  });
+
   const {
     data: { _id, title, comments, author, createdAt },
   } = usePostDetail({
@@ -70,7 +79,7 @@ const ReflectionDetail = () => {
       confirmText: '수정하시겠습니까?',
       icon: <EditIcon />,
       onClick: () => {
-        navigate(`/board/reflection/post?id=${postId}`);
+        navigate({ to: `/board/reflection/post?id=${postId}` });
       },
     },
     {
@@ -80,7 +89,7 @@ const ReflectionDetail = () => {
       icon: <DeleteIcon />,
       onClick: async () => {
         await deletePost(postId!);
-        navigate(-1);
+        history.back();
       },
     },
   ];
@@ -97,7 +106,7 @@ const ReflectionDetail = () => {
             username={author.username}
             userImage={author.coverImage}
             content={`${date} ${time}`}
-            onClick={() => navigate(`/${author.username}`)}
+            onClick={() => navigate({ to: `/${author.username}` })}
           />
           {isMyPost && (
             <Settings>

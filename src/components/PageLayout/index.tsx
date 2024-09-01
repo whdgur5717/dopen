@@ -1,8 +1,8 @@
 import { Flex } from '@chakra-ui/react';
-import { Outlet } from 'react-router-dom';
 import { DEFAULT_WIDTH } from '@/constants/style';
+import { ReactNode } from 'react';
 
-const PageLayout = () => {
+const PageLayout = ({ children }: { children: ReactNode }) => {
   return (
     <Flex
       position="relative"
@@ -15,7 +15,7 @@ const PageLayout = () => {
       overflowY="auto"
       sx={{ '&::-webkit-scrollbar': { display: 'none' } }}
     >
-      <Outlet />
+      {children}
     </Flex>
   );
 };

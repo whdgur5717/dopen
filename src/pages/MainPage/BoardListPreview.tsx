@@ -1,6 +1,6 @@
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Button, Flex, Spinner, Text } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import BoardListPreviewItem from '@/pages/MainPage/BoardListPreviewItem';
 import { useChannelList } from '@/hooks/useChannels';
 
@@ -22,7 +22,7 @@ const BoardListPreview = () => {
         <Button
           fontSize="md"
           bg="transparent"
-          onClick={() => navigate('/board')}
+          onClick={() => navigate({ to: '/board' })}
         >
           더 보기 <ChevronRightIcon />
         </Button>

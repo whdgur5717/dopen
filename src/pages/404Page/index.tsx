@@ -1,6 +1,6 @@
 import MainHeader from '@/components/MainHeader';
 import { Button, Flex, Image, Text } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 
 const ErrorPage = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const ErrorPage = () => {
           mt="28px"
           borderRadius="50px"
           _hover={{ bg: 'pink.400' }}
-          onClick={() => navigate('/')}
+          onClick={() => navigate({ to: '/' })}
         >
           메인으로 돌아가기
         </Button>

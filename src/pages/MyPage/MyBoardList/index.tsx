@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import { Box, Flex } from '@chakra-ui/react';
 
 import { useMyInfo } from '@/hooks/useAuth';
@@ -27,13 +27,13 @@ const MyBoardList = () => {
   const onPostDetail = (id: string, channel: Channel) => {
     switch (channel) {
       case FREE:
-        navigate(`/board/free/${id}`);
+        navigate({ to: `/board/free/${id}` });
         break;
       case REFLECTION:
-        navigate(`/board/reflection/${id}`);
+        navigate({ to: `/board/reflection/${id}` });
         break;
       case INFOSHARE:
-        navigate(`/board/infoshare/${id}`);
+        navigate({ to: `/board/infoshare/${id}` });
         break;
     }
   };

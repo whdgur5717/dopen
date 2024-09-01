@@ -20,17 +20,17 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fontsource/noto-sans-kr": "^5.0.17",
+    "@suspensive/react": "^2.14.0",
     "@tanstack/react-query": "^5.52.0",
     "@tanstack/react-query-devtools": "^5.52.0",
+    "@tanstack/react-router": "^1.51.0",
     "axios": "^1.6.3",
     "framer-motion": "^10.16.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^4.0.12",
     "react-hook-form": "^7.49.2",
-    "react-icons": "^4.12.0",
-    "react-router-dom": "^6.21.1",
-    "storybook-addon-react-router-v6": "^2.0.10"
+    "react-icons": "^4.12.0"
   },
   "devDependencies": {
     "@chakra-ui/storybook-addon": "^5.1.0",
@@ -42,6 +42,8 @@
     "@storybook/react": "^7.6.6",
     "@storybook/react-vite": "^7.6.6",
     "@storybook/test": "^7.6.6",
+    "@tanstack/router-devtools": "^1.50.1",
+    "@tanstack/router-plugin": "^1.49.3",
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
@@ -58,7 +60,6 @@
     "lint-staged": "^15.2.0",
     "prettier": "^3.1.1",
     "storybook": "^8.2.9",
-    "storybook-addon-react-router-v6": "^2.0.10",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
     "vitest": "^1.1.0"

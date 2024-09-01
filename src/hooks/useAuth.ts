@@ -1,4 +1,10 @@
-import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import {
   changePassword,
@@ -7,7 +13,6 @@ import {
 } from '@/apis/userInfo';
 import {
   checkAuthenticated,
-  checkUserAuthentication,
   logIn,
   logOut,
   signUp,
@@ -15,7 +20,7 @@ import {
 
 import { setItem } from '@/utils/storage';
 
-import { AUTH, MY_INFO } from '@/constants/queryKeys';
+import { MY_INFO } from '@/constants/queryKeys';
 import { LOGIN_TOKEN } from '@/constants/user';
 
 import { saveLoginId } from '@/pages/Login/saveLoginId';
@@ -47,12 +52,15 @@ interface SignUpProps {
 }
 
 export const useLogin = ({ onSuccessFn, onErrorFn, isSavedId }: LoginProps) => {
+  const query = useQueryClient();
   return useMutation<UserResponse, AxiosError, LogInPayload, unknown>({
     mutationFn: logIn,
     onSuccess: (result) => {
       if (onSuccessFn) {
         saveLoginId(isSavedId, result.user?.email);
         setItem(LOGIN_TOKEN, result.token);
+        query.setQueryData(authOptions().queryKey, result.user);
+
         onSuccessFn();
       }
     },
@@ -148,15 +156,23 @@ export const useMyInfo = () => {
   return useQuery({ queryKey: [MY_INFO], queryFn: checkAuthenticated });
 };
 
+export const authOptions = () => {
+  return queryOptions({
+    queryKey: [MY_INFO],
+    queryFn: checkAuthenticated,
+  });
+};
+
 export const useCheckUserAuth = () => {
   return useSuspenseQuery({
-    queryKey: [AUTH],
-    queryFn: checkUserAuthentication,
+    queryKey: [MY_INFO],
+    queryFn: checkAuthenticated,
 
     retry: 0,
     meta: {
       errorMessage: '로그인이 필요한 페이지입니다',
     },
     staleTime: 0,
+    gcTime: 0,
   });
 };

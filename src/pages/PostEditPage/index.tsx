@@ -9,7 +9,7 @@ import {
 import { EditIcon } from '@chakra-ui/icons';
 import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from '@tanstack/react-router';
 import PageHeader from '@/components/PageHeader';
 import { IMAGE_FILE_TYPES } from '@/constants/image';
 import { DEFAULT_PAGE_PADDING } from '@/constants/style';
@@ -62,7 +62,7 @@ const PostEditPage = () => {
 
   const onSuccessFn = () => {
     alert(`글 ${postId ? '수정' : '등록'} 성공!`);
-    navigate(`/board/${channel.name}`);
+    navigate({ to: `/board/${channel.name}` });
   };
 
   const { mutate: onCreatePost } = usePosting({ onSuccessFn });
@@ -101,8 +101,9 @@ const PostEditPage = () => {
     }
   };
 
-  const [searchParams] = useSearchParams();
-  const postId = searchParams.get('id') || '';
+  const { boardName, postId = '' } = useParams({
+    from: '/_auth/Board/_boardlayout/$boardName/write',
+  });
 
   const { data: postData, isSuccess: isGetPostDetailSuccess } = usePostDetail({
     id: postId,

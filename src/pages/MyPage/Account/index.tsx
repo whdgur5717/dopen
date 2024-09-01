@@ -5,7 +5,6 @@ import Footer from '@/components/Footer';
 
 const Account = () => {
   const { data: myInfo } = useMyInfo();
-
   if (!myInfo) {
     return;
   }

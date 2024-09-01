@@ -1,7 +1,7 @@
 import { IconType } from 'react-icons';
 import { Icon, Flex, Text } from '@chakra-ui/react';
 import { FaChevronRight } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 
 interface MyPageListItemProps {
   icon: IconType;
@@ -19,7 +19,7 @@ const MyPageListItem = ({
   const navigator = useNavigate();
 
   return (
-    <li onClick={() => navigator(href || `/${username}`)}>
+    <li onClick={() => navigator({ to: href || `/${username}` })}>
       <Flex alignItems="center">
         <Flex
           alignItems="center"

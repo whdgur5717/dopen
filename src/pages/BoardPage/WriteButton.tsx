@@ -1,7 +1,7 @@
 import { getItem } from '@/utils/storage';
 import { EditIcon } from '@chakra-ui/icons';
 import { Box, Button } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 
 const WriteButton = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const WriteButton = () => {
           color="white"
           bg="pink.300"
           _hover={{ bg: 'pink.400' }}
-          onClick={() => navigate('./post')}
+          onClick={() => navigate({ to: './write' })}
         >
           글쓰기
           <EditIcon ml="5px" />
@@ -39,7 +39,7 @@ const WriteButton = () => {
           bg="pink.300"
           cursor="pointer"
           _hover={{ bg: 'pink.400' }}
-          onClick={() => navigate('/login')}
+          onClick={() => navigate({ to: '/Login' })}
         >
           포스트 작성은 로그인 후 가능합니다.
         </Box>

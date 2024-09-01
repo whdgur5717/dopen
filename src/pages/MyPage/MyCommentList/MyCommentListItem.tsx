@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import { ListItem, Box, Text } from '@chakra-ui/react';
 import { useDeleteComment } from '@/hooks/useComment';
 import { usePostDetail } from '@/hooks/usePost';
@@ -44,13 +44,13 @@ const MyCommentListItem = ({
   const onMoveMyComment = (id: string, channel: string) => {
     switch (channel) {
       case 'free':
-        navigate(`/board/free/${id}`);
+        navigate({ to: `/board/free/${id}` });
         break;
       case 'reflection':
-        navigate(`/board/reflection/${id}`);
+        navigate({ to: `/board/reflection/${id}` });
         break;
       case 'infoshare':
-        navigate(`/board/infoshare/${id}`);
+        navigate({ to: `/board/infoshare/${id}` });
         break;
     }
   };

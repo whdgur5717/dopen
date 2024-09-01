@@ -14,7 +14,7 @@ import {
 import { DEFAULT_PAGE_PADDING } from '@/constants/style';
 import { calculateTimeDiff } from '@/utils/calculateTimeDiff';
 import { checkIsJson } from '@/utils/checkIsJson';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 
 interface PostListProps extends ChannelPayload, StackProps {
   keyword?: string;
@@ -78,7 +78,9 @@ const PostList = ({
           username={post.author.username}
           likeCount={post.likes.length}
           commentCount={post.comments.length}
-          onClick={() => navigate(`/board/${post.channel?.name}/${post._id}`)}
+          onClick={() =>
+            navigate({ to: `/board/${post.channel?.name}/${post._id}` })
+          }
         />
       ))}
     </VStack>

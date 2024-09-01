@@ -13,6 +13,7 @@ import GuestGrassBox from '@/pages/MainPage/GuestGrassBox';
 
 const MainPage = () => {
   const { data: myInfo } = useMyInfo();
+
   return (
     <Flex
       position="relative"

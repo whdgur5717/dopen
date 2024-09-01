@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { Flex, Button } from '@chakra-ui/react';
 import { useCreateFollow, useDeleteFollow } from '@/hooks/useFollow';
@@ -63,7 +63,7 @@ const UserProfileButton = ({
 
   const onConfirm = () => {
     setIsConfirm(false);
-    navigate('/login');
+    navigate({ to: '/login' });
   };
 
   const onCancel = () => {
@@ -71,7 +71,7 @@ const UserProfileButton = ({
   };
 
   const onSendMessage = () => {
-    navigate(`/message/${userId}`);
+    navigate({ to: `/message/${userId}` });
   };
 
   return (

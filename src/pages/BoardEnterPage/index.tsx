@@ -3,12 +3,13 @@ import Footer from '@/components/Footer';
 import PageHeader from '@/components/PageHeader';
 import BoardList from '@/components/BoardList';
 import { DEFAULT_PAGE_PADDING, DEFAULT_WIDTH } from '@/constants/style';
-import { useNavigate } from 'react-router-dom';
-import { useChannelList } from '@/hooks/useChannels';
+import { useNavigate } from '@tanstack/react-router';
+import { channelListquery } from '@/hooks/useChannels';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 const BoardEnterPage = () => {
   const navigate = useNavigate();
-  const { channelListData } = useChannelList();
+  const { data: channelListData } = useSuspenseQuery(channelListquery);
 
   return (
     <>
@@ -21,7 +22,7 @@ const BoardEnterPage = () => {
             fontSize="2rem"
             fontWeight="midium"
             p="10px"
-            onClick={() => navigate(`./${[board.name]}`)}
+            onClick={() => navigate({ to: `./${[board.name]}` })}
           />
         ))}
       </Box>

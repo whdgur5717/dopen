@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import styled from '@emotion/styled';
 import { Box, Text, Avatar, useColorModeValue, Flex } from '@chakra-ui/react';
 import { LOGIN_TOKEN } from '@/constants/user';
@@ -12,10 +12,9 @@ import Footer from '@/components/Footer';
 const MyPage = () => {
   const navigator = useNavigate();
   const menuListBg = useColorModeValue('#fff', '#1c1c1c');
-
   const onSuccessFn = () => {
     removeItem(LOGIN_TOKEN);
-    navigator('/', { replace: true });
+    navigator({ to: '/', replace: true });
   };
   const { mutate } = useLogOut({ onSuccessFn });
   const { data: myInfo } = useMyInfo();
@@ -33,7 +32,7 @@ const MyPage = () => {
           margin="15px auto 0"
           cursor="pointer"
           textAlign="center"
-          onClick={() => navigator(`/${myInfo?.username}`)}
+          onClick={() => navigator({ to: `/${myInfo?.username}` })}
         >
           <Box>
             <Avatar w="118px" h="118px" src={myInfo?.image || ''} />

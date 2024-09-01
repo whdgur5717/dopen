@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from '@tanstack/react-router';
 import { Box, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
 
 import { useMyInfo } from '@/hooks/useAuth';

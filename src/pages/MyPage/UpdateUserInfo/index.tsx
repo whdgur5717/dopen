@@ -11,11 +11,10 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useRouter } from '@tanstack/react-router';
 import { USER_INPUT_LIST } from '@/pages/SignUp/userInputList';
 import { Button, Input, Form } from '@/pages/SignUp';
 import { validateUserInfo } from '@/pages/SignUp/validateUserInfo';
-import { preparing } from '@/pages/Login/preparing';
 import { UserInfoInput } from '@/types/user';
 import { PROFILE_IMAGE_TYPES } from '@/constants/user';
 import { useUpdateInfo } from '@/hooks/useAuth';
@@ -37,10 +36,8 @@ const UpdateUserInfo = ({
 }: userInfoTypes) => {
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [profilePreview, setProfilePreview] = useState<string>(image || '');
-
+  const router = useRouter();
   const inputBgColor = useColorModeValue('#F0F0F0F0', '#141414');
-
-  const navigate = useNavigate();
 
   const {
     register,
@@ -58,7 +55,7 @@ const UpdateUserInfo = ({
 
   const onSuccessFn = () => {
     alert('회원정보 수정 완료');
-    navigate(-1);
+    router.history.back();
   };
 
   const { mutate } = useUpdateInfo({
@@ -150,13 +147,6 @@ const UpdateUserInfo = ({
         ))}
       </UnorderedList>
       <Button>회원정보 수정</Button>
-      <Button
-        type="button"
-        style={{ backgroundColor: '#A09ABD', marginTop: '18px' }}
-        onClick={preparing}
-      >
-        회원탈퇴
-      </Button>
     </Form>
   );
 };

@@ -1,5 +1,5 @@
 import { Avatar, Flex, Text } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 
 const GuestProfile = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const GuestProfile = () => {
           borderColor="transparent"
           transition="border-bottom 0.5s"
           _hover={{ cursor: 'pointer', borderColor: 'pink.300' }}
-          onClick={() => navigate('/login')}
+          onClick={() => navigate({ to: '/login' })}
         >
           로그인
         </Text>

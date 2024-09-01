@@ -1,11 +1,20 @@
 import { useCheckUserAuth } from '@/hooks/useAuth';
+import { Suspense } from 'react';
 
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from '@tanstack/react-router';
 
 export default function PrivateRoute() {
+  return (
+    <Suspense fallback={<div>아씨발</div>}>
+      <Check></Check>
+    </Suspense>
+  );
+}
+
+function Check() {
   const result = useCheckUserAuth();
-  if (result.isSuccess && result.data) {
-    return <Outlet context={result} />;
+  if (result.data) {
+    return <Outlet />;
   }
   return <Navigate to="/login" replace={true} />;
 }

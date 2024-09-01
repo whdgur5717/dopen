@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import { getUserList } from '@/apis/userInfo';
 import { User } from '@/apis/type';
 import { AxiosError } from 'axios';
@@ -63,7 +63,7 @@ const UserList = ({
           key={user._id}
           username={user?.username}
           _hover={{ bg: 'gray100' }}
-          onClick={() => navigate(`/${user?.username}`)}
+          onClick={() => navigate({ to: `/${user?.username}` })}
         />
       ))}
     </VStack>

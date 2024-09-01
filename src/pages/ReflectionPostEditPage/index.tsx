@@ -21,7 +21,12 @@ import {
   ValidationValueMessage,
   useForm,
 } from 'react-hook-form';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import {
+  getRouteApi,
+  useNavigate,
+  useParams,
+  useSearch,
+} from '@tanstack/react-router';
 
 export interface ReflectionInputTypes {
   title: string;
@@ -111,13 +116,15 @@ const ReflectionInputList: ReflectionInputProps[] = [
 ];
 
 const ReflectionPostEditPage = () => {
-  const [searchParams] = useSearchParams();
-  const postId = searchParams.get('id') || '';
+  const api = getRouteApi('/_auth/Board/_boardlayout/Reflection/write');
+  const { postId } = api.useSearch();
 
   const { data: postData, isSuccess: isGetPostDetailSuccess } = usePostDetail({
     id: postId,
     enabled: !!postId,
   });
+
+  console.log(postData);
 
   const { channel: reflectionChannel } = useChannelInfo({
     channelInfo: 'reflection',
@@ -147,7 +154,7 @@ const ReflectionPostEditPage = () => {
 
   const onSuccessFn = () => {
     alert('글 등록 성공!');
-    navigate('/board/reflection');
+    navigate({ to: '/Board/$boardName', params: { boardName: 'reflection' } });
   };
 
   const { mutate: onCreatePost } = usePosting({ onSuccessFn });
@@ -177,7 +184,6 @@ const ReflectionPostEditPage = () => {
 
   return (
     <>
-      <PageHeader pageName="회고" />
       <Flex flexDir="column" align="center" w="100%" flex={1}>
         <Flex
           w="100%"

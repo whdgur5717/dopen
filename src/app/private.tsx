@@ -19,11 +19,21 @@ import UserInfo from '@/pages/UserInfo';
 import PrivateRoute from '@/components/common/PrivateRoute';
 import ReflectionViewPage from '@/pages/ReflectionViewPage';
 import ReflectionPostEditPage from '@/pages/ReflectionPostEditPage';
+import { QueryClient, useQueryErrorResetBoundary } from '@tanstack/react-query';
+import ErrorFallback from '@/pages/PostViewPage/ErrorFallback';
+import { ErrorBoundary } from 'react-error-boundary';
+import { Suspense } from 'react';
 
-export const routes = () =>
-  createBrowserRouter([
+const Loading = () => {
+  console.log('suspense');
+  return <div></div>;
+};
+
+export const routes = (queryClient: QueryClient, reset) => {
+  return createBrowserRouter([
     {
       element: <PageLayout />,
+
       children: [
         {
           path: '/',
@@ -36,7 +46,13 @@ export const routes = () =>
           element: <MyPage />,
         },
         {
-          element: <PrivateRoute />,
+          element: (
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Suspense fallback={<Loading />}>
+                <PrivateRoute />
+              </Suspense>
+            </ErrorBoundary>
+          ),
           children: [
             {
               path: '/mypage/account',
@@ -68,5 +84,5 @@ export const routes = () =>
       ],
     },
   ]);
-
+};
 export default routes;

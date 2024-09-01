@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Divider, Text } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@tanstack/react-router';
 import { useOnlineUserList } from '@/hooks/useOnlineUserList';
 import { DEFAULT_PAGE_PADDING } from '@/constants/style';
 import OnlineUserProfile from '@/components/OnlineUserProfile';
@@ -25,7 +25,7 @@ const OnlineUsers = () => {
               key={onlineUser._id}
               username={onlineUser.username}
               image={onlineUser.image}
-              onClick={() => navigate(`/${onlineUser.username}`)}
+              onClick={() => navigate({ to: `/${onlineUser.username}` })}
             />
           ))}
         </OnlineUsersBox>

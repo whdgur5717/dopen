@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useRouter } from '@tanstack/react-router';
 import { AxiosError } from 'axios';
 import { Box, Button } from '@chakra-ui/react';
 import { AuthError } from '@/apis/authentication';
@@ -10,6 +10,8 @@ interface ErrorFallbackProps {
 
 const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps) => {
   const navigate = useNavigate();
+  const router = useRouter();
+
   if (error?.response?.status === 401) {
     return (
       <Box
@@ -24,7 +26,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps) => {
         <Box width="100%" fontSize="2rem" mb="20px">
           권한이 없습니다
         </Box>
-        <Button ml="20px" onClick={() => navigate('/login')}>
+        <Button ml="20px" onClick={() => navigate({ to: '/login' })}>
           로그인 화면으로 이동하기
         </Button>
       </Box>
@@ -46,7 +48,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps) => {
           에러가 발생했습니다
         </Box>
         <Button onClick={() => resetErrorBoundary()}>다시 시도하기</Button>
-        <Button ml="20px" onClick={() => navigate(-1)}>
+        <Button ml="20px" onClick={() => router.history.back()}>
           뒤로가기
         </Button>
       </Box>

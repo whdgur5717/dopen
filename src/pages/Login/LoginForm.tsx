@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useRouter } from '@tanstack/react-router';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Text, Checkbox, Flex, useColorModeValue } from '@chakra-ui/react';
 
@@ -15,8 +15,8 @@ import { useLogin } from '@/hooks/useAuth';
 const LoginForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const router = useRouter();
   const inputBgColor = useColorModeValue('#F0F0F0F0', '#141414');
-
   const {
     register,
     handleSubmit,
@@ -32,18 +32,11 @@ const LoginForm = () => {
 
   const onSuccessFn = () => {
     alert('로그인 성공');
-
-    const path = location.state?.from?.pathname;
-    if (!path || path === '/signup') {
-      navigate('/');
-    } else {
-      navigate(-1);
-    }
+    navigate({ to: location.search.redirect || '/' });
   };
 
   const onErrorFn = (error: AxiosError) => {
     if (error.response?.status === 400) {
-      // 비밀번호가 틀렸을 때
       setError(
         'password',
         { message: '비밀번호를 확인해주세요.' },
@@ -116,7 +109,7 @@ const LoginForm = () => {
       <Button
         type="button"
         style={{ backgroundColor: '#F5C6C2', marginTop: '18px' }}
-        onClick={() => navigate('/signup')}
+        onClick={() => router.history.back()}
       >
         회원가입 하기
       </Button>

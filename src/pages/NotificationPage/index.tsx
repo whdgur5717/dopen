@@ -1,7 +1,8 @@
-import { Suspense } from 'react';
-import { Spinner } from '@chakra-ui/react';
-import NotificationList from './NotificationList';
 import PageHeader from '@/components/PageHeader';
+import { Spinner } from '@chakra-ui/react';
+import { Suspense } from 'react';
+
+import NotificationList from './NotificationList';
 
 const NotificationPage = () => {
   return (

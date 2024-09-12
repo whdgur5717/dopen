@@ -1,7 +1,7 @@
-import { getItem } from '@/utils/storage';
 import { EditIcon } from '@chakra-ui/icons';
 import { Box, Button } from '@chakra-ui/react';
 import { useNavigate } from '@tanstack/react-router';
+import { getItem } from 'shared/utils/storage';
 
 const WriteButton = () => {
   const navigate = useNavigate();

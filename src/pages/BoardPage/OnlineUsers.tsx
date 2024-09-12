@@ -1,9 +1,9 @@
-import styled from '@emotion/styled';
-import { Box, Divider, Text } from '@chakra-ui/react';
-import { useNavigate } from '@tanstack/react-router';
-import { useOnlineUserList } from '@/hooks/useOnlineUserList';
-import { DEFAULT_PAGE_PADDING } from '@/constants/style';
 import OnlineUserProfile from '@/components/OnlineUserProfile';
+import { DEFAULT_PAGE_PADDING } from '@/constants/style';
+import { useOnlineUserList } from '@/hooks/useOnlineUserList';
+import { Box, Divider, Text } from '@chakra-ui/react';
+import styled from '@emotion/styled';
+import { useNavigate } from '@tanstack/react-router';
 
 const OnlineUsers = () => {
   const navigate = useNavigate();

@@ -1,28 +1,24 @@
-import {
-  redirect,
-  useNavigate,
-  useParams,
-  useRouter,
-} from '@tanstack/react-router';
-import { usePostDetail } from '@/hooks/usePost';
-import TextCard from './TextCard';
-import Post from '@/pages/PostViewPage/PostDetail/Container';
-import { Flex, Box, Button, Text, Portal } from '@chakra-ui/react';
-import UserContentBlock from '@/components/common/UserContentBlock';
-import { MdArticle, MdFavoriteBorder } from 'react-icons/md';
-import TextIconButton from '@/components/common/TextIconButton';
-import { calculateTimeDiff } from '@/utils/calculateTimeDiff';
-import { useLike } from '@/hooks/useLike';
 import Comments from '@/components/Comment';
 import { useCheckUserAuth } from '@/hooks/useAuth';
-import { convertDateToString } from '@/utils/convertDateToString';
-import { useRef, useState } from 'react';
-import { usePushNotification } from '@/hooks/useNotificationList';
-import { ArrowDownIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { deletePost } from '@/apis/post';
-import Settings from '@/pages/PostViewPage/PostDetail/Settings';
 import { useConfirmModal } from '@/hooks/useConfirmModal';
-import Confirm from '@/components/common/Confirm';
+import { useLike } from '@/hooks/useLike';
+import { usePushNotification } from '@/hooks/useNotificationList';
+import { usePostDetail } from '@/hooks/usePost';
+import Post from '@/pages/PostViewPage/PostDetail/Container';
+import Settings from '@/pages/PostViewPage/PostDetail/Settings';
+import { deletePost } from '@/shared/api/post/api';
+import UserContentBlock from '@/shared/ui/UserContentBlock';
+import { ArrowDownIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { Box, Button, Flex, Portal, Text } from '@chakra-ui/react';
+import { useNavigate, useParams, useRouter } from '@tanstack/react-router';
+import { useRef, useState } from 'react';
+import { MdArticle, MdFavoriteBorder } from 'react-icons/md';
+import Confirm from 'shared/ui/Confirm';
+import TextIconButton from 'shared/ui/TextIconButton';
+import { calculateTimeDiff } from 'shared/utils/calculateTimeDiff';
+import { convertDateToString } from 'shared/utils/convertDateToString';
+
+import TextCard from './TextCard';
 
 const ReflectionDetail = () => {
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
 import { checkAuthenticated } from '@/apis/authentication';
-import { getUserInfo } from '@/apis/userInfo';
 import { TComment } from '@/apis/type';
+import { getUserInfo } from '@/apis/userInfo';
 import { MY_COMMENT_LIST } from '@/constants/queryKeys';
+import { useQuery } from '@tanstack/react-query';
 
 export const useMyComment = () => {
   return useQuery<TComment[]>({

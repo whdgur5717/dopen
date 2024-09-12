@@ -1,29 +1,23 @@
-import { User } from '@/apis/type';
-import Grass from '@/components/Grass';
-import { GRASS_DUMMY } from '@/constants/GrassDummy';
-import { useStudyPost } from '@/hooks/useStudy';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { postQueries } from 'entities/post/post.queries';
+import GrassCalender from 'shared/ui/GrassCalender/GrassCalender';
 
 interface LoginGrassBoxProps {
-  myInfo: User;
+  channelId: string;
 }
 
-const LoginGrassBox = ({ myInfo }: LoginGrassBoxProps) => {
-  const timerChannelId = JSON.parse(myInfo.fullName).timerChannelId;
-  const { studyPost = [] } = useStudyPost({
-    channelId: timerChannelId,
-  });
-  const studyPosts = myInfo
-    ? studyPost.map(({ title, createdAt }) => ({
+const TimerCalender = ({ channelId }: LoginGrassBoxProps) => {
+  const { data } = useSuspenseQuery({
+    ...postQueries.postList({ channelId }),
+    select: (data) => {
+      return data.map(({ title, createdAt }) => ({
         time: title,
         createdAt,
-      }))
-    : GRASS_DUMMY;
+      }));
+    },
+  });
 
-  return (
-    <>
-      <Grass timerPosts={studyPosts} />
-    </>
-  );
+  return <GrassCalender data={data} />;
 };
 
-export default LoginGrassBox;
+export default TimerCalender;

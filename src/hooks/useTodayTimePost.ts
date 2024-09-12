@@ -1,7 +1,7 @@
-import { getPostListByChannel } from '@/apis/post';
-import { Post } from '@/apis/type';
-import { AxiosError } from 'axios';
+import { getPostListByChannel } from '@/shared/api/post/api';
 import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { Post } from 'shared/types/domain';
 
 export const useTodayTimePost = (channelId: string) => {
   return useQuery<Post[], AxiosError, Post>({

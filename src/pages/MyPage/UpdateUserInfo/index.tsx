@@ -1,30 +1,30 @@
-import { useState } from 'react';
-import styled from '@emotion/styled';
+import { UserInfoInput } from '@/types/user';
 import {
+  Avatar,
   Box,
   Flex,
-  Avatar,
+  FormLabel,
+  ListItem,
   Text,
   UnorderedList,
-  ListItem,
-  FormLabel,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { useNavigate, useRouter } from '@tanstack/react-router';
-import { USER_INPUT_LIST } from '@/pages/SignUp/userInputList';
-import { Button, Input, Form } from '@/pages/SignUp';
-import { validateUserInfo } from '@/pages/SignUp/validateUserInfo';
-import { UserInfoInput } from '@/types/user';
-import { PROFILE_IMAGE_TYPES } from '@/constants/user';
-import { useUpdateInfo } from '@/hooks/useAuth';
+import styled from '@emotion/styled';
+import { useRouter } from '@tanstack/react-router';
+import { validateUserInfo } from 'entities/form/lib/validateUserInfo';
+import { USER_INPUT_LIST } from 'features/signup/lib/userInputList';
+import { useUpdateUserInfoMutation } from 'features/userInfo/mutation';
+import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { PROFILE_IMAGE_TYPES } from 'shared/constants/user';
+import { Button, Form, Input } from 'shared/ui/FormControl';
 
-interface userInfoTypes {
+//TODO : validate,input 관련 파일 어디에 위치할지 생각하기
+interface UserInfoProps {
   image: string;
   email: string;
   fullName: string;
   username: string;
-  timerChannelId: string;
 }
 
 const UpdateUserInfo = ({
@@ -32,8 +32,7 @@ const UpdateUserInfo = ({
   email,
   fullName,
   username,
-  timerChannelId,
-}: userInfoTypes) => {
+}: UserInfoProps) => {
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [profilePreview, setProfilePreview] = useState<string>(image || '');
   const router = useRouter();
@@ -53,15 +52,15 @@ const UpdateUserInfo = ({
     },
   });
 
-  const onSuccessFn = () => {
+  const onSuccess = () => {
     alert('회원정보 수정 완료');
     router.history.back();
   };
 
-  const { mutate } = useUpdateInfo({
-    onSuccessFn,
+  const { mutate } = useUpdateUserInfoMutation({
+    onSuccess,
     profileImageFile,
-    newUserInfo: { ...getValues(), timerChannelId },
+    newUserInfo: getValues(),
   });
 
   // 프로필 이미지 변경

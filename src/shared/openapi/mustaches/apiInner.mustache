@@ -1,0 +1,55 @@
+{{#withSeparateModelsAndApi}}
+/* eslint-disable @typescript-eslint/ban-types */
+
+/* eslint-disable no-empty-pattern */
+
+/* tslint:disable /
+/ eslint-disable */
+
+import {
+  deleteRequest,
+  getRequest,
+  postRequest,
+  putRequest,
+} from 'shared/axios/instance';
+{{#imports}}
+import { {{classname}} } from '{{apiRelativeToRoot}}{{tsModelPackage}}';
+{{/imports}}
+{{/withSeparateModelsAndApi}}
+{{^withSeparateModelsAndApi}}
+{{/withSeparateModelsAndApi}}
+
+{{#operations}}
+  {{#operation}}
+  {{^isDeprecated}}
+const {{nickname}} = ({
+{{#allParams}}
+  {{paramName}},
+{{/allParams}}
+}: {
+{{#allParams}}
+  {{paramName}}{{^required}}?{{/required}}: {{=<% %>=}}<%&dataType%><%={{ }}=%>{{#isNullable}} | null{{/isNullable}};
+{{/allParams}}
+}
+  {{^allParams}}
+    = {}
+  {{/allParams}}
+): Promise<{{{returnType}}}{{^returnType}}void{{/returnType}}> => {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}Request(
+  '{{path}}',
+  {
+  {{#allParams}}
+    {{paramName}},
+  {{/allParams}}
+  }
+);
+
+  {{/isDeprecated}}
+  {{/operation}}
+export {
+  {{#operation}}
+  {{^isDeprecated}}
+  {{nickname}},
+  {{/isDeprecated}}
+  {{/operation}}
+};
+{{/operations}}

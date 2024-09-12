@@ -1,49 +1,27 @@
-import { Box, BoxProps } from '@chakra-ui/react';
-import CommentForm from './CommentForm';
-import CommentText from './CommentText';
-import { TComment, User } from '@/apis/type';
-import { DEFAULT_PAGE_PADDING } from '@/constants/style';
+import { CommentViewModel } from 'features/post/model/postModel';
 
-interface CommentProps extends BoxProps {
-  comments: TComment[];
-  author?: string;
-  myInfo: User;
-  _id: string;
+import CommentListItem from './CommentListItem';
+
+interface CommentListProps {
+  comments: CommentViewModel[];
 }
 
-const Comments = ({
-  comments,
-  author,
-  myInfo,
-  _id,
-  ...props
-}: CommentProps) => {
+const CommentList = ({ comments }: CommentListProps) => {
   return (
-    <Box {...props} padding={`0 ${DEFAULT_PAGE_PADDING}`}>
-      <Box>
-        {comments.map(({ _id, comment, author }) => (
-          <CommentText
-            key={_id}
-            id={_id}
+    <>
+      {comments.map(({ comment, createdAt, author, image }, index) => {
+        return (
+          <CommentListItem
+            key={comment + index}
             comment={comment}
             author={author}
-            username={myInfo.username}
+            image={image}
+            createdAt={createdAt}
           />
-        ))}
-      </Box>
-      <Box
-        pos="sticky"
-        left="0"
-        bottom="0"
-        width="100%"
-        mt="10px"
-        bg="customBgWhite"
-        zIndex="100"
-      >
-        <CommentForm id={_id} author={author ?? ''} />
-      </Box>
-    </Box>
+        );
+      })}
+    </>
   );
 };
 
-export default Comments;
+export default CommentList;

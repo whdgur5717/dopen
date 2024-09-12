@@ -1,5 +1,5 @@
-import { Flex } from '@chakra-ui/react';
 import { DEFAULT_WIDTH } from '@/constants/style';
+import { Flex } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 const PageLayout = ({ children }: { children: ReactNode }) => {

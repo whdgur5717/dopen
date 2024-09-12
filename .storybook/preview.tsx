@@ -1,9 +1,14 @@
 import type { Preview } from '@storybook/react';
-import { theme } from '../src/theme';
-import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import React from 'react';
 import { withRouter } from 'storybook-addon-react-router-v6';
+
+import { theme } from '../src/theme';
 
 const queryclient = new QueryClient({
   defaultOptions: {

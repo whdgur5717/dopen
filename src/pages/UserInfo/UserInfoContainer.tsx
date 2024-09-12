@@ -1,8 +1,9 @@
-import { Box } from '@chakra-ui/react';
 import { User } from '@/apis/type';
-import UserProfile from './UserProfile';
+import { Box } from '@chakra-ui/react';
+
 import UserFollowInfo from './UserFollowInfo';
 import UserGrass from './UserGrass';
+import UserProfile from './UserProfile';
 
 interface UserInfoContainerProps {
   userList: User[];

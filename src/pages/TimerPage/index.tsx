@@ -1,8 +1,8 @@
-import { createPost, editPost } from '@/apis/post';
 import PageHeader from '@/components/PageHeader';
-
+import { TIME_OUT_VALUE } from '@/constants/time';
 import useTimer from '@/hooks/useTimer';
-import { getItem, setItem } from '@/utils/storage';
+import { useTodayTimePost } from '@/hooks/useTodayTimePost';
+import { createPost, editPost } from '@/shared/api/post/api';
 import {
   Button,
   Center,
@@ -15,18 +15,17 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
+import { UseQueryResult, useMutation } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 import { MdPause, MdPlayArrow } from 'react-icons/md';
-import { UseQueryResult, useMutation } from '@tanstack/react-query';
+import { User } from 'shared/types/domain';
+import { convertDateToString } from 'shared/utils/convertDateToString';
+import { getCurrentStringTime } from 'shared/utils/getCurrentStringTime';
+import { secondsToStringTime } from 'shared/utils/secondsToStringTime';
+import { getItem, setItem } from 'shared/utils/storage';
+import { stringTimeToSeconds } from 'shared/utils/stringTimeToSeconds';
+
 import TimerSettingModal from './TimerSettingModal';
-import { stringTimeToSeconds } from '@/utils/stringTimeToSeconds';
-import { useTodayTimePost } from '@/hooks/useTodayTimePost';
-import { secondsToStringTime } from '@/utils/secondsToStringTime';
-import { convertDateToString } from '@/utils/convertDateToString';
-import { getCurrentStringTime } from '@/utils/getCurrentStringTime';
-import { TIME_OUT_VALUE } from '@/constants/time';
-import { useOutletContext } from '@tanstack/react-router';
-import { User } from '@/apis/type';
 
 const timerIconStyle: IconButtonProps = {
   position: 'absolute',

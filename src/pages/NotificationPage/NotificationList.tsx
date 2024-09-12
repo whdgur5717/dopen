@@ -1,17 +1,24 @@
-import { AbsoluteCenter, Flex, FlexProps, Text } from '@chakra-ui/react';
 import {
-  useNotificationList,
   messageByTypes,
   useCheckNotification,
+  useNotificationList,
 } from '@/hooks/useNotificationList';
-import UserContentBlock from '@/components/common/UserContentBlock';
-import { calculateTimeDiff } from '@/utils/calculateTimeDiff';
+import { AbsoluteCenter, Flex, FlexProps, Text } from '@chakra-ui/react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { notificationQueries } from 'entities/nofitication/api/notification.queries';
+import { useCheckNotificationMutation } from 'features/notify/api/mutation';
+import UserContentBlock from 'shared/ui/UserContentBlock';
+import { calculateTimeDiff } from 'shared/utils/calculateTimeDiff';
 
 interface NotificationListProps extends FlexProps {}
 
 const NotificationList = ({ ...props }: NotificationListProps) => {
-  const { myNotificationList } = useNotificationList();
-  const readNotificationMutate = useCheckNotification();
+  const { data: myNotificationList } = useSuspenseQuery(
+    notificationQueries.list_my(),
+  );
+
+  const { mutate } = useCheckNotificationMutation();
+
   return (
     <Flex flexDir="column" overflowY="auto" {...props}>
       {myNotificationList.length ? (

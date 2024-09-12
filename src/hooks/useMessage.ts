@@ -1,11 +1,12 @@
+import { MESSAGE } from '@/constants/queryKeys';
+import { getMessageListByUser, sendMessage } from '@/shared/api/message/api';
 import {
-  useQueryClient,
   useMutation,
+  useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
-import { getMessageListByUser, sendMessage } from '@/apis/message';
-import { convertDateToString } from '@/utils/convertDateToString';
-import { MESSAGE } from '@/constants/queryKeys';
+import { convertDateToString } from 'shared/utils/convertDateToString';
+
 interface MessageLog {
   time: string;
   message: string;
@@ -20,7 +21,6 @@ export const useMessage = (userId: string) => {
 
     select: (data) => {
       const messageLogs = new Map<string, MessageLog[]>();
-
       data?.forEach(({ message, sender, _id, createdAt }) => {
         const { date, time } = convertDateToString(new Date(createdAt));
         const type = userId === sender._id ? 'sent' : 'received';

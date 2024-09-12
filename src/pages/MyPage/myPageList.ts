@@ -1,8 +1,8 @@
 import {
-  FaUserCircle,
+  FaAddressCard,
   FaClipboardList,
   FaPen,
-  FaAddressCard,
+  FaUserCircle,
 } from 'react-icons/fa';
 
 export const MYPAGE_LIST = [

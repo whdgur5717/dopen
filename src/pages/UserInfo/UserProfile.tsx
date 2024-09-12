@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Flex, Box, Text, Avatar } from '@chakra-ui/react';
 import { User } from '@/apis/type';
+import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+
 import UserProfileButton from './UserProfileButton';
 
 interface UserProfileProps {

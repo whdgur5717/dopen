@@ -1,17 +1,14 @@
-import PageHeader from '@/components/PageHeader';
-import MessageList from '@/components/MessageList';
-import { Spinner } from '@chakra-ui/react';
-import { Suspense } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { authQueries } from 'entities/auth/api/auth.queries';
+
+import MyMessageList from './ui/MyMessageList';
 
 const MessageListPage = () => {
-  return (
-    <>
-      <Suspense fallback={<Spinner />}>
-        <PageHeader pageName="메세지" />
-        <MessageList gap="10" h="100vh" />
-      </Suspense>
-    </>
-  );
+  const {
+    data: { _id },
+  } = useSuspenseQuery(authQueries.auth());
+
+  return <MyMessageList myId={_id} />;
 };
 
 export default MessageListPage;

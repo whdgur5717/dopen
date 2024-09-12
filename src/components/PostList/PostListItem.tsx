@@ -1,4 +1,3 @@
-import { DEFAULT_PAGE_PADDING } from '@/constants/style';
 import {
   Flex,
   FlexProps,
@@ -7,12 +6,13 @@ import {
   VStack,
   useColorModeValue,
 } from '@chakra-ui/react';
-import TextIconButton from '../common/TextIconButton';
 import { MdArticle, MdFavoriteBorder } from 'react-icons/md';
+import { DEFAULT_PAGE_PADDING } from 'shared/constants/style';
+import TextIconButton from 'shared/ui/TextIconButton';
 
 interface PostListItemProps extends FlexProps {
   title: string;
-  username: string;
+  author: string;
   timeAgo: string;
   likeCount: number;
   commentCount: number;
@@ -20,7 +20,7 @@ interface PostListItemProps extends FlexProps {
 
 const PostListItem = ({
   title,
-  username,
+  author,
   timeAgo,
   likeCount = 0,
   commentCount = 0,
@@ -51,7 +51,7 @@ const PostListItem = ({
           {title}
         </Text>
         <Text color={darModeColorGray800} fontSize="1.2rem" fontWeight="medium">
-          {username}
+          {author}
         </Text>
         <HStack>
           <Text color="gray.600" fontSize="1.2rem">

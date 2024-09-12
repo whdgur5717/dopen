@@ -1,10 +1,9 @@
-import MainHeader from '@/components/MainHeader';
 import { Button, Flex, Image, Text } from '@chakra-ui/react';
 import { useNavigate } from '@tanstack/react-router';
+import MainHeader from 'shared/ui/MainHeader';
 
 const ErrorPage = () => {
   const navigate = useNavigate();
-
   return (
     <>
       <MainHeader />

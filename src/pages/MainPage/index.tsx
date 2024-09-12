@@ -1,18 +1,26 @@
 import { Flex } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { DEFAULT_PAGE_PADDING } from '@/constants/style';
-import { useMyInfo } from '@/hooks/useAuth';
-import MainHeader from '@/components/MainHeader';
-import Footer from '@/components/Footer';
-import GuestProfile from '@/pages/MainPage/GuestProfile';
-import LoginProfile from '@/pages/MainPage/LoginProfile';
-import Dday from '@/pages/MainPage/Dday';
-// import BoardListPreview from '@/pages/MainPage/BoardListPreview';
-import LoginGrassBox from '@/pages/MainPage/LoginGrassBox';
-import GuestGrassBox from '@/pages/MainPage/GuestGrassBox';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { authQueries } from 'entities/auth/api/auth.queries';
+import { Suspense } from 'react';
+import { DEFAULT_PAGE_PADDING } from 'shared/constants/style';
+
+import TimerCalender from './LoginGrassBox';
+import Dday from './ui/Dday/Dday';
+import UserProfile from './ui/Profile/UserProfile';
 
 const MainPage = () => {
-  const { data: myInfo } = useMyInfo();
+  const {
+    data: {
+      username,
+      image,
+      fullName: { timerChannelId },
+    },
+  } = useSuspenseQuery({
+    ...authQueries.auth(),
+  });
+
+  const isLoggedIn = !!username;
 
   return (
     <Flex
@@ -22,14 +30,17 @@ const MainPage = () => {
       margin="0 auto"
       direction="column"
     >
-      <MainHeader />
       <MainPageBody>
-        {myInfo ? <LoginProfile myInfo={myInfo} /> : <GuestProfile />}
-        <Dday myInfo={myInfo} />
-        {!myInfo ? <GuestGrassBox /> : <LoginGrassBox myInfo={myInfo} />}
-        {/* <BoardListPreview /> */}
+        {isLoggedIn ? (
+          <>
+            <UserProfile username={username} src={image || ''} />
+            <Dday />
+            <Suspense>
+              <TimerCalender channelId={timerChannelId} />
+            </Suspense>
+          </>
+        ) : null}
       </MainPageBody>
-      <Footer />
     </Flex>
   );
 };

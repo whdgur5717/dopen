@@ -1,6 +1,7 @@
 {
+  "extends": ["@xionhub/fsd-typescript"],
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES6",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable", "WebWorker"],
     "module": "ESNext",
@@ -18,12 +19,20 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "strictNullChecks": true,
     "noFallthroughCasesInSwitch": true,
-
+    "baseUrl": ".",
+    "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
     /* Path alias */
     "paths": {
-      /* Base Url이 없기때문에 상대경로로 설정*/
-      "@/*": ["./src/*"]
+      "app/*": ["./src/app/*"],
+      "shared/*": ["./src/shared/*"],
+      "pages/*": ["./src/pages/*"],
+      "widgets/*": ["./src/widgets/*"],
+      "entities/*": ["./src/entities/*"],
+      "features/*": ["./src/features/*"]
     }
   },
   "include": ["src"],

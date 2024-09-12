@@ -1,7 +1,7 @@
-import { IconType } from 'react-icons';
-import { Icon, Flex, Text } from '@chakra-ui/react';
-import { FaChevronRight } from 'react-icons/fa';
+import { Flex, Icon, Text } from '@chakra-ui/react';
 import { useNavigate } from '@tanstack/react-router';
+import { IconType } from 'react-icons';
+import { FaChevronRight } from 'react-icons/fa';
 
 interface MyPageListItemProps {
   icon: IconType;

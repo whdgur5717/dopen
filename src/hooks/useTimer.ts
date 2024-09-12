@@ -1,5 +1,5 @@
-import { stringTimeToSeconds } from '@/utils/stringTimeToSeconds';
 import { useRef, useState } from 'react';
+import { stringTimeToSeconds } from 'shared/utils/stringTimeToSeconds';
 
 interface useTimerProps {
   timerEndCallback?: () => void;

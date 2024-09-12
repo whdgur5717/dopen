@@ -1,5 +1,5 @@
+import { AbsoluteCenter, Box, BoxProps, Divider } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { Divider, Box, AbsoluteCenter, BoxProps } from '@chakra-ui/react';
 
 interface TextDividerProps extends BoxProps {
   dividerColor: string;

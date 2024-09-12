@@ -1,11 +1,12 @@
-import { Fragment, useEffect, useRef } from 'react';
-import { useParams } from '@tanstack/react-router';
 import { useMessage, useSendMessage } from '@/hooks/useMessage';
-import { Box, Flex, BoxProps } from '@chakra-ui/react';
-import TextDivider from '@/pages/MessagePage/TextDivider';
-import MessageBox from '@/pages/MessagePage/MessageBox';
-import MessageForm from './MessageForm';
 import { usePushNotification } from '@/hooks/useNotificationList';
+import MessageBox from '@/pages/MessagePage/MessageBox';
+import TextDivider from '@/pages/MessagePage/TextDivider';
+import { Box, BoxProps, Flex } from '@chakra-ui/react';
+import { useParams } from '@tanstack/react-router';
+import { Fragment, useEffect, useRef } from 'react';
+
+import MessageForm from './MessageForm';
 
 const Message = ({ ...props }: BoxProps) => {
   const { userId } = useParams({ from: '/Message/$userId' });
@@ -13,6 +14,7 @@ const Message = ({ ...props }: BoxProps) => {
   const sendMessageMutate = useSendMessage();
   const pushNotificationMutate = usePushNotification();
   const messageEndRef = useRef<HTMLDivElement | null>(null);
+
   const onSendMessage = async (message: string) => {
     if (!userId) {
       return;

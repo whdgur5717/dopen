@@ -1,8 +1,8 @@
-import { AxiosError } from 'axios';
-import { useQuery } from '@tanstack/react-query';
-import { ONLINE_USER_LIST } from '@/constants/queryKeys';
 import { getOnlineUsers } from '@/apis/onlineUser';
 import { User } from '@/apis/type';
+import { ONLINE_USER_LIST } from '@/constants/queryKeys';
+import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 export const useOnlineUserList = () => {
   const { data } = useQuery<User[], AxiosError>({

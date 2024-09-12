@@ -1,12 +1,11 @@
-import { useParams } from '@tanstack/react-router';
-import { Box, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
-
+import PageHeader from '@/components/PageHeader';
 import { useMyInfo } from '@/hooks/useAuth';
 import { useGetUsersList } from '@/hooks/useUser';
-import { isValueUniqueInArray } from '@/utils/isValueUniqueInArray';
-
-import PageHeader from '@/components/PageHeader';
 import ErrorPage from '@/pages/404Page';
+import { Box, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
+import { useParams } from '@tanstack/react-router';
+import { isValueUniqueInArray } from 'shared/utils/isValueUniqueInArray';
+
 import UserInfoContainer from './UserInfoContainer';
 
 const UserInfo = () => {

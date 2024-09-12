@@ -1,7 +1,7 @@
-import { Box } from '@chakra-ui/react';
 import { User } from '@/apis/type';
-import { useStudyPost } from '@/hooks/useStudy';
 import Grass from '@/components/Grass';
+import { useStudyPost } from '@/hooks/useStudy';
+import { Box } from '@chakra-ui/react';
 
 interface UserGrassProps {
   userInfo: User;

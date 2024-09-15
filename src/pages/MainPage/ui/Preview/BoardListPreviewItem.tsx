@@ -15,35 +15,29 @@ const BoardListPreviewItem = ({
   channelId,
 }: BoardListPreviewItemProps) => {
   const navigate = useNavigate();
-  const { data, isLoading } = useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     ...postQueries.postList({ channelId }),
-    select: (data) => {
-      const firstPost = data[0];
-      const firstPostTitle = firstPost
-        ? (JSON.parse(firstPost.title).title as string)
-        : '등록된 글이 없습니다.';
-      return firstPostTitle;
-    },
   });
 
   return (
     <Flex
       alignItems="center"
       cursor="pointer"
+      gap="5px"
       onClick={() => navigate({ to: `/board/${channel}` })}
     >
-      <Box width="140px" fontSize="1.5rem" fontWeight="medium">
+      <Box width="140px" fontSize="xl" fontWeight="medium">
         {boardName}
       </Box>
       <Box
         width="200px"
-        fontSize="1.2rem"
+        fontSize="xl"
         fontWeight="medium"
         whiteSpace="nowrap"
         overflow="hidden"
         textOverflow="ellipsis"
       >
-        {!isLoading && data}
+        {data[0]._title.title}
       </Box>
     </Flex>
   );

@@ -19,7 +19,9 @@ export class PostModel {
 
   @Expose()
   get _title() {
-    return this.title;
+    if (typeof this.title === 'string') {
+      return JSON.parse(this.title);
+    }
   }
 
   @Expose()
@@ -49,7 +51,7 @@ export class PostModel {
 
 export class PostViewModel {
   @Expose()
-  @Transform(({ obj }: { obj: PostModel }) => JSON.parse(obj._title))
+  @Transform(({ obj }: { obj: PostModel }) => obj._title)
   title: { title: string; content: string };
 
   author: PostModel['_author'];

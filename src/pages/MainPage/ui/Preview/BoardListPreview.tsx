@@ -1,13 +1,13 @@
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import { Button, Flex, Spinner, Text } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
+import { Button, Flex, Text } from '@chakra-ui/react';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { channelQueries } from 'entities/channel/api/channel.queries';
 
 import BoardListPreviewItem from './BoardListPreviewItem';
 
 const BoardListPreview = () => {
-  const { data: channelListData, isLoading } = useQuery({
+  const { data: channelListData } = useSuspenseQuery({
     ...channelQueries.channelList(),
   });
   const navigate = useNavigate();
@@ -32,18 +32,14 @@ const BoardListPreview = () => {
         </Button>
       </Flex>
       <Flex paddingTop="23px" gap="10px" direction="column">
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          channelListData?.map((item) => (
-            <BoardListPreviewItem
-              key={item._id}
-              channel={item.name}
-              channelId={item._id}
-              boardName={item.description}
-            />
-          ))
-        )}
+        {channelListData?.map((item) => (
+          <BoardListPreviewItem
+            key={item._id}
+            channel={item.name}
+            channelId={item._id}
+            boardName={item.description}
+          />
+        ))}
       </Flex>
     </Flex>
   );

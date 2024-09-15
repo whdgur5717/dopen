@@ -1,9 +1,9 @@
-import { useMessage, useSendMessage } from '@/hooks/useMessage';
-import { usePushNotification } from '@/hooks/useNotificationList';
-import MessageBox from '@/pages/MessagePage/MessageBox';
-import TextDivider from '@/pages/MessagePage/TextDivider';
 import { Box, BoxProps, Flex } from '@chakra-ui/react';
 import { useParams } from '@tanstack/react-router';
+import { useMessage, useSendMessage } from 'hooks/useMessage';
+import { usePushNotification } from 'hooks/useNotificationList';
+import MessageBox from 'pages/MessagePage/MessageBox';
+import TextDivider from 'pages/MessagePage/TextDivider';
 import { Fragment, useEffect, useRef } from 'react';
 
 import MessageForm from './MessageForm';

@@ -1,5 +1,5 @@
-import { USER_LIST } from '@/constants/queryKeys';
 import { useQuery } from '@tanstack/react-query';
+import { USER_LIST } from 'constants/queryKeys';
 import { getUserList } from 'shared/api/user';
 
 interface UserListProps {

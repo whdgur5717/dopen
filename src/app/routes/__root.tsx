@@ -1,8 +1,8 @@
-import PageLayout from '@/components/PageLayout';
 import { QueryClient } from '@tanstack/react-query';
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import RootLayout from 'shared/layout/RootLayout';
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === 'production'
@@ -21,12 +21,11 @@ export const Route = createRootRouteWithContext<{
 }>()({
   component: () => {
     return (
-      <PageLayout>
+      <RootLayout>
         <ErrorBoundary fallbackRender={() => <div>에러임?</div>}>
-          <TanStackRouterDevtools />
           <Outlet />
         </ErrorBoundary>
-      </PageLayout>
+      </RootLayout>
     );
   },
   notFoundComponent: () => {

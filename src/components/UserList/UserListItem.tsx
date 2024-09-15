@@ -1,4 +1,3 @@
-import { DEFAULT_PAGE_PADDING } from '@/constants/style';
 import {
   Avatar,
   Flex,
@@ -7,6 +6,7 @@ import {
   SystemProps,
   Text,
 } from '@chakra-ui/react';
+import { DEFAULT_PAGE_PADDING } from 'constants/style';
 import { MdArrowForwardIos } from 'react-icons/md';
 
 interface UserListItemProps extends FlexProps {

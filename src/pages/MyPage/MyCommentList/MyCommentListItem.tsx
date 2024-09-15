@@ -1,10 +1,10 @@
-import { useDeleteComment } from '@/hooks/useComment';
-import { usePostDetail } from '@/hooks/usePost';
-import UserContentBlock from '@/shared/ui/UserContentBlock';
-import Confirm from '@/shared/ui/common/Confirm';
 import { Box, ListItem, Text } from '@chakra-ui/react';
 import { useNavigate } from '@tanstack/react-router';
+import { useDeleteComment } from 'hooks/useComment';
+import { usePostDetail } from 'hooks/usePost';
 import { useState } from 'react';
+import UserContentBlock from 'shared/ui/UserContentBlock';
+import Confirm from 'shared/ui/common/Confirm';
 import { calculateTimeDiff } from 'shared/utils/calculateTimeDiff';
 
 interface MyCommentListItemProps {

@@ -1,5 +1,5 @@
-import { CREATE_FOLLOW, DELETE_FOLLOW } from '@/constants/queryKeys';
 import { useMutation } from '@tanstack/react-query';
+import { CREATE_FOLLOW, DELETE_FOLLOW } from 'constants/queryKeys';
 import { followUser, unfollowUser } from 'shared/api/follow';
 
 interface FollowProps {

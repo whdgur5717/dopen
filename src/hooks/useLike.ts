@@ -1,6 +1,6 @@
-import { AUTH, POST_DETAIL } from '@/constants/queryKeys';
-import { createLike, deleteLike } from '@/shared/api/post/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AUTH, POST_DETAIL } from 'constants/queryKeys';
+import { createLike, deleteLike } from 'shared/api/post/api';
 
 import { useCheckUserAuth } from './useAuth';
 import { usePostDetail } from './usePost';

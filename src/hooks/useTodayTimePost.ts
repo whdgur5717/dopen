@@ -1,13 +1,9 @@
-import { getPostListByChannel } from '@/shared/api/post/api';
 import { useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
-import { Post } from 'shared/types/domain';
+import { postQueries } from 'entities/post/post.queries';
 
 export const useTodayTimePost = (channelId: string) => {
-  return useQuery<Post[], AxiosError, Post>({
-    queryKey: ['today-time-post'],
-    queryFn: () => getPostListByChannel({ channelId }),
-
+  return useQuery({
+    ...postQueries.postList({ channelId }),
     meta: {
       errorMessage: '오늘의 타이머 게시글 가져오는 도중 오류발생',
     },

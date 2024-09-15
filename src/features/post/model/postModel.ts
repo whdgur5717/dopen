@@ -3,7 +3,11 @@ import type { Comment, Post } from 'shared/openapi/generate';
 
 export class PostModel {
   @Expose() private likes: Post['likes'];
-  @Expose() private comments: Post['comments'];
+  @Expose()
+  @Transform(({ obj }: { obj: Post }) =>
+    obj.comments.map((comment) => plainToInstance(CommentModel, comment)),
+  )
+  private comments: Post['comments'];
   @Expose() private _id: Post['_id'];
   @Expose() private image: Post['image'];
   @Expose() private imagePublicId: Post['imagePublicId'];
@@ -14,17 +18,8 @@ export class PostModel {
   @Expose() private updatedAt: Post['updatedAt'];
 
   @Expose()
-  @Transform(({ value }) => {
-    if (typeof value === 'string') {
-      return JSON.parse(value);
-    }
-    return value;
-  })
-  get _title(): {
-    title: Post['title'];
-    content: string;
-  } {
-    return JSON.parse(this.title);
+  get _title() {
+    return this.title;
   }
 
   @Expose()
@@ -42,11 +37,8 @@ export class PostModel {
     return this.image || '';
   }
 
-  @Expose()
   get _comments() {
-    return this.comments.map((comment) =>
-      plainToInstance(CommentModel, comment),
-    );
+    return this.comments;
   }
 
   @Expose()
@@ -57,11 +49,9 @@ export class PostModel {
 
 export class PostViewModel {
   @Expose()
-  @Transform(({ obj }) => obj._title)
-  title: PostModel['_title'];
+  @Transform(({ obj }: { obj: PostModel }) => JSON.parse(obj._title))
+  title: { title: string; content: string };
 
-  @Expose()
-  @Transform(({ obj }) => obj._author)
   author: PostModel['_author'];
 
   @Expose()
@@ -69,15 +59,13 @@ export class PostViewModel {
   createdAt: PostModel['_createdAt'];
 
   @Expose()
-  @Transform(({ obj }) => {
-    return obj._comments.map((comment) =>
-      plainToInstance(CommentViewModel, comment),
-    );
+  @Transform(({ obj }: { obj: PostModel }) => {
+    return obj._comments.map((comment) => {
+      return plainToInstance(CommentViewModel, comment);
+    });
   })
   comments: CommentViewModel[];
 
-  @Expose()
-  @Transform(({ obj }) => obj._likes)
   likes: PostModel['_likes'];
 
   image: PostModel['_image'];
@@ -87,22 +75,51 @@ export class PostFormModel {
   title: string;
   content: string;
   image: File | null;
+}
 
-  get defaultValue() {
-    return {
-      title: this.title || '',
-      content: this.content || '',
-      image: this.image || null,
+export class ReflectionPostViewModel {
+  @Expose()
+  @Transform(({ obj }: { obj: PostModel }) => JSON.parse(obj._title))
+  title: {
+    title: string;
+    content: {
+      favorite: string;
+      shame: string;
+      sayToMe: string;
     };
-  }
+  };
+  author: PostModel['_author'];
 
-  submitFormData({ title, content, image }: PostFormModel, channelId: string) {
-    return {
-      title: JSON.stringify({ title, content }),
-      image,
-      channelId,
-    };
-  }
+  @Expose()
+  @Transform(({ obj }: { obj: PostModel }) => new Date(obj._createdAt))
+  createdAt: Date;
+
+  @Expose()
+  @Transform(({ obj }: { obj: PostModel }) => {
+    return obj._comments?.map((comment) => {
+      return plainToInstance(CommentViewModel, comment);
+    });
+  })
+  comments: CommentViewModel[];
+
+  likes: PostModel['_likes'];
+
+  image: PostModel['_image'];
+}
+
+export class ReflectionFormModel {
+  @Expose()
+  @Transform(({ obj }) => obj.title.title)
+  title: ReflectionPostViewModel['title']['title'];
+  @Expose()
+  @Transform(({ obj }) => obj.title.content.favorite)
+  favorite: ReflectionPostViewModel['title']['content']['favorite'];
+  @Expose()
+  @Transform(({ obj }) => obj.title.content.shame)
+  shame: ReflectionPostViewModel['title']['content']['shame'];
+  @Expose()
+  @Transform(({ obj }) => obj.title.content.sayToMe)
+  sayToMe: ReflectionPostViewModel['title']['content']['sayToMe'];
 }
 
 export class CommentModel {
@@ -144,7 +161,9 @@ export class CommentViewModel {
   createdAt: Date;
 
   @Expose()
-  @Transform(({ obj }) => obj._author.username)
+  @Transform(({ obj }) => {
+    return obj._author.username;
+  })
   author: string;
 }
 

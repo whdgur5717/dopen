@@ -1,9 +1,11 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
+import { plainToInstance } from 'class-transformer';
 import { authQueries } from 'entities/auth/api/auth.queries';
+import { UserModel } from 'entities/auth/model/user.dto';
 
 export const Route = createFileRoute('/_auth')({
   component: () => <Outlet />,
-  beforeLoad: async ({ context, location }) => {
+  loader: async ({ context, location }) => {
     const data = await context.queryClient.ensureQueryData({
       ...authQueries.auth(),
       revalidateIfStale: true,
@@ -19,5 +21,6 @@ export const Route = createFileRoute('/_auth')({
         },
       });
     }
+    return plainToInstance(UserModel, data);
   },
 });

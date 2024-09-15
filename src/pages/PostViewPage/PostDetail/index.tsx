@@ -1,8 +1,8 @@
-// import Comments from '@/components/Comment';
-// import { useConfirmModal } from '@/hooks/useConfirmModal';
-// import { usePushNotification } from '@/hooks/useNotificationList';
-// import { useMyPostList, usePostDetail } from '@/hooks/usePost';
-// import { deletePost } from '@/shared/api/post/api';
+// import Comments from 'components/Comment';
+// import { useConfirmModal } from 'hooks/useConfirmModal';
+// import { usePushNotification } from 'hooks/useNotificationList';
+// import { useMyPostList, usePostDetail } from 'hooks/usePost';
+// import { deletePost } from 'shared/api/post/api';
 import { ArrowDownIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Image, Portal, Text } from '@chakra-ui/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -13,13 +13,13 @@ import { useLikeMutation } from 'features/like/api/like.mutation';
 import { useDeletePostMutation } from 'features/post/api/post.mutation';
 import { useRef, useState } from 'react';
 import { MdArticle, MdFavoriteBorder } from 'react-icons/md';
+import { useConfirmModal } from 'shared/hook/useConfirmModal';
 import Confirm from 'shared/ui/Confirm';
 import TextIconButton from 'shared/ui/TextIconButton';
 import UserContentBlock from 'shared/ui/UserContentBlock';
 import { calculateTimeDiff } from 'shared/utils/calculateTimeDiff';
 import { convertDateToString } from 'shared/utils/convertDateToString';
 import CommentList from 'src/components/Comment';
-import { useConfirmModal } from 'src/hooks/useConfirmModal';
 
 import Post from './Container';
 import Settings from './Settings';

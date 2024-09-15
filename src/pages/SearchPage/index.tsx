@@ -1,13 +1,13 @@
-import PageHeader from '@/components/PageHeader';
-import PostList from '@/components/PostList';
-import UserList from '@/components/UserList';
-import { OPTION_USER } from '@/constants/SearchOptions';
-import { DEFAULT_WIDTH } from '@/constants/style';
-import { useChannelList } from '@/hooks/useChannels';
-import OptionSelector from '@/pages/SearchPage/OptionSelector';
-import SearchInput from '@/pages/SearchPage/SearchInput';
 import { Flex } from '@chakra-ui/react';
 import styled from '@emotion/styled';
+import PageHeader from 'components/PageHeader';
+import PostList from 'components/PostList';
+import UserList from 'components/UserList';
+import { OPTION_USER } from 'constants/SearchOptions';
+import { DEFAULT_WIDTH } from 'constants/style';
+import { useChannelList } from 'hooks/useChannels';
+import OptionSelector from 'pages/SearchPage/OptionSelector';
+import SearchInput from 'pages/SearchPage/SearchInput';
 import { FormEvent, useRef, useState } from 'react';
 
 export interface SearchDataTypes {

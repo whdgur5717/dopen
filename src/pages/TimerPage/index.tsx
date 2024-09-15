@@ -1,8 +1,3 @@
-import PageHeader from '@/components/PageHeader';
-import { TIME_OUT_VALUE } from '@/constants/time';
-import useTimer from '@/hooks/useTimer';
-import { useTodayTimePost } from '@/hooks/useTodayTimePost';
-import { createPost, editPost } from '@/shared/api/post/api';
 import {
   Button,
   Center,
@@ -15,15 +10,20 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import { UseQueryResult, useMutation } from '@tanstack/react-query';
+import { useLoaderData } from '@tanstack/react-router';
+import {
+  useCreatePostMutation,
+  useEditPostMutation,
+} from 'features/post/api/post.mutation';
 import { useEffect, useRef } from 'react';
 import { MdPause, MdPlayArrow } from 'react-icons/md';
-import { User } from 'shared/types/domain';
 import { convertDateToString } from 'shared/utils/convertDateToString';
 import { getCurrentStringTime } from 'shared/utils/getCurrentStringTime';
 import { secondsToStringTime } from 'shared/utils/secondsToStringTime';
 import { getItem, setItem } from 'shared/utils/storage';
 import { stringTimeToSeconds } from 'shared/utils/stringTimeToSeconds';
+import { useTimer } from 'src/hooks/useTimer';
+import { useTodayTimePost } from 'src/hooks/useTodayTimePost';
 
 import TimerSettingModal from './TimerSettingModal';
 
@@ -39,6 +39,8 @@ const timerIconStyle: IconButtonProps = {
   'aria-label': '',
 };
 
+export const TIME_OUT_VALUE = '23:45:00';
+
 const TimerPage = () => {
   const { timer, isPlay, timerRef, startTimer, stopTimer, setTimer } = useTimer(
     {
@@ -47,9 +49,12 @@ const TimerPage = () => {
     },
   );
 
-  const { data: myInfo, isSuccess } = useOutletContext<UseQueryResult<User>>();
-
-  const { timerChannelId } = isSuccess && JSON.parse(myInfo?.fullName);
+  const { timerChannelId } = useLoaderData({
+    from: '/_auth',
+    select: (data) => ({
+      ...data._fullName,
+    }),
+  });
 
   const {
     data: todayTimePost,
@@ -62,28 +67,9 @@ const TimerPage = () => {
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const { mutate: onCreatePost } = useMutation(
-    ['create-timer-post'],
-    (time: string) =>
-      createPost({
-        title: time,
-        channelId: timerChannelId,
-      }),
-    {
-      onSuccess: () => refetch(),
-    },
-  );
+  const { mutate: onCreatePost } = useCreatePostMutation();
 
-  const { mutate: onEditPost } = useMutation(
-    'edit-timer-post',
-    ({ postId, title }: { postId: string; title: string }) =>
-      editPost({
-        postId,
-        title,
-        channelId: timerChannelId,
-      }),
-    { onSuccess: () => refetch() },
-  );
+  const { mutate: onEditPost } = useEditPostMutation();
 
   const onPause = () => {
     //1초라도 경과했는지 판별 후 로직 실행합니다. 아무런 행동없이 새로고침하면 로직을 실행하지 않습니다
@@ -120,7 +106,11 @@ const TimerPage = () => {
       onEditPost({ postId: _id, title: secondsToStringTime(totalSpendTime) });
     } else {
       //게시글이 없다면 생성
-      onCreatePost(secondsToStringTime(currentSpendTime));
+      onCreatePost({
+        title: secondsToStringTime(currentSpendTime),
+        channelId: timerChannelId,
+        image: null,
+      });
     }
 
     stopTimer();
@@ -155,7 +145,6 @@ const TimerPage = () => {
 
   return (
     <Flex flexDir="column" align="center" w="100%" bg="pink.200" flex={1}>
-      <PageHeader pageName="타이머" bg="pink.300" />
       <Center p="97px 0" position="relative" w="100%">
         <CircularProgress
           value={

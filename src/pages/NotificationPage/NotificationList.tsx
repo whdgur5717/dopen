@@ -1,12 +1,12 @@
-import {
-  messageByTypes,
-  useCheckNotification,
-  useNotificationList,
-} from '@/hooks/useNotificationList';
 import { AbsoluteCenter, Flex, FlexProps, Text } from '@chakra-ui/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { notificationQueries } from 'entities/nofitication/api/notification.queries';
 import { useCheckNotificationMutation } from 'features/notify/api/mutation';
+import {
+  messageByTypes,
+  useCheckNotification,
+  useNotificationList,
+} from 'hooks/useNotificationList';
 import UserContentBlock from 'shared/ui/UserContentBlock';
 import { calculateTimeDiff } from 'shared/utils/calculateTimeDiff';
 

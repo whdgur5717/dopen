@@ -1,4 +1,3 @@
-import { useMessageForm } from '@/hooks/useMessageForm';
 import {
   Box,
   BoxProps,
@@ -8,6 +7,7 @@ import {
   Image,
   Input,
 } from '@chakra-ui/react';
+import { useMessageForm } from 'hooks/useMessageForm';
 
 interface MessageFormProps extends BoxProps {
   onSuccess: (value: string) => void;

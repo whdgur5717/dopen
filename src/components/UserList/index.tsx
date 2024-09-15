@@ -1,10 +1,10 @@
-import { USER_LIST } from '@/constants/queryKeys';
-import { DEFAULT_PAGE_PADDING } from '@/constants/style';
-import { getUserList } from '@/shared/api/user/api';
 import { Box, StackDivider, StackProps, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { AxiosError } from 'axios';
+import { USER_LIST } from 'constants/queryKeys';
+import { DEFAULT_PAGE_PADDING } from 'constants/style';
+import { getUserList } from 'shared/api/user/api';
 import { User } from 'shared/types/domain';
 
 import UserListItem from './UserListItem';

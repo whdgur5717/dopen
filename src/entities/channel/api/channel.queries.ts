@@ -1,6 +1,7 @@
 import { queryOptions } from '@tanstack/react-query';
-import { getChannelList } from 'shared/openapi';
+import { getChannelInfo, getChannelList } from 'shared/openapi';
 
+const boardList_public = ['free', 'reflection', 'shareInfo'];
 export const channelQueries = {
   keys: {
     list: ['channel_list'] as const,
@@ -15,21 +16,15 @@ export const channelQueries = {
     return queryOptions({
       queryKey: [...channelQueries.keys.list],
       queryFn: getChannelList,
-      select: (data) =>
-        data.filter(
-          (channel) =>
-            channel.description === '자유 게시판' ||
-            channel.description === '인증 & 회고 게시판' ||
-            channel.description === '정보 공유 게시판',
-        ),
+      select: (data): NonNullable<Awaited<ReturnType<typeof getChannelList>>> =>
+        data.filter((channel) => boardList_public.includes(channel.name)),
+      staleTime: Infinity,
     });
   },
-
   channelInfo(channelName: string) {
     return queryOptions({
-      ...channelQueries.channelList(),
-      select: (data) =>
-        data.filter((channel) => channel.name === channelName)[0],
+      queryKey: channelQueries.keys.channelInfo(channelName),
+      queryFn: () => getChannelInfo({ channelName }),
     });
   },
 };
@@ -96,3 +91,6 @@ export const channelQueries = {
 //     select: (data) => data.filter((channel) => channel.name === channelInfo)[0],
 //     staleTime: 0,
 //   });
+
+//채널 리스트를 불러오고 -
+//특정 채널의 데이터를 불러오기

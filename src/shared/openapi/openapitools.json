@@ -8,8 +8,6 @@
   "apiPackage": "api",
   "supportsES6": true,
   "withNodeImports": false,
-  "useSingleRequestParameter": true,
-  "enumNameSuffix": "",
   "withSeparateModelsAndApi": true,
-  "enumPropertyNaming": "original"
+  "useSingleRequestParameter": true
 }

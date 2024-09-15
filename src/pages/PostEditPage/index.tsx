@@ -11,10 +11,9 @@ import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { channelQueries } from 'entities/channel/api/channel.queries';
-import { PostFormModel } from 'features/post/api/model/postModel';
 import { useCreatePostMutation } from 'features/post/api/post.mutation';
+import { usePostForm } from 'features/post/model/usePostForm';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { DEFAULT_PAGE_PADDING } from 'shared/constants/style';
 
 //여기는 정말 작성만 하는 페이지로
@@ -26,26 +25,18 @@ const PostEditPage = () => {
 
   const channelInfo = pathname.split('/')[2];
 
-  const { data: channel } = useSuspenseQuery(
-    channelQueries.channelInfo(channelInfo),
-  );
-  //채널이름을 가지고 채널 id를 불러오는듯?
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<PostFormModel>({
-    mode: 'onBlur',
-    defaultValues: {
-      title: '',
-      image: null,
-      content: '',
-    },
+  const { data: channel } = useSuspenseQuery({
+    ...channelQueries.channelInfo(channelInfo),
+    staleTime: Infinity,
   });
+  //현재 채널명을 통해 channelId를 불러와서 submit에 사용
+  //채널의 데이터중에 id만 필요 -  id는 안바뀌는데 굳이 매번?
+  //내부적으로 캐싱해놓는게 낫지않나?
+
+  const { handleSubmit, errors, registerField } = usePostForm();
 
   const { mutate } = useCreatePostMutation();
-  const [model] = useState(new PostFormModel());
+
   return (
     <Flex
       flexDirection="column"
@@ -56,11 +47,14 @@ const PostEditPage = () => {
     >
       <form
         onSubmit={handleSubmit((data) => {
-          mutate(model.submitFormData(data, channel._id), {
-            onSuccess: () => {
-              navigate({ to: '/' });
+          mutate(
+            { ...data, channelId: channel._id },
+            {
+              onSuccess: () => {
+                navigate({ to: '/' });
+              },
             },
-          });
+          );
         })}
       >
         <FormControl isInvalid={!!errors?.title?.message}>
@@ -72,20 +66,7 @@ const PostEditPage = () => {
             focusBorderColor="black"
             placeholder="제목을 입력해주세요."
             _placeholder={{ color: 'gray800' }}
-            {...register('title', {
-              required: '글의 제목은 필수입니다.',
-              validate: (value) =>
-                value.trim() !== '' ||
-                '제목은 1글자 ~ 30글자까지 작성 가능합니다.',
-              minLength: {
-                value: 1,
-                message: '최소 1글자 이상 입력 해주세요.',
-              },
-              maxLength: {
-                value: 30,
-                message: '최대 30글자까지 입력 가능합니다.',
-              },
-            })}
+            {...registerField('title')}
           />
           <FormErrorMessage>
             {errors?.title && errors.title.message}
@@ -99,7 +80,7 @@ const PostEditPage = () => {
             type="file"
             id="file"
             accept="image/*"
-            {...register('image')}
+            {...registerField('image')}
           />
         </PostingImageFileBox>
         <FormControl isInvalid={!!errors?.content?.message}>
@@ -110,19 +91,7 @@ const PostEditPage = () => {
             bg="customWhite"
             focusBorderColor="black"
             placeholder="내용을 입력하세요."
-            {...register('content', {
-              required: '글의 내용은 필수 입니다.',
-              validate: (value) =>
-                value.trim() !== '' || '글의 내용은 필수 입니다.',
-              minLength: {
-                value: 1,
-                message: '최소 1글자 이상 입력 해주세요.',
-              },
-              maxLength: {
-                value: 500,
-                message: '최대 500글자까지 입력 가능합니다.',
-              },
-            })}
+            {...registerField('content')}
             _placeholder={{ color: 'gray800' }}
           ></Textarea>
           <FormErrorMessage>

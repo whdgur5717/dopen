@@ -1,5 +1,5 @@
-import PageHeader from '@/components/PageHeader';
 import { Spinner } from '@chakra-ui/react';
+import PageHeader from 'components/PageHeader';
 import { Suspense } from 'react';
 
 import NotificationList from './NotificationList';

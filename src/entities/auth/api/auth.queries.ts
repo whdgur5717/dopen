@@ -1,18 +1,28 @@
 import { queryOptions } from '@tanstack/react-query';
-import { plainToClass } from 'class-transformer';
-import { UserDTO } from 'entities/auth/model/user.dto';
-import { checkUserAuthentication } from 'shared/openapi';
+import { plainToClass, plainToInstance } from 'class-transformer';
+import { UserModel } from 'entities/auth/model/user.dto';
+import { checkUserAuthentication, getUserInfo } from 'shared/openapi';
 
 export const authQueries = {
   keys: {
-    root: ['my_info'] as const,
+    root: ['users'] as const,
+    userInfo: (userId: string) => [...authQueries.keys.root, userId] as const,
+    myInfo: () => [...authQueries.keys.root, 'me'] as const,
   },
 
   auth() {
     return queryOptions({
-      queryKey: [...this.keys.root],
+      queryKey: [...this.keys.myInfo()],
       queryFn: checkUserAuthentication,
-      select: (data) => plainToClass(UserDTO, data),
+      select: (data) => plainToInstance(UserModel, data),
+    });
+  },
+
+  userInfo(userId: string) {
+    return queryOptions({
+      queryKey: authQueries.keys.userInfo(userId),
+      queryFn: () => getUserInfo({ userId }),
+      select: (data) => plainToInstance(UserModel, data),
     });
   },
 };

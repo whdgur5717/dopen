@@ -1,10 +1,10 @@
-import { useCreateFollow, useDeleteFollow } from '@/hooks/useFollow';
-import Confirm from '@/shared/ui/common/Confirm';
 import { Button, Flex } from '@chakra-ui/react';
 import { LOGIN_TOKEN } from '@shared/constants/index';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
+import { useCreateFollow, useDeleteFollow } from 'hooks/useFollow';
 import { useState } from 'react';
+import Confirm from 'shared/ui/common/Confirm';
 import { getItem } from 'shared/utils/storage';
 
 interface UserProfileButtonProps {

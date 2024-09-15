@@ -1,7 +1,7 @@
-import { MY_COMMENT_LIST, POST_DETAIL } from '@/constants/queryKeys';
-import { createComment, deleteComment } from '@/shared/api/comment/api';
-import { pushNotification } from '@/shared/api/notification/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { MY_COMMENT_LIST, POST_DETAIL } from 'constants/queryKeys';
+import { createComment, deleteComment } from 'shared/api/comment/api';
+import { pushNotification } from 'shared/api/notification/api';
 
 export const useCreateComment = (author: string) => {
   const queryClient = useQueryClient();

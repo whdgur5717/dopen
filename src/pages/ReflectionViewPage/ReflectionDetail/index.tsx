@@ -1,77 +1,79 @@
-import Comments from '@/components/Comment';
-import { useCheckUserAuth } from '@/hooks/useAuth';
-import { useConfirmModal } from '@/hooks/useConfirmModal';
-import { useLike } from '@/hooks/useLike';
-import { usePushNotification } from '@/hooks/useNotificationList';
-import { usePostDetail } from '@/hooks/usePost';
-import Post from '@/pages/PostViewPage/PostDetail/Container';
-import Settings from '@/pages/PostViewPage/PostDetail/Settings';
-import { deletePost } from '@/shared/api/post/api';
-import UserContentBlock from '@/shared/ui/UserContentBlock';
 import { ArrowDownIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Portal, Text } from '@chakra-ui/react';
-import { useNavigate, useParams, useRouter } from '@tanstack/react-router';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { useLoaderData, useParams, useRouter } from '@tanstack/react-router';
+import Comments from 'components/Comment';
+import { postQueries } from 'entities/post/post.queries';
+import { useDeleteCommentMutation } from 'features/post/api/comment.mutation';
+import { useLike } from 'hooks/useLike';
+import { usePushNotification } from 'hooks/useNotificationList';
+import { usePostDetail } from 'hooks/usePost';
+import Post from 'pages/PostViewPage/PostDetail/Container';
+import Settings from 'pages/PostViewPage/PostDetail/Settings';
 import { useRef, useState } from 'react';
 import { MdArticle, MdFavoriteBorder } from 'react-icons/md';
+import { useConfirmModal } from 'shared/hook/useConfirmModal';
 import Confirm from 'shared/ui/Confirm';
 import TextIconButton from 'shared/ui/TextIconButton';
-import { calculateTimeDiff } from 'shared/utils/calculateTimeDiff';
-import { convertDateToString } from 'shared/utils/convertDateToString';
+import UserContentBlock from 'shared/ui/UserContentBlock';
+import CommentListItem from 'src/components/Comment/CommentListItem';
+import { convertDateToString } from 'src/shared/utils/convertDateToString';
 
 import TextCard from './TextCard';
 
 const ReflectionDetail = () => {
-  const navigate = useNavigate();
-  const { history } = useRouter();
+  const { history, navigate } = useRouter();
   const { postId } = useParams({
     from: '/_auth/Board/_boardlayout/Reflection/$postId',
   });
 
-  const {
-    data: { _id, title, comments, author, createdAt },
-  } = usePostDetail({
-    id: postId!,
+  const { id, isMyPost } = useLoaderData({
+    from: '/_auth',
+    select: (data) => ({
+      id: data._id,
+      isMyPost: data._posts.some((post) => post._id === postId), //유저가 작성한 포스트의 id와 현재 보고 있는 postId와 동일한지
+    }),
   });
-  const { data: myInfo } = useCheckUserAuth();
-  const postData = JSON.parse(title);
+
+  const {
+    data: { title, comments, author, createdAt },
+  } = useSuspenseQuery({
+    ...postQueries.reflectionDetail(postId),
+  });
+
+  const { date, time } = convertDateToString(createdAt);
+
   const { countLike, mutateAsync: setLike, clicked } = useLike(postId!);
-  const { date, time } = convertDateToString(new Date(createdAt));
+
   const [isFold, setIsFold] = useState(false);
+
   const reflectionLists = [
     {
       title: '좋았던 일',
-      content: postData.content.favorite,
+      content: title.content.favorite,
     },
     {
       title: '아쉬운 일',
-      content: postData.content.shame,
+      content: title.content.shame,
     },
     {
       title: '나에게 한마디',
-      content: postData.content.sayToMe,
+      content: title.content.sayToMe,
     },
   ];
 
-  const pushNotificationMutate = usePushNotification();
   const { isOpen, open, close, handleConfirm, message } = useConfirmModal();
+
+  const { mutate: onDeletePost } = useDeleteCommentMutation();
 
   const onClickLike = async () => {
     const data = await setLike();
-    if (!data) {
-      return;
-    }
-    pushNotificationMutate({
-      notificationType: 'LIKE',
-      notificationTypeId: data._id,
-      userId: author._id,
-      postId: _id,
-    });
   };
 
   const settingsOption = [
     {
       text: '수정하기',
-      show: author._id === myInfo?._id,
+      show: isMyPost,
       confirmText: '수정하시겠습니까?',
       icon: <EditIcon />,
       onClick: () => {
@@ -80,23 +82,26 @@ const ReflectionDetail = () => {
     },
     {
       text: '삭제하기',
-      show: author._id === myInfo?._id,
+      show: isMyPost,
       confirmText: '삭제하시겠습니까?',
       icon: <DeleteIcon />,
       onClick: async () => {
-        await deletePost(postId!);
-        history.back();
+        onDeletePost(
+          { id: postId },
+          {
+            onSuccess: () => history.back(),
+          },
+        );
       },
     },
   ];
 
   const pageEndRef = useRef<HTMLDivElement | null>(null);
-  const isMyPost = myInfo?.posts?.some((post) => post._id === postId);
 
   return (
     <>
       <Post gap="30px">
-        <Post.Header>{postData.title}</Post.Header>
+        <Post.Header>{title.title}</Post.Header>
         <Flex>
           <UserContentBlock
             username={author.username}
@@ -160,14 +165,15 @@ const ReflectionDetail = () => {
               textLocation="right"
             />
           </Flex>
-          <Box>{calculateTimeDiff(createdAt)}</Box>
+          {/* <Box>{calculateTimeDiff(createdAt)}</Box> */}
         </Post.Footer>
         <Button onClick={() => setIsFold(!isFold)}>
           {isFold ? '댓글 펼치기' : '댓글 접기'}
         </Button>
-        {!isFold && (
-          <Comments comments={comments} myInfo={myInfo!} _id={_id}></Comments>
-        )}
+        {!!isFold &&
+          comments.map((comment) => (
+            <CommentListItem {...comment} key={comment.comment + id} />
+          ))}
       </Post>
       {isOpen && (
         <Confirm

@@ -54,23 +54,15 @@ const LoginForm = () => {
 
   const { data: userList } = useQuery({
     ...userListQuery.userList(),
-    initialData: [],
+    placeholderData: [],
   });
 
   const onLoginValid: SubmitHandler<LoginFormData> = async ({
     email,
     password,
   }) => {
-    const isUserEmailCheck = isValueUniqueInArray(userList, 'email', email);
-    if (isUserEmailCheck) {
-      mutate({ loginRequest: { email, password } });
-    } else {
-      setError(
-        'email',
-        { message: '등록되지 않은 아이디입니다.' },
-        { shouldFocus: true },
-      );
-    }
+    console.log(email, password);
+    mutate({ loginRequest: { email, password } });
   };
 
   return (

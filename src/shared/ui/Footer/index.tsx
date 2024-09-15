@@ -22,7 +22,7 @@ const Footer = ({ ...props }: FlexProps) => {
       w="100%"
       h={DEFAULT_HEADER_HEIGHT}
       shrink="0"
-      position="sticky"
+      position="fixed"
       bottom="0"
       bgColor="gray50"
       {...props}

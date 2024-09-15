@@ -1,6 +1,6 @@
-import { STUDY_POST } from '@/constants/queryKeys';
-import { getPostListByChannel } from '@/shared/api/post/api';
 import { useQuery } from '@tanstack/react-query';
+import { STUDY_POST } from 'constants/queryKeys';
+import { getPostListByChannel } from 'shared/api/post/api';
 
 interface StudyProps {
   channelId: string;

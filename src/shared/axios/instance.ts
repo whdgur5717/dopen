@@ -37,17 +37,34 @@ axiosInstance.interceptors.response.use((response) => {
 
 export const getRequest = async <T>(
   url: string,
-  config?: Record<string, any>,
+  params?: AxiosRequestConfig['params'],
+  pathParams?: Record<string, any>,
 ): Promise<T> => {
-  return await axiosInstance.get<T>(url, { params: config });
+  let finalUrl = url;
+  if (pathParams) {
+    Object.keys(pathParams).forEach((key) => {
+      finalUrl = finalUrl.replace(`{${key}}`, pathParams[key]);
+    });
+  }
+  return await axiosInstance.get<T>(finalUrl, { params });
 };
+
+function flattenParams(params: Record<string, any>): Record<string, any> {
+  if (typeof params === 'object' && params !== null) {
+    const keys = Object.keys(params);
+    if (keys.length === 1 && typeof params[keys[0]] === 'object') {
+      return params[keys[0]];
+    }
+  }
+  return params;
+}
 
 export const postRequest = async <T, U>(
   url: string,
   body?: U,
   config?: AxiosRequestConfig,
 ): Promise<T> => {
-  return await axiosInstance.post<T>(url, body, config);
+  return await axiosInstance.post<T>(url, flattenParams(body), config);
 };
 
 export const putRequest = async <T, U>(
@@ -55,7 +72,7 @@ export const putRequest = async <T, U>(
   body?: U,
   config?: AxiosRequestConfig,
 ): Promise<T> => {
-  return await axiosInstance.put<T>(url, body, config);
+  return await axiosInstance.put<T>(url, flattenParams(body), config);
 };
 
 export const deleteRequest = async <T, U>(

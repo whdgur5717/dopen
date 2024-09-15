@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { authQueries } from 'entities/auth/api/auth.queries';
-import { UserDTO } from 'entities/auth/model/user.dto';
 import { LOGINID_SAVEKEY, LOGIN_TOKEN } from 'shared/constants/user';
 import { login } from 'shared/openapi';
 import { removeItem, setItem } from 'shared/utils/storage';
@@ -17,7 +16,6 @@ export const saveId = <T, U>(isSavedId: T, loginId: U) => {
 };
 export const useLoginMutation = ({
   onSuccessFn,
-  onErrorFn,
   isSavedId,
 }: {
   onSuccessFn?: () => void;
@@ -33,11 +31,6 @@ export const useLoginMutation = ({
         setItem(LOGIN_TOKEN, result.token);
         queryClient.setQueryData(authQueries.auth().queryKey, result.user);
         onSuccessFn();
-      }
-    },
-    onError: (error) => {
-      if (onErrorFn) {
-        onErrorFn(error);
       }
     },
   });

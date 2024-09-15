@@ -1,5 +1,5 @@
-import Message from '@/pages/MessagePage/Message';
 import { Flex } from '@chakra-ui/react';
+import Message from 'pages/MessagePage/Message';
 
 const MessagePage = () => {
   return (

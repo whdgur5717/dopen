@@ -1,57 +1,26 @@
-import { User } from '@/apis/type';
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
 import UserProfileButton from './UserProfileButton';
 
 interface UserProfileProps {
-  userInfo: User;
-  myInfo: User;
+  image: string;
   username: string;
   isSameUser: boolean;
 }
-
-const UserProfile = ({
-  userInfo,
-  myInfo,
-  username,
-  isSameUser,
-}: UserProfileProps) => {
-  const [isFollowing, setIsFollowing] = useState(false);
-  const [followId, setFollowId] = useState('');
-
-  const { image, _id: userId } = userInfo;
-  const { following } = myInfo;
-
-  useEffect(() => {
-    const isAlreadyFollowing = following.some(
-      ({ user: followingUserId, _id }) => {
-        if (followingUserId === userId) {
-          setFollowId(_id);
-          return followingUserId === userId;
-        }
-      },
-    );
-    setIsFollowing(isAlreadyFollowing);
-  }, [following]);
-
-  const onupdateFollowing = (isFollowing: boolean) => {
-    setIsFollowing(isFollowing);
-  };
-
+//팔로우 하는 로직을 넣어야함 - 여기에 넣어도 괜찮을거같음 - 그럼 이 사람에 대한 정보를 알아야될텐데
+//본인일수도 있음
+const UserProfile = ({ username, image, isSameUser }: UserProfileProps) => {
   return (
     <Flex alignItems="center" p="0 20px" mb="30px">
       <Box mr="15px">
         <Avatar src={image} w="118px" h="118px" />
       </Box>
       <Box w="calc(100% - 133px)">
-        <Text as="strong" display="block" fontSize="3xl" mb="15px">
+        <Text as="h3" display="block" fontSize="3xl" mb="15px">
           {username}
         </Text>
-
-        {isSameUser ? (
-          ''
-        ) : (
+        {!isSameUser && (
           <UserProfileButton
             isFollowing={isFollowing}
             followId={followId}

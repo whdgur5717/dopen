@@ -12,15 +12,15 @@
  * Do not edit the class manually.
  */
 
-export const CreateNotificationRequestNotificationTypeEnum = {
-  COMMENT: 'COMMENT',
-  FOLLOW: 'FOLLOW',
-  LIKE: 'LIKE',
-  MESSAGE: 'MESSAGE',
+export const CreateNotificationRequestNotificationTypeEnumEnum = {
+  Comment: 'COMMENT',
+  Follow: 'FOLLOW',
+  Like: 'LIKE',
+  Message: 'MESSAGE',
 } as const;
 
-export type CreateNotificationRequestNotificationType =
-  (typeof CreateNotificationRequestNotificationTypeEnum)[keyof typeof CreateNotificationRequestNotificationTypeEnum];
+export type CreateNotificationRequestNotificationTypeEnum =
+  (typeof CreateNotificationRequestNotificationTypeEnumEnum)[keyof typeof CreateNotificationRequestNotificationTypeEnumEnum];
 /**
  *
  * @export
@@ -32,7 +32,7 @@ export interface CreateNotificationRequest {
    * @type {string}
    * @memberof CreateNotificationRequest
    */
-  notificationType: CreateNotificationRequestNotificationType;
+  notificationType: CreateNotificationRequestNotificationTypeEnum;
   /**
    *
    * @type {string}

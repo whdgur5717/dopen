@@ -1,17 +1,17 @@
-import { Notification, User } from '@/apis/type';
-import { NOTIFICATION_LIST } from '@/constants/queryKeys';
-import {
-  NotificationType,
-  checkNotification,
-  getUserNotificationList,
-  pushNotification,
-} from '@/shared/api/notification/api';
 import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
+import { Notification, User } from 'apis/type';
 import { AxiosError } from 'axios';
+import { NOTIFICATION_LIST } from 'constants/queryKeys';
+import {
+  NotificationType,
+  checkNotification,
+  getUserNotificationList,
+  pushNotification,
+} from 'shared/api/notification/api';
 
 export interface MyNotificationListItem {
   type: NotificationType;

@@ -1,6 +1,6 @@
-import { User } from '@/apis/type';
-import { useStudyPost } from '@/hooks/useStudy';
 import { Box, Flex, Text } from '@chakra-ui/react';
+import { User } from 'apis/type';
+import { useStudyPost } from 'hooks/useStudy';
 
 interface UserFollowInfoProps {
   followInfo: User;

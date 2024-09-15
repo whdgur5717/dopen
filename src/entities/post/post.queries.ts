@@ -1,7 +1,11 @@
 /* eslint-disable @tanstack/query/exhaustive-deps */
 import { queryOptions } from '@tanstack/react-query';
 import { plainToInstance } from 'class-transformer';
-import { PostModel, PostViewModel } from 'features/post/model/postModel';
+import {
+  PostModel,
+  PostViewModel,
+  ReflectionPostViewModel,
+} from 'features/post/model/postModel';
 import { getPostByPostId, getPostListByChannel } from 'shared/openapi';
 
 export const postQueries = {
@@ -11,6 +15,8 @@ export const postQueries = {
       [...postQueries.keys.root, 'list', channelId] as const,
     detail: (postId: string) =>
       [...postQueries.keys.root, 'detail', postId] as const,
+    reflection: (postId: string) =>
+      [...postQueries.keys.root, 'reflection', postId] as const,
   },
 
   postList: ({
@@ -37,6 +43,18 @@ export const postQueries = {
       queryFn: () => getPostByPostId({ postId }),
       select: (data) => {
         return plainToInstance(PostViewModel, plainToInstance(PostModel, data));
+      },
+    }),
+
+  reflectionDetail: (postId: string) =>
+    queryOptions({
+      queryKey: [...postQueries.keys.reflection(postId)],
+      queryFn: () => getPostByPostId({ postId }),
+      select: (data) => {
+        return plainToInstance(
+          ReflectionPostViewModel,
+          plainToInstance(PostModel, data),
+        );
       },
     }),
 };

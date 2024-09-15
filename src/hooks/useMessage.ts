@@ -1,10 +1,10 @@
-import { MESSAGE } from '@/constants/queryKeys';
-import { getMessageListByUser, sendMessage } from '@/shared/api/message/api';
 import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
+import { MESSAGE } from 'constants/queryKeys';
+import { getMessageListByUser, sendMessage } from 'shared/api/message/api';
 import { convertDateToString } from 'shared/utils/convertDateToString';
 
 interface MessageLog {

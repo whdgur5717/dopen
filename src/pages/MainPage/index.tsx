@@ -1,26 +1,22 @@
 import { Flex } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { authQueries } from 'entities/auth/api/auth.queries';
 import { Suspense } from 'react';
 import { DEFAULT_PAGE_PADDING } from 'shared/constants/style';
 
 import TimerCalender from './LoginGrassBox';
 import Dday from './ui/Dday/Dday';
+import GuestProfile from './ui/Profile/GuestProfile';
 import UserProfile from './ui/Profile/UserProfile';
 
+//여기는 현재 유저정보가 있냐없냐에 따라 나뉘어야됨
 const MainPage = () => {
-  const {
-    data: {
-      username,
-      image,
-      fullName: { timerChannelId },
-    },
-  } = useSuspenseQuery({
+  const { data } = useQuery({
     ...authQueries.auth(),
   });
 
-  const isLoggedIn = !!username;
+  const isLoggedIn = !!data;
 
   return (
     <Flex
@@ -33,13 +29,18 @@ const MainPage = () => {
       <MainPageBody>
         {isLoggedIn ? (
           <>
-            <UserProfile username={username} src={image || ''} />
+            <UserProfile username={data._username} src={data._image || ''} />
             <Dday />
             <Suspense>
-              <TimerCalender channelId={timerChannelId} />
+              <TimerCalender channelId={data._fullName.timerChannelId} />
             </Suspense>
           </>
-        ) : null}
+        ) : (
+          <>
+            <GuestProfile />
+            <Dday />
+          </>
+        )}
       </MainPageBody>
     </Flex>
   );

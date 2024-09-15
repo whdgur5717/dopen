@@ -1,15 +1,15 @@
-import { MYPOST_LIST, POST_DETAIL } from '@/constants/queryKeys';
-import { checkAuthenticated } from '@/shared/api/auth/api';
+import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { MYPOST_LIST, POST_DETAIL } from 'constants/queryKeys';
+import { checkAuthenticated } from 'shared/api/auth/api';
 import {
   ChannelPayload,
   createPost,
   editPost,
   getPostDetail,
   getPostListByChannel,
-} from '@/shared/api/post/api';
-import { api } from '@/shared/generated/test';
-import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+} from 'shared/api/post/api';
+import { api } from 'shared/generated/test';
 import { Post } from 'shared/types/domain';
 
 interface PostDetailProps {

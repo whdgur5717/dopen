@@ -1,4 +1,3 @@
-import { UserInfoInput } from '@/types/user';
 import {
   Avatar,
   Box,
@@ -18,6 +17,7 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { PROFILE_IMAGE_TYPES } from 'shared/constants/user';
 import { Button, Form, Input } from 'shared/ui/FormControl';
+import { UserInfoInput } from 'types/user';
 
 //TODO : validate,input 관련 파일 어디에 위치할지 생각하기
 interface UserInfoProps {

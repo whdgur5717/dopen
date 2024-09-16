@@ -7,6 +7,7 @@ import { DEFAULT_PAGE_PADDING } from 'shared/constants/style';
 
 import TimerCalender from './LoginGrassBox';
 import Dday from './ui/Dday/Dday';
+import BoardListPreview from './ui/Preview/BoardListPreview';
 import GuestProfile from './ui/Profile/GuestProfile';
 import UserProfile from './ui/Profile/UserProfile';
 
@@ -31,8 +32,9 @@ const MainPage = () => {
           <>
             <UserProfile username={data._username} src={data._image || ''} />
             <Dday />
-            <Suspense>
+            <Suspense fallback={<div>로딩중</div>}>
               <TimerCalender channelId={data._fullName.timerChannelId} />
+              <BoardListPreview />
             </Suspense>
           </>
         ) : (

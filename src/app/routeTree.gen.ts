@@ -153,11 +153,7 @@ const AuthBoardBoardlayoutBoardNameIndexRoute =
   AuthBoardBoardlayoutBoardNameIndexImport.update({
     path: '/$boardName/',
     getParentRoute: () => AuthBoardBoardlayoutRoute,
-  } as any).lazy(() =>
-    import('./routes/_auth/Board/_boardlayout/$boardName/index.lazy').then(
-      (d) => d.Route,
-    ),
-  )
+  } as any)
 
 const AuthBoardBoardlayoutReflectionPostIdLazyRoute =
   AuthBoardBoardlayoutReflectionPostIdLazyImport.update({

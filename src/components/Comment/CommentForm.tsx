@@ -1,54 +1,38 @@
+import { Box, Image, Input, Text } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { Image, Text, Box, Input } from '@chakra-ui/react';
-import { useCreateComment } from '@/hooks/useComment';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useCreateCommentMutation } from 'features/post/api/comment.mutation';
+
+import { useCommentForm } from './useCommentForm';
 
 interface CommentFormProps {
-  id: string;
-  author: string;
+  postId: string;
 }
 
 export interface CommentInput {
   comment: string;
 }
 
-const CommentForm = ({ id, author }: CommentFormProps) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setError,
-    formState: { errors },
-  } = useForm<CommentInput>();
+const CommentForm = ({ postId }: CommentFormProps) => {
+  const { comment, handleSubmit, errors } = useCommentForm(postId);
 
-  const { pushComment, isSuccess } = useCreateComment(author);
+  const { mutate } = useCreateCommentMutation();
 
-  const onCommentValid: SubmitHandler<CommentInput> = ({ comment }) => {
-    if (comment.trim().length < 1) {
-      setError(
-        'comment',
-        { message: '댓글을 작성해주세요.' },
-        { shouldFocus: true },
-      );
-      return;
-    }
-    pushComment({ comment, postId: id });
-    reset();
-  };
+  // useEffect(() => {
+  //   if (!isSuccess) {
+  //     return;
+  //   }
 
-  useEffect(() => {
-    if (!isSuccess) {
-      return;
-    }
-
-    const scrollPosition = document.body.scrollHeight + 300;
-    setTimeout(() => window.scrollTo(0, scrollPosition), 100);
-  }, [isSuccess]);
+  //   const scrollPosition = document.body.scrollHeight + 300;
+  //   setTimeout(() => window.scrollTo(0, scrollPosition), 100);
+  // }, [isSuccess]);
 
   return (
     <Box>
-      <Form onSubmit={handleSubmit(onCommentValid)}>
+      <Form
+        onSubmit={handleSubmit((data) =>
+          mutate({ createCommentRequest: data }),
+        )}
+      >
         <Input
           resize="none"
           bgColor="gray200"
@@ -58,12 +42,7 @@ const CommentForm = ({ id, author }: CommentFormProps) => {
           borderRadius="5px"
           placeholder="댓글을 입력해주세요."
           id="comment"
-          {...register('comment', {
-            maxLength: {
-              value: 100,
-              message: '댓글을 100자 이하로 작성해주세요.',
-            },
-          })}
+          {...comment}
         />
         <Button>
           <Image src="/assets/send.svg" alt="comment send" />

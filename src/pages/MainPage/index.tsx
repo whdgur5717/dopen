@@ -1,18 +1,23 @@
 import { Flex } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { DEFAULT_PAGE_PADDING } from '@/constants/style';
-import { useMyInfo } from '@/hooks/useAuth';
-import MainHeader from '@/components/MainHeader';
-import Footer from '@/components/Footer';
-import GuestProfile from '@/pages/MainPage/GuestProfile';
-import LoginProfile from '@/pages/MainPage/LoginProfile';
-import Dday from '@/pages/MainPage/Dday';
-// import BoardListPreview from '@/pages/MainPage/BoardListPreview';
-import LoginGrassBox from '@/pages/MainPage/LoginGrassBox';
-import GuestGrassBox from '@/pages/MainPage/GuestGrassBox';
+import { useQuery } from '@tanstack/react-query';
+import { authQueries } from 'entities/auth/api/auth.queries';
+import { Suspense } from 'react';
+import { DEFAULT_PAGE_PADDING } from 'shared/constants/style';
 
+import TimerCalender from './LoginGrassBox';
+import Dday from './ui/Dday/Dday';
+import BoardListPreview from './ui/Preview/BoardListPreview';
+import GuestProfile from './ui/Profile/GuestProfile';
+import UserProfile from './ui/Profile/UserProfile';
+
+//여기는 현재 유저정보가 있냐없냐에 따라 나뉘어야됨
 const MainPage = () => {
-  const { data: myInfo } = useMyInfo();
+  const { data } = useQuery({
+    ...authQueries.auth(),
+  });
+
+  const isLoggedIn = !!data;
 
   return (
     <Flex
@@ -22,14 +27,23 @@ const MainPage = () => {
       margin="0 auto"
       direction="column"
     >
-      <MainHeader />
       <MainPageBody>
-        {myInfo ? <LoginProfile myInfo={myInfo} /> : <GuestProfile />}
-        <Dday myInfo={myInfo} />
-        {!myInfo ? <GuestGrassBox /> : <LoginGrassBox myInfo={myInfo} />}
-        {/* <BoardListPreview /> */}
+        {isLoggedIn ? (
+          <>
+            <UserProfile username={data._username} src={data._image || ''} />
+            <Dday />
+            <Suspense fallback={<div>로딩중</div>}>
+              <TimerCalender channelId={data._fullName.timerChannelId} />
+              <BoardListPreview />
+            </Suspense>
+          </>
+        ) : (
+          <>
+            <GuestProfile />
+            <Dday />
+          </>
+        )}
       </MainPageBody>
-      <Footer />
     </Flex>
   );
 };

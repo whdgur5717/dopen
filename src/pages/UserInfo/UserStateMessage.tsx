@@ -1,4 +1,4 @@
-import { Box, Text, Button } from '@chakra-ui/react';
+import { Box, Button, Text } from '@chakra-ui/react';
 
 const UserStateMessage = () => {
   return (

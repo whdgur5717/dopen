@@ -1,43 +1,46 @@
-import { useNavigate } from '@tanstack/react-router';
+import { Avatar, Box, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { Box, Text, Avatar, useColorModeValue, Flex } from '@chakra-ui/react';
-import { LOGIN_TOKEN } from '@/constants/user';
-import { removeItem } from '@/utils/storage';
-import { useLogOut, useMyInfo } from '@/hooks/useAuth';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
+import { authQueries } from 'entities/auth/api/auth.queries';
+import { useLogOutMutation } from 'features/logout/mutation';
+import { LOGIN_TOKEN } from 'shared/constants/user';
+import { removeItem } from 'shared/utils/storage';
+
 import MyPageListItem from './MyPageListItem';
 import { MYPAGE_LIST } from './myPageList';
-import PageHeader from '@/components/PageHeader';
-import Footer from '@/components/Footer';
 
 const MyPage = () => {
   const navigator = useNavigate();
   const menuListBg = useColorModeValue('#fff', '#1c1c1c');
-  const onSuccessFn = () => {
-    removeItem(LOGIN_TOKEN);
-    navigator({ to: '/', replace: true });
-  };
-  const { mutate } = useLogOut({ onSuccessFn });
-  const { data: myInfo } = useMyInfo();
 
-  const onLogOut = () => {
-    mutate();
-  };
+  const { mutate: logout } = useLogOutMutation({
+    onSuccess: () => {
+      removeItem(LOGIN_TOKEN);
+      navigator({ to: '/', replace: true });
+    },
+  });
+
+  const {
+    data: { username, image },
+  } = useSuspenseQuery({
+    ...authQueries.auth(),
+  });
 
   return (
     <Flex w="100%" flex="1" flexDir="column" m="0 auto">
-      <PageHeader pageName="마이페이지" />
       <Box padding="20px" flex="1">
         <Box
           width="fit-content"
           margin="15px auto 0"
           cursor="pointer"
           textAlign="center"
-          onClick={() => navigator({ to: `/${myInfo?.username}` })}
+          onClick={() => navigator({ to: `/${username}` })}
         >
           <Box>
-            <Avatar w="118px" h="118px" src={myInfo?.image || ''} />
+            <Avatar w="118px" h="118px" src={image || ''} />
           </Box>
-          <ProfileName>{myInfo?.username}</ProfileName>
+          <ProfileName>{username}</ProfileName>
         </Box>
         {MYPAGE_LIST.map((mypage, index) => {
           return (
@@ -49,7 +52,7 @@ const MyPage = () => {
                     icon={icon}
                     title={title}
                     href={href}
-                    username={myInfo?.username}
+                    username={username}
                   />
                 );
               })}
@@ -57,14 +60,13 @@ const MyPage = () => {
           );
         })}
         <MyPageUl menuListBg={menuListBg}>
-          <li onClick={onLogOut}>
+          <li onClick={() => logout()}>
             <Text as="strong" fontSize="lg" color="pink.400">
               로그아웃
             </Text>
           </li>
         </MyPageUl>
       </Box>
-      <Footer />
     </Flex>
   );
 };

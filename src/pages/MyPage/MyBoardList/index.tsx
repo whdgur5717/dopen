@@ -1,13 +1,12 @@
-import { useNavigate } from '@tanstack/react-router';
 import { Box, Flex } from '@chakra-ui/react';
+import { useNavigate } from '@tanstack/react-router';
+import Footer from 'components/Footer';
+import PageHeader from 'components/PageHeader';
+import PostListItem from 'components/PostList/PostListItem';
+import { useMyInfo } from 'hooks/useAuth';
+import { useMyPostList } from 'hooks/usePost';
+import { calculateTimeDiff } from 'shared/utils/calculateTimeDiff';
 
-import { useMyInfo } from '@/hooks/useAuth';
-import { useMyPostList } from '@/hooks/usePost';
-
-import PostListItem from '@/components/PostList/PostListItem';
-import PageHeader from '@/components/PageHeader';
-import Footer from '@/components/Footer';
-import { calculateTimeDiff } from '@/utils/calculateTimeDiff';
 import { FREE, INFOSHARE, REFLECTION } from './boardChannelId';
 
 type Channel = typeof FREE | typeof REFLECTION | typeof INFOSHARE;

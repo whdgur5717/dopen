@@ -1,5 +1,5 @@
-import { stringTimeToSeconds } from '@/utils/stringTimeToSeconds';
 import { useRef, useState } from 'react';
+import { stringTimeToSeconds } from 'shared/utils/stringTimeToSeconds';
 
 interface useTimerProps {
   timerEndCallback?: () => void;
@@ -7,7 +7,7 @@ interface useTimerProps {
   initialTime?: string; //"HH:MM:SS"
 }
 
-const useTimer = ({
+export const useTimer = ({
   timerEndCallback,
   limitTime,
   initialTime = '00:00:00',
@@ -110,5 +110,3 @@ const useTimer = ({
     timerRef,
   };
 };
-
-export default useTimer;

@@ -1,5 +1,5 @@
-import { getRequest, putRequest, postRequest } from './instance';
-import { User } from './type';
+import { getRequest, postRequest, putRequest } from '../shared/axios/instance';
+import { User } from '../shared/types/domain';
 
 export const getUserList = async ({
   offset,

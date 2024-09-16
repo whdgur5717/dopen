@@ -1,21 +1,20 @@
-import { AxiosError } from 'axios';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { Box, Heading, Image, Text, useColorModeValue } from '@chakra-ui/react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import styled from '@emotion/styled';
-import { Box, Text, Heading, Image, useColorModeValue } from '@chakra-ui/react';
-
-import { useLogin, useSignUp } from '@/hooks/useAuth';
-import { UserInfoInput, UserResponse } from '@/types/user';
-
-import { USER_INPUT_LIST } from './userInputList';
-import { validateUserInfo } from './validateUserInfo';
+import { AxiosError } from 'axios';
+import { useSignupMutation } from 'features/signup/api/signup.mutation';
+import type { SignupFormData } from 'features/signup/model/type';
+import { SignupResponse } from 'features/signup/model/type';
 import { useEffect, useRef } from 'react';
-import { LOGIN_TOKEN } from '@/constants/user';
-import { removeItem, setItem } from '@/utils/storage';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { LOGIN_TOKEN } from 'shared/constants/user';
+import { Button, Form, Input } from 'shared/ui/FormControl';
+import { removeItem, setItem } from 'shared/utils/storage';
+
+import { validateUserInfo } from '../../entities/form/lib/validateUserInfo';
+import { USER_INPUT_LIST } from '../../features/signup/lib/userInputList';
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const isAdminLogin = useRef(false);
   const isSignedUp = useRef(false);
 
   const inputBgColor = useColorModeValue('#F0F0F0F0', '#141414');
@@ -24,20 +23,43 @@ const SignUp = () => {
     '/assets/dopenWhiteLogo.svg',
   );
 
-  const { mutate: logIn } = useLogin({
-    onSuccessFn: () => {},
-    isSavedId: false,
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors, isValid },
+    setError,
+  } = useForm<SignupFormData>();
+
+  const onSuccess = (data: SignupResponse) => {
+    setItem(LOGIN_TOKEN, data.token);
+    isSignedUp.current = true;
+    alert('회원가입 성공');
+    setTimeout(() => navigate({ to: '/' }));
+  };
+
+  const onError = (error: AxiosError) => {
+    if (!error.response) {
+      // response가 없는 에러의 경우
+      alert(error.message);
+    }
+    if (error.response?.status === 400) {
+      setError(
+        'email',
+        { message: '동일한 이메일이 존재합니다.' },
+        { shouldFocus: true },
+      );
+    }
+  };
+
+  const { mutate } = useSignupMutation({
+    onSuccess,
+    onError,
+    signupFormData: getValues(),
   });
 
-  useEffect(() => {
-    if (!isAdminLogin.current) {
-      logIn({
-        email: import.meta.env.VITE_ADMIN_ID,
-        password: import.meta.env.VITE_ADMIN_PW,
-      });
-      isAdminLogin.current = true;
-    }
-  }, []);
+  const onValid: SubmitHandler<SignupFormData> = async (data) =>
+    await validateUserInfo({ userData: data, setError, onSuccess: mutate });
 
   useEffect(() => {
     const onBeforeUnload = () => {
@@ -53,44 +75,6 @@ const SignUp = () => {
     };
   }, []);
 
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    formState: { errors, isValid },
-    setError,
-  } = useForm<UserInfoInput>();
-
-  const onSuccessFn = (data: UserResponse) => {
-    setItem(LOGIN_TOKEN, data.token);
-    isSignedUp.current = true;
-    alert('회원가입 성공');
-    setTimeout(() => navigate({ to: '/' }));
-  };
-
-  const onErrorFn = (error: AxiosError) => {
-    if (!error.response) {
-      // response가 없는 에러의 경우
-      alert(error.message);
-    }
-    if (error.response?.status === 400) {
-      setError(
-        'email',
-        { message: '동일한 이메일이 존재합니다.' },
-        { shouldFocus: true },
-      );
-    }
-  };
-
-  const { mutate } = useSignUp({
-    onSuccessFn,
-    onErrorFn,
-    userInfo: getValues(),
-  });
-
-  const onValid: SubmitHandler<UserInfoInput> = async (data) =>
-    await validateUserInfo({ userData: data, setError, onSuccess: mutate });
-
   return (
     <Box w="100%" m="0 auto" textAlign="center" p="130px 20px">
       <Box mb={30}>
@@ -101,12 +85,12 @@ const SignUp = () => {
           <Text as="span" mr={5}>
             이미 회원이신가요?
           </Text>
-          <Link to="/login" title="로그인하기" style={{ color: '#f88585' }}>
+          <Link to="/Login" title="로그인하기" style={{ color: '#f88585' }}>
             로그인하기
           </Link>
         </Text>
       </Box>
-      <Form onSubmit={handleSubmit(onValid)}>
+      <Form onSubmit={handleSubmit((data) => onValid(data))}>
         <ul>
           {USER_INPUT_LIST.map(
             ({ name, type, required, placeholder, validate }) => (
@@ -115,10 +99,7 @@ const SignUp = () => {
                   bgColor={inputBgColor}
                   type={type}
                   placeholder={placeholder}
-                  {...register(name, {
-                    required,
-                    ...validate,
-                  })}
+                  {...register(name, { required, ...validate })}
                 />
                 <Text mt={2} color="pink.300" fontSize="sm">
                   {errors && errors[name] && errors[name]?.message}
@@ -137,45 +118,5 @@ const SignUp = () => {
     </Box>
   );
 };
-
-export const Button = styled.button`
-  width: 100%;
-  height: 50px;
-  background-color: #f88585;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
-  border-radius: 50px;
-`;
-
-export const Form = styled.form`
-  & ul {
-    margin-bottom: 32px;
-    & > li:not(:last-child) {
-      margin-bottom: 18px;
-    }
-
-    & > li {
-      text-align: left;
-      list-style: none;
-
-      & > span {
-        display: inline-block;
-        margin-top: 10px;
-        font-size: 12px;
-        color: #f88585;
-      }
-    }
-  }
-`;
-
-export const Input = styled.input<{ bgColor: string }>`
-  width: 100%;
-  height: 50px;
-  font-size: 14px;
-  border-radius: 5px;
-  background-color: ${({ bgColor }) => bgColor};
-  padding-left: 15px;
-`;
 
 export default SignUp;

@@ -1,12 +1,12 @@
-import MyModal, { MyModalProps } from '@/components/common/MyModal';
-import { TIME_OUT_VALUE } from '@/constants/time';
-import { convertDateToString } from '@/utils/convertDateToString';
-import { setItem } from '@/utils/storage';
-import { stringTimeToSeconds } from '@/utils/stringTimeToSeconds';
 import { FormControl, FormErrorMessage } from '@chakra-ui/form-control';
 import { Box, Flex, Input, Text } from '@chakra-ui/react';
+import { TIME_OUT_VALUE } from 'constants/time';
 import { Fragment, MutableRefObject } from 'react';
 import { Path, RegisterOptions, useForm } from 'react-hook-form';
+import MyModal, { MyModalProps } from 'shared/ui/MyModal';
+import { convertDateToString } from 'shared/utils/convertDateToString';
+import { setItem } from 'shared/utils/storage';
+import { stringTimeToSeconds } from 'shared/utils/stringTimeToSeconds';
 
 const checkTimeOut = (value: string) => {
   const currentTime = new Date();
@@ -109,8 +109,7 @@ const TimerSettingModal = ({
     currentTargetTime.current = stringTime;
     originTargetTime.current = stringTime;
 
-    const currentDate = new Date();
-    const { date } = convertDateToString(currentDate);
+    const { date } = convertDateToString(new Date());
 
     setItem('timer', {
       time: stringTime,

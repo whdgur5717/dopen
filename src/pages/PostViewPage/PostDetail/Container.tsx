@@ -1,8 +1,9 @@
-import { ReactNode } from 'react';
 import { Flex, FlexProps } from '@chakra-ui/react';
-import Header from './Header';
+import { ReactNode } from 'react';
+
 import Content from './Content';
 import Footer from './Footer';
+import Header from './Header';
 
 interface PostProps extends FlexProps {
   children: ReactNode;

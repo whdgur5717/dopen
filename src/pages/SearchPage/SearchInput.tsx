@@ -1,4 +1,3 @@
-import { Dispatch, FormEvent, SetStateAction } from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -9,7 +8,8 @@ import {
   FormErrorMessage,
   Input,
 } from '@chakra-ui/react';
-import { DEFAULT_PAGE_PADDING } from '@/constants/style';
+import { DEFAULT_PAGE_PADDING } from 'constants/style';
+import { Dispatch, FormEvent, SetStateAction } from 'react';
 
 // TODO : Input 컴포넌트인데 BoxProps를 받아오니깐 어색... 새로운 작명이 필요
 interface SearchInputProps extends BoxProps {

@@ -1,7 +1,6 @@
+import { Box, Button } from '@chakra-ui/react';
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import { AxiosError } from 'axios';
-import { Box, Button } from '@chakra-ui/react';
-import { AuthError } from '@/apis/authentication';
 
 interface ErrorFallbackProps {
   error: AxiosError;
@@ -33,7 +32,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps) => {
     );
   }
 
-  if (!error?.response && !(error instanceof AuthError)) {
+  if (!error?.response) {
     return (
       <Box
         width="100vw"

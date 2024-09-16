@@ -1,5 +1,5 @@
+import { Box, BoxProps, Flex, FlexProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { Box, Flex, FlexProps, BoxProps } from '@chakra-ui/react';
 
 interface MessageBoxProps extends FlexProps, BoxProps {
   children: ReactNode | string;

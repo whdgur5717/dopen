@@ -1,13 +1,13 @@
 import {
-  Input,
-  Button,
-  Flex,
   Box,
   BoxProps,
+  Button,
+  Flex,
   FormControl,
   Image,
+  Input,
 } from '@chakra-ui/react';
-import { useMessageForm } from '@/hooks/useMessageForm';
+import { useMessageForm } from 'hooks/useMessageForm';
 
 interface MessageFormProps extends BoxProps {
   onSuccess: (value: string) => void;

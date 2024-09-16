@@ -1,15 +1,16 @@
-import { AxiosError } from 'axios';
 import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { MYPOST_LIST, POST_DETAIL } from '@/constants/queryKeys';
-import { checkAuthenticated } from '@/apis/authentication';
+import { AxiosError } from 'axios';
+import { MYPOST_LIST, POST_DETAIL } from 'constants/queryKeys';
+import { checkAuthenticated } from 'shared/api/auth/api';
 import {
+  ChannelPayload,
   createPost,
   editPost,
   getPostDetail,
-  ChannelPayload,
   getPostListByChannel,
-} from '@/apis/post';
-import { Post } from '@/apis/type';
+} from 'shared/api/post/api';
+import { api } from 'shared/generated/test';
+import { Post } from 'shared/types/domain';
 
 interface PostDetailProps {
   id: string;

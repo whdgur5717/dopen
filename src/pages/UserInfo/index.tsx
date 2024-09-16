@@ -1,54 +1,26 @@
-import { useParams } from '@tanstack/react-router';
-import { Box, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
+import { useLoaderData, useParams } from '@tanstack/react-router';
 
-import { useMyInfo } from '@/hooks/useAuth';
-import { useGetUsersList } from '@/hooks/useUser';
-import { isValueUniqueInArray } from '@/utils/isValueUniqueInArray';
-
-import PageHeader from '@/components/PageHeader';
-import ErrorPage from '@/pages/404Page';
+import UserFollowInfo from './UserFollowInfo';
+import UserGrass from './UserGrass';
 import UserInfoContainer from './UserInfoContainer';
+import UserProfile from './UserProfile';
 
 const UserInfo = () => {
-  const { username = '' } = useParams();
-  const { data: myInfo } = useMyInfo();
-  const { data: userList = [], isLoading } = useGetUsersList({});
-
-  const isUserExist = isValueUniqueInArray(userList, 'username', username);
-  const isSameUser = username === myInfo?.username;
-
-  if (isLoading) {
-    return (
-      <Box padding="6" boxShadow="lg" bg="white">
-        <SkeletonCircle size="118px" />
-        <SkeletonText
-          mt="30px"
-          noOfLines={1}
-          spacing="4"
-          skeletonHeight="60px"
-        />
-      </Box>
-    );
-  }
-
-  if (isUserExist === false && isSameUser === false) {
-    return <ErrorPage />;
-  }
-
-  if (!myInfo) {
-    return null;
-  }
+  const { username, image } = useLoaderData({
+    from: '/_auth/$userId',
+    select: (data) => ({
+      username: data._username,
+      image: data._image,
+    }),
+  });
+  //현재 유저정보 페이지는 parmas로 닉네임을 넘김 - 이러면 찾기 힘드니까 userId로 넘기기
 
   return (
-    <Box height="100vh">
-      <PageHeader pageName={username} />
-      <UserInfoContainer
-        userList={userList}
-        myInfo={myInfo}
-        isSameUser={isSameUser}
-        username={username}
-      />
-    </Box>
+    <div>
+      <UserProfile username={username} image={image} />
+      <UserFollowInfo followInfo={userInfo ?? myInfo} />
+      <UserGrass userInfo={userInfo ?? myInfo} />
+    </div>
   );
 };
 

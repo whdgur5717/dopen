@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getUserList } from '@/apis/userInfo';
-import { USER_LIST } from '@/constants/queryKeys';
+import { USER_LIST } from 'constants/queryKeys';
+import { getUserList } from 'shared/api/user';
 
 interface UserListProps {
   offset?: number;

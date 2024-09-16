@@ -1,5 +1,3 @@
-import MyModal, { MyModalProps } from '@/components/common/MyModal';
-import { setItem } from '@/utils/storage';
 import {
   CloseButton,
   FormControl,
@@ -11,6 +9,8 @@ import {
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
+import MyModal, { MyModalProps } from 'shared/ui/common/MyModal';
+import { setItem } from 'shared/utils/storage';
 
 interface DdayModalInputTypes {
   dDayTitle: string;

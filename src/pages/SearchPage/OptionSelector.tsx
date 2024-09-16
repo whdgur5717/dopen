@@ -1,5 +1,3 @@
-import { Channel } from '@/apis/type';
-import { DEFAULT_PAGE_PADDING } from '@/constants/style';
 import {
   Box,
   FormControl,
@@ -7,6 +5,8 @@ import {
   Select,
   SelectProps,
 } from '@chakra-ui/react';
+import { Channel } from 'apis/type';
+import { DEFAULT_PAGE_PADDING } from 'constants/style';
 
 interface SearchOptionSelectorProps extends SelectProps {
   option: string;

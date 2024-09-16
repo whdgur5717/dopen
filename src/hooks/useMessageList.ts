@@ -1,9 +1,10 @@
-import { AxiosError } from 'axios';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getMessageList } from '@/apis/message';
-import { Conversation } from '@/apis/type';
-import { calculateTimeDiff } from '@/utils/calculateTimeDiff';
-import { MESSAGE_LIST } from '@/constants/queryKeys';
+import { Conversation } from 'apis/type';
+import { AxiosError } from 'axios';
+import { MESSAGE_LIST } from 'constants/queryKeys';
+import { getMessageList } from 'shared/api/message/api';
+import { calculateTimeDiff } from 'shared/utils/calculateTimeDiff';
+
 import { useCheckUserAuth } from './useAuth';
 
 export const useMessageList = () => {

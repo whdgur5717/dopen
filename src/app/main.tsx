@@ -24,13 +24,11 @@ declare module '@tanstack/react-router' {
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <ColorModeScript initialColorMode="light" />
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools />
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </ChakraProvider>
-  </React.StrictMode>,
+  <ChakraProvider theme={theme}>
+    <ColorModeScript initialColorMode="light" />
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  </ChakraProvider>,
 );

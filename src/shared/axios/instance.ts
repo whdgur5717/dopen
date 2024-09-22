@@ -1,12 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios, { type AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, {
+  type AxiosError,
+  type AxiosInstance,
+  AxiosRequestConfig,
+} from 'axios';
 
 import { LOGIN_TOKEN } from '../constants/user';
-import { getItem } from '../utils/storage';
 
 const API_ENDPOINT = `${import.meta.env.VITE_APP_URL}:${
   import.meta.env.VITE_APP_PORT
 }`;
+
+declare module '@tanstack/react-query' {
+  interface Register {
+    defaultError: AxiosError;
+  }
+}
 
 interface CustomInstance extends AxiosInstance {
   get<T>(...params: Parameters<AxiosInstance['get']>): Promise<T>;
@@ -24,7 +33,7 @@ export const axiosInstance: CustomInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = getItem(LOGIN_TOKEN, '');
+  const token = window.localStorage.getItem(LOGIN_TOKEN) || '';
   if (token && config.headers) {
     config.headers.Authorization = `bearer ${token}`;
   }
@@ -59,25 +68,25 @@ function flattenParams(params: Record<string, any>): Record<string, any> {
   return params;
 }
 
-export const postRequest = async <T, U>(
+export const postRequest = async <T>(
   url: string,
-  body?: U,
+  body?: Record<string, any>,
   config?: AxiosRequestConfig,
 ): Promise<T> => {
-  return await axiosInstance.post<T>(url, flattenParams(body), config);
+  return await axiosInstance.post<T>(url, flattenParams(body || {}), config);
 };
 
-export const putRequest = async <T, U>(
+export const putRequest = async <T>(
   url: string,
-  body?: U,
+  body?: Record<string, any>,
   config?: AxiosRequestConfig,
 ): Promise<T> => {
-  return await axiosInstance.put<T>(url, flattenParams(body), config);
+  return await axiosInstance.put<T>(url, flattenParams(body || {}), config);
 };
 
-export const deleteRequest = async <T, U>(
+export const deleteRequest = async <T>(
   url: string,
-  body?: U,
+  body?: Record<string, any>,
   config?: AxiosRequestConfig,
 ): Promise<T> => {
   return await axiosInstance.delete<T>(url, {

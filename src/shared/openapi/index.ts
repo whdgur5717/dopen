@@ -1,1 +1,1 @@
-export * from './generate/api';
+export * from './generate';

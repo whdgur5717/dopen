@@ -23,5 +23,5 @@ export interface UpdateUserPasswordRequest {
    * @type {string}
    * @memberof UpdateUserPasswordRequest
    */
-  password: string;
+  password?: string;
 }

@@ -23,11 +23,11 @@ export interface LoginRequest {
    * @type {string}
    * @memberof LoginRequest
    */
-  email: string;
+  email?: string;
   /**
    *
    * @type {string}
    * @memberof LoginRequest
    */
-  password: string;
+  password?: string;
 }

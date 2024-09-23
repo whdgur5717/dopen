@@ -23,35 +23,35 @@ export interface UserFollowingInner {
    * @type {string}
    * @memberof UserFollowingInner
    */
-  _id: string;
+  _id?: string;
   /**
    *
    * @type {string}
    * @memberof UserFollowingInner
    */
-  user: string;
+  user?: string;
   /**
    *
    * @type {string}
    * @memberof UserFollowingInner
    */
-  follower: string;
+  follower?: string;
   /**
    *
    * @type {string}
    * @memberof UserFollowingInner
    */
-  createdAt: string;
+  createdAt?: string;
   /**
    *
    * @type {string}
    * @memberof UserFollowingInner
    */
-  updatedAt: string;
+  updatedAt?: string;
   /**
    *
    * @type {number}
    * @memberof UserFollowingInner
    */
-  __v: number;
+  __v?: number;
 }

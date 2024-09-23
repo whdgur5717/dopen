@@ -28,11 +28,11 @@ export interface Login200Response {
    * @type {User}
    * @memberof Login200Response
    */
-  user: User;
+  user?: User;
   /**
    *
    * @type {string}
    * @memberof Login200Response
    */
-  token: string;
+  token?: string;
 }

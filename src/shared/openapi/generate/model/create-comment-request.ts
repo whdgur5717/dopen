@@ -23,11 +23,11 @@ export interface CreateCommentRequest {
    * @type {string}
    * @memberof CreateCommentRequest
    */
-  comment: string;
+  comment?: string;
   /**
    *
    * @type {string}
    * @memberof CreateCommentRequest
    */
-  postId: string;
+  postId?: string;
 }

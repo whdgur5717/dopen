@@ -23,5 +23,5 @@ export interface PutMessageSeenRequest {
    * @type {string}
    * @memberof PutMessageSeenRequest
    */
-  sender: string;
+  sender?: string;
 }

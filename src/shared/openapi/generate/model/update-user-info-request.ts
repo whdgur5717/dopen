@@ -23,11 +23,11 @@ export interface UpdateUserInfoRequest {
    * @type {string}
    * @memberof UpdateUserInfoRequest
    */
-  fullName: string;
+  fullName?: string;
   /**
    *
    * @type {string}
    * @memberof UpdateUserInfoRequest
    */
-  username: string;
+  username?: string;
 }

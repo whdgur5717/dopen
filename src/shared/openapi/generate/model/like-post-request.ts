@@ -23,5 +23,5 @@ export interface LikePostRequest {
    * @type {string}
    * @memberof LikePostRequest
    */
-  postId: string;
+  postId?: string;
 }

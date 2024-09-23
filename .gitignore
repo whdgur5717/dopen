@@ -26,3 +26,4 @@ dist-ssr
 # 기타 파일
 .eslintcache
 .env
+output.txt

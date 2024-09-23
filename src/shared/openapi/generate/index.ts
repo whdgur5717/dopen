@@ -1,7 +1,5 @@
 /* tslint:disable */
-
 /* eslint-disable */
-
 /**
  * Social Network API
  * API for a social network service
@@ -13,11 +11,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DefaultApi } from './api';
-import { Configuration } from './configuration';
 
-const config = new Configuration({
-  basePath: `${import.meta.env.VITE_APP_URL}:${import.meta.env.VITE_APP_PORT}`,
-});
-
-export const api = new DefaultApi(config);
+export * from './api';
+export * from './configuration';
+export * from './model';

@@ -10,6 +10,7 @@ index.ts
 model/channel.ts
 model/comment.ts
 model/conversation.ts
+model/create-channel-request.ts
 model/create-comment-request.ts
 model/create-notification-request.ts
 model/follow-user-request.ts

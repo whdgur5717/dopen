@@ -1,14 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postQueries } from 'entities/post/post.queries';
-import { likePost } from 'shared/openapi';
+import { api } from 'shared/openapi';
 
 export const useLikeMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: likePost,
-    onSuccess: (_, { likePostRequest }) => {
+    mutationFn: api.likePost,
+    onSuccess: (_, params) => {
       queryClient.invalidateQueries({
-        queryKey: postQueries.keys.detail(likePostRequest.postId),
+        queryKey: postQueries.keys.detail(params.likePostRequest.postId || ''),
       });
     },
   });

@@ -226,6 +226,31 @@ paths:
                 items:
                   $ref: '#/components/schemas/Channel'
 
+  /channels/create:
+    post:
+      summary: Create Channel
+      operationId: 'createChannel'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                authRequired:
+                  type: boolean
+      responses:
+        '200':
+          description: Created channel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+
   /channel/{channelName}:
     get:
       summary: Get channel information
@@ -452,6 +477,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - comment
+                - postId
               properties:
                 comment:
                   type: string

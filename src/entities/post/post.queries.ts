@@ -6,7 +6,7 @@ import {
   PostViewModel,
   ReflectionPostViewModel,
 } from 'features/post/model/postModel';
-import { getPostByPostId, getPostListByChannel } from 'shared/openapi';
+import { api } from 'shared/openapi';
 
 export const postQueries = {
   keys: {
@@ -30,17 +30,20 @@ export const postQueries = {
   }) =>
     queryOptions({
       queryKey: [...postQueries.keys.list(channelId)],
-      queryFn: () => getPostListByChannel({ channelId, offset, limit }),
-      select: (data) => {
-        return data.map((v) => plainToInstance(PostModel, v));
+      queryFn: async () => {
+        return await api.getPostListByChannel({ channelId, offset, limit });
       },
+      select: (data) => {
+        return plainToInstance(PostViewModel, plainToInstance(PostModel, data));
+      },
+      staleTime: Infinity,
       refetchOnWindowFocus: true,
     }),
 
   postDetail: (postId: string) =>
     queryOptions({
       queryKey: [...postQueries.keys.detail(postId)],
-      queryFn: () => getPostByPostId({ postId }),
+      queryFn: () => api.getPostByPostId({ postId }),
       select: (data) => {
         return plainToInstance(PostViewModel, plainToInstance(PostModel, data));
       },
@@ -49,7 +52,7 @@ export const postQueries = {
   reflectionDetail: (postId: string) =>
     queryOptions({
       queryKey: [...postQueries.keys.reflection(postId)],
-      queryFn: () => getPostByPostId({ postId }),
+      queryFn: () => api.getPostByPostId({ postId }),
       select: (data) => {
         return plainToInstance(
           ReflectionPostViewModel,

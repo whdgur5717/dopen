@@ -1,6 +1,7 @@
 export * from './channel';
 export * from './comment';
 export * from './conversation';
+export * from './create-channel-request';
 export * from './create-comment-request';
 export * from './create-notification-request';
 export * from './follow';

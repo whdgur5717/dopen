@@ -47,6 +47,8 @@ import type { Comment } from '../model';
 // @ts-ignore
 import type { Conversation } from '../model';
 // @ts-ignore
+import type { CreateChannelRequest } from '../model';
+// @ts-ignore
 import type { CreateCommentRequest } from '../model';
 // @ts-ignore
 import type { CreateNotificationRequest } from '../model';
@@ -128,6 +130,60 @@ export const DefaultApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Create Channel
+     * @param {CreateChannelRequest} createChannelRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createChannel: async (
+      createChannelRequest: CreateChannelRequest,
+      options: RawAxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createChannelRequest' is not null or undefined
+      assertParamExists(
+        'createChannel',
+        'createChannelRequest',
+        createChannelRequest,
+      );
+      const localVarPath = `/channels/create`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createChannelRequest,
+        localVarRequestOptions,
+        configuration,
+      );
 
       return {
         url: toPathString(localVarUrlObj),
@@ -1825,12 +1881,40 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      */
     async checkUserAuthentication(
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => User> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<User>> {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.checkUserAuthentication(options);
       const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
       const localVarOperationServerBasePath =
         operationServerMap['DefaultApi.checkUserAuthentication']?.[
+          localVarOperationServerIndex
+        ]?.url;
+      return (axios, basePath) =>
+        createRequestFunction(
+          localVarAxiosArgs,
+          globalAxios,
+          BASE_PATH,
+          configuration,
+        )(axios, localVarOperationServerBasePath || basePath);
+    },
+    /**
+     *
+     * @summary Create Channel
+     * @param {CreateChannelRequest} createChannelRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createChannel(
+      createChannelRequest: CreateChannelRequest,
+      options?: RawAxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<Channel>> {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createChannel(
+        createChannelRequest,
+        options,
+      );
+      const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+      const localVarOperationServerBasePath =
+        operationServerMap['DefaultApi.createChannel']?.[
           localVarOperationServerIndex
         ]?.url;
       return (axios, basePath) =>
@@ -1851,7 +1935,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async createComment(
       createCommentRequest: CreateCommentRequest,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Comment> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<Comment>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createComment(
         createCommentRequest,
         options,
@@ -1879,7 +1963,9 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async createNotification(
       createNotificationRequest: CreateNotificationRequest,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Notification> {
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<Notification>
+    > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.createNotification(
           createNotificationRequest,
@@ -1912,7 +1998,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
       image: File | null,
       channelId: string,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Post> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<Post>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createPost(
         title,
         image,
@@ -1942,7 +2028,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async deleteComment(
       id: string,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Comment> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<Comment>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteComment(
         id,
         options,
@@ -1970,7 +2056,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async deleteLikePost(
       id: string,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Like> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<Like>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deleteLikePost(
         id,
         options,
@@ -1998,7 +2084,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async deletePost(
       id: string,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => void> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<void>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.deletePost(
         id,
         options,
@@ -2026,7 +2112,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async followUser(
       followUserRequest: FollowUserRequest,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Follow> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<Follow>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.followUser(
         followUserRequest,
         options,
@@ -2054,7 +2140,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async getChannelInfo(
       channelName: string,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Channel> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<Channel>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getChannelInfo(
         channelName,
         options,
@@ -2080,7 +2166,9 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      */
     async getChannelList(
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Array<Channel>> {
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<Array<Channel>>
+    > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.getChannelList(options);
       const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -2105,7 +2193,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async getMessageList(
       options?: RawAxiosRequestConfig,
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Array<Conversation>
+      (axios?: AxiosInstance, basePath?: string) => Promise<Array<Conversation>>
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.getMessageList(options);
@@ -2132,7 +2220,9 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async getMessageListByUser(
       userId: string,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Array<Message>> {
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<Array<Message>>
+    > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.getMessageListByUser(userId, options);
       const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -2157,7 +2247,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async getNotification(
       options?: RawAxiosRequestConfig,
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Array<Notification>
+      (axios?: AxiosInstance, basePath?: string) => Promise<Array<Notification>>
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.getNotification(options);
@@ -2182,7 +2272,9 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      */
     async getOnlineUserList(
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Array<User>> {
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<Array<User>>
+    > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.getOnlineUserList(options);
       const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -2208,7 +2300,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async getPostByPostId(
       postId: string,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Post> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<Post>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getPostByPostId(
         postId,
         options,
@@ -2240,7 +2332,9 @@ export const DefaultApiFp = function (configuration?: Configuration) {
       offset?: number,
       limit?: number,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Array<Post>> {
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<Array<Post>>
+    > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.getPostListByChannel(
           channelId,
@@ -2275,7 +2369,9 @@ export const DefaultApiFp = function (configuration?: Configuration) {
       offset?: number,
       limit?: number,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Array<Post>> {
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<Array<Post>>
+    > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.getPostListByUser(
           authorId,
@@ -2306,7 +2402,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async getUserInfo(
       userId: string,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => User> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<User>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getUserInfo(
         userId,
         options,
@@ -2336,7 +2432,9 @@ export const DefaultApiFp = function (configuration?: Configuration) {
       offset?: number,
       limit?: number,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Array<User>> {
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<Array<User>>
+    > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getUserList(
         offset,
         limit,
@@ -2365,7 +2463,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async likePost(
       likePostRequest: LikePostRequest,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Like> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<Like>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.likePost(
         likePostRequest,
         options,
@@ -2393,7 +2491,9 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async login(
       loginRequest: LoginRequest,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Login200Response> {
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<Login200Response>
+    > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.login(
         loginRequest,
         options,
@@ -2418,7 +2518,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      */
     async logout(
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => void> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<void>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.logout(options);
       const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
       const localVarOperationServerBasePath =
@@ -2444,7 +2544,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
       isCover?: boolean,
       image?: File,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => User> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<User>> {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.postUserProfileImg(
           isCover,
@@ -2474,7 +2574,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async putMessageSeen(
       putMessageSeenRequest: PutMessageSeenRequest,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => void> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<void>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.putMessageSeen(
         putMessageSeenRequest,
         options,
@@ -2500,7 +2600,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      */
     async putNotificationSeen(
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => void> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<void>> {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.putNotificationSeen(options);
       const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -2530,7 +2630,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
       (
         axios?: AxiosInstance,
         basePath?: string,
-      ) => Array<SearchPostAndUser200ResponseInner>
+      ) => Promise<Array<SearchPostAndUser200ResponseInner>>
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.searchPostAndUser(query, options);
@@ -2557,7 +2657,9 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async searchUser(
       query: string,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Array<User>> {
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<Array<User>>
+    > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.searchUser(
         query,
         options,
@@ -2585,7 +2687,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async sendMessage(
       sendMessageRequest: SendMessageRequest,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Message> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<Message>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.sendMessage(
         sendMessageRequest,
         options,
@@ -2613,7 +2715,9 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async signup(
       signupRequest: SignupRequest,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Login200Response> {
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<Login200Response>
+    > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.signup(
         signupRequest,
         options,
@@ -2640,7 +2744,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async unfollowUser(
       followUserRequest: FollowUserRequest,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Follow> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<Follow>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.unfollowUser(
         followUserRequest,
         options,
@@ -2676,7 +2780,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
       imageToDeletePublicId?: string,
       channelId?: string,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => Post> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<Post>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.updatePost(
         postId,
         title,
@@ -2708,7 +2812,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async updateUserInfo(
       updateUserInfoRequest: UpdateUserInfoRequest,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => User> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<User>> {
       const localVarAxiosArgs = await localVarAxiosParamCreator.updateUserInfo(
         updateUserInfoRequest,
         options,
@@ -2736,7 +2840,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     async updateUserPassword(
       updateUserPasswordRequest: UpdateUserPasswordRequest,
       options?: RawAxiosRequestConfig,
-    ): Promise<(axios?: AxiosInstance, basePath?: string) => void> {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<void>> {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.updateUserPassword(
           updateUserPasswordRequest,
@@ -2778,6 +2882,21 @@ export const DefaultApiFactory = function (
     checkUserAuthentication(options?: RawAxiosRequestConfig): Promise<User> {
       return localVarFp
         .checkUserAuthentication(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Create Channel
+     * @param {DefaultApiCreateChannelRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createChannel(
+      requestParameters: DefaultApiCreateChannelRequest,
+      options?: RawAxiosRequestConfig,
+    ): Promise<Channel> {
+      return localVarFp
+        .createChannel(requestParameters.createChannelRequest, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -3276,6 +3395,20 @@ export const DefaultApiFactory = function (
 };
 
 /**
+ * Request parameters for createChannel operation in DefaultApi.
+ * @export
+ * @interface DefaultApiCreateChannelRequest
+ */
+export interface DefaultApiCreateChannelRequest {
+  /**
+   *
+   * @type {CreateChannelRequest}
+   * @memberof DefaultApiCreateChannel
+   */
+  readonly createChannelRequest: CreateChannelRequest;
+}
+
+/**
  * Request parameters for createComment operation in DefaultApi.
  * @export
  * @interface DefaultApiCreateCommentRequest
@@ -3740,6 +3873,23 @@ export class DefaultApi extends BaseAPI {
   public checkUserAuthentication(options?: RawAxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
       .checkUserAuthentication(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Create Channel
+   * @param {DefaultApiCreateChannelRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public createChannel(
+    requestParameters: DefaultApiCreateChannelRequest,
+    options?: RawAxiosRequestConfig,
+  ) {
+    return DefaultApiFp(this.configuration)
+      .createChannel(requestParameters.createChannelRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

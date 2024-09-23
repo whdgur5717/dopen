@@ -1,7 +1,7 @@
 import { queryOptions } from '@tanstack/react-query';
-import { plainToClass, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { UserModel } from 'entities/auth/model/user.dto';
-import { checkUserAuthentication, getUserInfo } from 'shared/openapi';
+import { api } from 'shared/openapi';
 
 export const authQueries = {
   keys: {
@@ -13,7 +13,7 @@ export const authQueries = {
   auth() {
     return queryOptions({
       queryKey: [...this.keys.myInfo()],
-      queryFn: checkUserAuthentication,
+      queryFn: () => api.checkUserAuthentication(),
       select: (data) => plainToInstance(UserModel, data),
     });
   },
@@ -21,7 +21,7 @@ export const authQueries = {
   userInfo(userId: string) {
     return queryOptions({
       queryKey: authQueries.keys.userInfo(userId),
-      queryFn: () => getUserInfo({ userId }),
+      queryFn: () => api.getUserInfo({ userId }),
       select: (data) => plainToInstance(UserModel, data),
     });
   },

@@ -1,8 +1,9 @@
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Button, Flex, Text } from '@chakra-ui/react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { channelQueries } from 'entities/channel/api/channel.queries';
+import { postQueries } from 'entities/post/post.queries';
 
 import BoardListPreviewItem from './BoardListPreviewItem';
 
@@ -10,6 +11,19 @@ const BoardListPreview = () => {
   const { data: channelListData } = useSuspenseQuery({
     ...channelQueries.channelList(),
   });
+
+  const postThumbnailLists = useSuspenseQueries({
+    queries:
+      channelListData?.map(({ _id }) => ({
+        ...postQueries.postList({ channelId: _id }),
+      })) || [],
+    combine: (results) => {
+      return results
+        .map((result) => result.data)
+        .map((post) => post[0].title.title);
+    },
+  });
+
   const navigate = useNavigate();
 
   return (
@@ -32,12 +46,12 @@ const BoardListPreview = () => {
         </Button>
       </Flex>
       <Flex paddingTop="23px" gap="10px" direction="column">
-        {channelListData?.map((item) => (
+        {postThumbnailLists?.map((title) => (
           <BoardListPreviewItem
-            key={item._id}
-            channel={item.name}
-            channelId={item._id}
-            boardName={item.description}
+            key={title}
+            boardName={title}
+            title={title}
+            onClick={() => navigate({ to: '/Board' })}
           />
         ))}
       </Flex>

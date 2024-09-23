@@ -1,26 +1,26 @@
 import { StackDivider, VStack } from '@chakra-ui/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { channelQueries } from 'entities/channel/api/channel.queries';
+import { useLoaderData } from '@tanstack/react-router';
 import { postQueries } from 'entities/post/post.queries';
 import PostListItem from 'src/components/PostList/PostListItem';
 
 const BoardPage = () => {
-  const { data } = useSuspenseQuery(
-    channelQueries.channelInfo(location.pathname.split('/')[2]),
-  );
+  const channelId = useLoaderData({
+    from: '/_auth/Board/_boardlayout/$boardName/',
+  });
 
-  const { data: posts } = useSuspenseQuery(
-    postQueries.postList({ channelId: data._id, offset: 0, limit: 0 }),
-  );
+  const { data } = useSuspenseQuery({
+    ...postQueries.postList({ channelId }),
+  });
 
   return (
     <VStack w="100%" spacing={0} divider={<StackDivider />}>
-      {posts.map((post) => {
+      {data.map((post) => {
         return (
           <PostListItem
-            key={post._id}
-            title={post.title}
-            author={post.author.username}
+            key={post.title.content + post.createdAt}
+            title={post.title.title}
+            author={post.author.fullName}
             timeAgo={post.createdAt}
             likeCount={post.likes?.length || 0}
             commentCount={post.comments?.length || 0}

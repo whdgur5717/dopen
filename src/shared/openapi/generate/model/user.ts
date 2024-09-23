@@ -52,6 +52,12 @@ export interface User {
    * @type {string}
    * @memberof User
    */
+  username: string;
+  /**
+   *
+   * @type {string}
+   * @memberof User
+   */
   role: string;
   /**
    *

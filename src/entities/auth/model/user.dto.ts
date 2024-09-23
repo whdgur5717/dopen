@@ -1,10 +1,5 @@
 import type { User } from 'shared/openapi/generate';
 
-type ParsedFullName = {
-  name: string;
-  timerChannelId: string;
-};
-
 function safeJSONParse<T>(str: string) {
   return JSON.parse(str) as T;
 }

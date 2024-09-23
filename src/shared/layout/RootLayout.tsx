@@ -17,7 +17,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       sx={{ '&::-webkit-scrollbar': { display: 'none' } }}
     >
       {children}
-      <Footer />
+      <Footer maxW={DEFAULT_WIDTH} />
     </Flex>
   );
 };

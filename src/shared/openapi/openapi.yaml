@@ -770,10 +770,13 @@ components:
         - email
         - createdAt
         - updatedAt
+        - username
       properties:
         coverImage:
           type: string
         image:
+          type: string
+        username:
           type: string
         role:
           type: string

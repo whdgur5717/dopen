@@ -5,7 +5,7 @@ import { api } from 'shared/openapi';
 export const useLoginMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => api.login(),
+    mutationFn: api.login,
     onSuccess: (result) => {
       queryClient.setQueryData(authQueries.auth().queryKey, result.user);
     },

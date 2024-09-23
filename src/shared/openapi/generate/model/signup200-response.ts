@@ -20,19 +20,19 @@ import type { User } from './user';
 /**
  *
  * @export
- * @interface Login200Response
+ * @interface Signup200Response
  */
-export interface Login200Response {
+export interface Signup200Response {
   /**
    *
    * @type {User}
-   * @memberof Login200Response
+   * @memberof Signup200Response
    */
-  user: User;
+  user?: User;
   /**
    *
    * @type {string}
-   * @memberof Login200Response
+   * @memberof Signup200Response
    */
-  token: string;
+  token?: string;
 }

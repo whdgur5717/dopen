@@ -77,6 +77,8 @@ import type { SearchPostAndUser200ResponseInner } from '../model';
 // @ts-ignore
 import type { SendMessageRequest } from '../model';
 // @ts-ignore
+import type { Signup200Response } from '../model';
+// @ts-ignore
 import type { SignupRequest } from '../model';
 // @ts-ignore
 import type { UpdateUserInfoRequest } from '../model';
@@ -2716,7 +2718,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
       signupRequest: SignupRequest,
       options?: RawAxiosRequestConfig,
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<Login200Response>
+      (axios?: AxiosInstance, basePath?: string) => Promise<Signup200Response>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.signup(
         signupRequest,
@@ -3316,7 +3318,7 @@ export const DefaultApiFactory = function (
     signup(
       requestParameters: DefaultApiSignupRequest,
       options?: RawAxiosRequestConfig,
-    ): Promise<Login200Response> {
+    ): Promise<Signup200Response> {
       return localVarFp
         .signup(requestParameters.signupRequest, options)
         .then((request) => request(axios, basePath));

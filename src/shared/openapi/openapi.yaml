@@ -571,12 +571,15 @@ paths:
       operationId: 'unfollowUser'
       security:
         - BearerAuth: []
-      parameters:
-        - in: query
-          name: id
-          required: true
-          schema:
-            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
       responses:
         '200':
           description: Follow deleted
@@ -635,6 +638,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - message
+                - receiver
               properties:
                 message:
                   type: string
@@ -718,15 +724,22 @@ components:
   schemas:
     User:
       type: object
+      required:
+        - role
+        - isOnline
+        - posts
+        - likes
+        - comments
+        - followers
+        - following
+        - notifications
+        - messages
+        - _id
+        - fullName
+        - email
+        - createdAt
+        - updatedAt
       properties:
-        _id:
-          type: string
-        fullName:
-          type: string
-        username:
-          type: string
-        email:
-          type: string
         coverImage:
           type: string
         image:
@@ -779,6 +792,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Message'
+        _id:
+          type: string
+        fullName:
+          type: string
+        email:
+          type: string
         createdAt:
           type: string
         updatedAt:
@@ -786,6 +805,13 @@ components:
 
     Channel:
       type: object
+      required:
+        - posts
+        - _id
+        - name
+        - description
+        - createdAt
+        - updatedAt
       properties:
         authRequired:
           type: boolean
@@ -806,6 +832,15 @@ components:
 
     Post:
       type: object
+      required:
+        - likes
+        - comments
+        - _id
+        - title
+        - channel
+        - author
+        - createdAt
+        - updatedAt
       properties:
         likes:
           type: array
@@ -836,6 +871,12 @@ components:
 
     Like:
       type: object
+      required:
+        - _id
+        - user
+        - post
+        - createdAt
+        - updatedAt
       properties:
         _id:
           type: string
@@ -850,6 +891,13 @@ components:
 
     Comment:
       type: object
+      required:
+        - _id
+        - comment
+        - author
+        - post
+        - createdAt
+        - updatedAt
       properties:
         _id:
           type: string
@@ -866,6 +914,12 @@ components:
 
     Notification:
       type: object
+      required:
+        - seen
+        - _id
+        - author
+        - createdAt
+        - updatedAt
       properties:
         seen:
           type: boolean
@@ -893,6 +947,12 @@ components:
 
     Follow:
       type: object
+      required:
+        - _id
+        - user
+        - follower
+        - createdAt
+        - updatedAt
       properties:
         _id:
           type: string
@@ -907,6 +967,13 @@ components:
 
     Conversation:
       type: object
+      required:
+        - _id
+        - message
+        - sender
+        - receiver
+        - seen
+        - createdAt
       properties:
         _id:
           type: array
@@ -925,6 +992,14 @@ components:
 
     Message:
       type: object
+      required:
+        - _id
+        - message
+        - sender
+        - receiver
+        - seen
+        - createdAt
+        - updatedAt
       properties:
         _id:
           type: string

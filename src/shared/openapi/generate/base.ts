@@ -17,6 +17,7 @@
 // @ts-ignore
 import type { AxiosInstance, AxiosPromise, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
+import { axiosInstance } from 'shared/axios/instance';
 
 import type { Configuration } from './configuration';
 
@@ -57,7 +58,7 @@ export class BaseAPI {
   constructor(
     configuration?: Configuration,
     protected basePath: string = BASE_PATH,
-    protected axios: AxiosInstance = globalAxios,
+    protected axios: AxiosInstance = axiosInstance,
   ) {
     if (configuration) {
       this.configuration = configuration;

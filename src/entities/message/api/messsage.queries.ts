@@ -1,5 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
-import { getMessageList, getMessageListByUser } from 'shared/openapi';
+import { api } from 'shared/openapi';
 
 import { ConversationModel, MessageModel } from '../model/log';
 
@@ -12,7 +12,7 @@ export const messageQueries = {
   list_my(myId: string) {
     return queryOptions({
       queryKey: [...messageQueries.keys.root],
-      queryFn: getMessageList,
+      queryFn: api.getMessageList,
       select: (messages) => {
         return messages.map((conversation) => {
           return new ConversationModel(conversation, myId)._format;
@@ -24,7 +24,7 @@ export const messageQueries = {
   list(userId: string) {
     return queryOptions({
       queryKey: [...messageQueries.keys.list(userId)],
-      queryFn: async () => await getMessageListByUser({ userId }),
+      queryFn: async () => await api.getMessageListByUser({ userId }),
       select: (messages) => {
         return messages?.reduce((map, message) => {
           const model = new MessageModel(message, userId);

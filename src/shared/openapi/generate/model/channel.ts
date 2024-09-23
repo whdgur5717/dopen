@@ -23,7 +23,7 @@ export interface Channel {
    * @type {boolean}
    * @memberof Channel
    */
-  authRequired: boolean;
+  authRequired?: boolean;
   /**
    *
    * @type {Array<string>}

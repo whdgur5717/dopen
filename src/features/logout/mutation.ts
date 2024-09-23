@@ -1,13 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { logout } from 'shared/api/auth';
+import { api } from 'shared/openapi';
 
-export const useLogOutMutation = ({ onSuccess }: { onSuccess: () => void }) => {
+export const useLogOutMutation = () => {
   return useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
-      if (onSuccess) {
-        onSuccess();
-      }
-    },
+    mutationFn: () => api.logout(),
   });
 };

@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { queryOptions } from '@tanstack/react-query';
-import { getChannelInfo, getChannelList } from 'shared/openapi';
+import { api } from 'shared/openapi';
 
-const boardList_public = ['free', 'reflection', 'shareInfo'];
 export const channelQueries = {
   keys: {
     list: ['channel_list'] as const,
@@ -15,16 +15,16 @@ export const channelQueries = {
   channelList() {
     return queryOptions({
       queryKey: [...channelQueries.keys.list],
-      queryFn: getChannelList,
-      select: (data): NonNullable<Awaited<ReturnType<typeof getChannelList>>> =>
-        data.filter((channel) => boardList_public.includes(channel.name)),
+      queryFn: async () => await api.getChannelList(),
+      select: (data) =>
+        data.filter((channel) => channel.authRequired === false),
       staleTime: Infinity,
     });
   },
   channelInfo(channelName: string) {
     return queryOptions({
       queryKey: channelQueries.keys.channelInfo(channelName),
-      queryFn: () => getChannelInfo({ channelName }),
+      queryFn: async () => await api.getChannelInfo({ channelName }),
     });
   },
 };

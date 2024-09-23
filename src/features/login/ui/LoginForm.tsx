@@ -1,91 +1,87 @@
-import { Checkbox, Flex, Text, useColorModeValue } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
-import { useLocation, useNavigate, useRouter } from '@tanstack/react-router';
-import { AxiosError } from 'axios';
-import { userListQuery } from 'entities/userList/api/userList.queries';
+import { Checkbox, Flex, Text } from '@chakra-ui/react';
+import { useRouter } from '@tanstack/react-router';
 import { useLoginMutation } from 'features/login/api/login.mutation';
-import { LoginFormData } from 'features/login/model/type';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { LOGINID_SAVEKEY } from 'shared/constants/user';
-import { Button, Form, Input } from 'shared/ui/FormControl';
-import { isValueUniqueInArray } from 'shared/utils/isValueUniqueInArray';
-import { getItem } from 'shared/utils/storage';
+import { LoginFormData, LoginStorageModel } from 'features/login/model/type';
+import { useEffect, useState } from 'react';
+import { SubmitHandler } from 'react-hook-form';
+import { Button, Input } from 'shared/ui/FormControl';
 
 import { LOGIN_INPUT_LIST } from '../lib/loginInputList';
+import { useLoginForm } from '../lib/useLoginForm';
 
 const LoginForm = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const router = useRouter();
-  const inputBgColor = useColorModeValue('#F0F0F0F0', '#141414');
   const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    setError,
-  } = useForm<LoginFormData>({
-    defaultValues: {
-      email: getItem(LOGINID_SAVEKEY, ''),
-      isSavedId: getItem(LOGINID_SAVEKEY, false) ? true : false,
-    },
-  });
+    navigate,
+    state: { location },
+    history,
+  } = useRouter();
 
-  const onSuccessFn = () => {
+  const [storage, setStorage] = useState<LoginStorageModel | null>(null);
+
+  const { registerField, errors, setError, handleSubmit, isValid } =
+    useLoginForm();
+
+  const navigateLocation = () => {
     alert('로그인 성공');
-    navigate({ to: (location.search as { redirect: string }).redirect || '/' });
+    const searchParams = new URLSearchParams(location.href);
+    const redirectUrl = searchParams.get('redirect') || '/';
+    navigate({ to: redirectUrl });
   };
 
-  const onErrorFn = (error: AxiosError) => {
-    if (error.response?.status === 400) {
-      setError(
-        'password',
-        { message: '비밀번호를 확인해주세요.' },
-        { shouldFocus: true },
-      );
-    }
+  const { mutate } = useLoginMutation();
+
+  const onLogin: SubmitHandler<LoginFormData> = async (data) => {
+    mutate(
+      { loginRequest: { ...data } },
+      {
+        onSuccess: (res) => {
+          storage?.setEmail(data.email);
+          storage?.setToken(res.token);
+          navigateLocation();
+        },
+        onError: (error) => {
+          if (error.response?.status === 400) {
+            setError(
+              'password',
+              { message: '비밀번호를 확인해주세요.' },
+              { shouldFocus: true },
+            );
+          }
+        },
+      },
+    );
   };
 
-  const { mutate } = useLoginMutation({
-    onSuccessFn,
-    onErrorFn,
-    isSavedId: watch('isSavedId') ?? false,
-  });
-
-  const { data: userList } = useQuery({
-    ...userListQuery.userList(),
-    placeholderData: [],
-  });
-
-  const onLoginValid: SubmitHandler<LoginFormData> = async ({
-    email,
-    password,
-  }) => {
-    console.log(email, password);
-    mutate({ loginRequest: { email, password } });
-  };
+  useEffect(() => {
+    const storage = new LoginStorageModel();
+    setStorage(storage);
+  }, []);
 
   return (
-    <Form onSubmit={handleSubmit(onLoginValid)}>
+    <form onSubmit={handleSubmit(onLogin)}>
       <ul style={{ marginBottom: '0px' }}>
-        {LOGIN_INPUT_LIST.map(
-          ({ name, type, required, placeholder, validate }) => (
-            <li key={name}>
-              <Input
-                bgColor={inputBgColor}
-                type={type}
-                placeholder={placeholder}
-                {...register(name, {
-                  required,
-                  ...validate,
-                })}
-              />
-              <Text mt={2} color="pink.300" fontSize="sm" textAlign="left">
-                {errors && errors[name] && errors[name]?.message}
-              </Text>
-            </li>
-          ),
-        )}
+        {LOGIN_INPUT_LIST.map(({ name, type, placeholder }) => (
+          <li key={name}>
+            <label htmlFor={name}>{name}</label>
+            <Input
+              bgColor="grey.200"
+              type={type}
+              id={name}
+              placeholder={placeholder}
+              {...registerField(name)}
+            />
+
+            <Text
+              mt={2}
+              color="pink.300"
+              fontSize="sm"
+              textAlign="left"
+              data-testid={name + 'errormessage'}
+            >
+              {errors && errors[name] && errors[name]?.message}
+            </Text>
+          </li>
+        ))}
       </ul>
 
       <Flex alignItems="center" m="10px 0 25px">
@@ -94,22 +90,30 @@ const LoginForm = () => {
           colorScheme="red"
           id="emailRemember"
           iconSize="lg"
-          {...register('isSavedId')}
+          {...registerField('keepLoggedIn')}
         >
           <Text as="span" fontSize="sm" color="#666">
             아이디 저장하기
           </Text>
         </Checkbox>
       </Flex>
-      <Button>로그인</Button>
+      <button
+        data-action="login"
+        disabled={!isValid}
+        name="login"
+        role="button"
+      >
+        로그인
+      </button>
       <Button
-        type="button"
+        data-action="signin"
+        name="signin"
         style={{ backgroundColor: '#F5C6C2', marginTop: '18px' }}
-        onClick={() => router.history.back()}
+        onClick={() => history.back()}
       >
         회원가입 하기
       </Button>
-    </Form>
+    </form>
   );
 };
 

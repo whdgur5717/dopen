@@ -52,31 +52,31 @@ export interface Notification {
    * @type {NotificationUser}
    * @memberof Notification
    */
-  user: NotificationUser;
+  user?: NotificationUser;
   /**
    *
    * @type {string}
    * @memberof Notification
    */
-  post: string | null;
+  post?: string | null;
   /**
    *
    * @type {string}
    * @memberof Notification
    */
-  follow: string;
+  follow?: string;
   /**
    *
    * @type {Comment}
    * @memberof Notification
    */
-  comment: Comment;
+  comment?: Comment;
   /**
    *
    * @type {string}
    * @memberof Notification
    */
-  message: string;
+  message?: string;
   /**
    *
    * @type {string}

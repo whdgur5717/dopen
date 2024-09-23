@@ -55,13 +55,13 @@ export interface Post {
    * @type {string}
    * @memberof Post
    */
-  image: string | null;
+  image?: string | null;
   /**
    *
    * @type {string}
    * @memberof Post
    */
-  imagePublicId: string | null;
+  imagePublicId?: string | null;
   /**
    *
    * @type {string}

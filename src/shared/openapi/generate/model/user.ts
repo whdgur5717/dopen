@@ -40,13 +40,13 @@ export interface User {
    * @type {string}
    * @memberof User
    */
-  _id: string;
+  coverImage?: string;
   /**
    *
    * @type {string}
    * @memberof User
    */
-  fullName: string;
+  image?: string;
   /**
    *
    * @type {string}
@@ -58,37 +58,19 @@ export interface User {
    * @type {string}
    * @memberof User
    */
-  email: string;
-  /**
-   *
-   * @type {string}
-   * @memberof User
-   */
-  coverImage: string;
-  /**
-   *
-   * @type {string}
-   * @memberof User
-   */
-  image: string;
-  /**
-   *
-   * @type {string}
-   * @memberof User
-   */
   role: string;
   /**
    *
    * @type {boolean}
    * @memberof User
    */
-  emailVerified: boolean;
+  emailVerified?: boolean;
   /**
    *
    * @type {boolean}
    * @memberof User
    */
-  banned: boolean;
+  banned?: boolean;
   /**
    *
    * @type {boolean}
@@ -137,6 +119,24 @@ export interface User {
    * @memberof User
    */
   messages: Array<Message>;
+  /**
+   *
+   * @type {string}
+   * @memberof User
+   */
+  _id: string;
+  /**
+   *
+   * @type {string}
+   * @memberof User
+   */
+  fullName: string;
+  /**
+   *
+   * @type {string}
+   * @memberof User
+   */
+  email: string;
   /**
    *
    * @type {string}

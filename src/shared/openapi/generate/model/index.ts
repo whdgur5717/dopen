@@ -1,6 +1,7 @@
 export * from './channel';
 export * from './comment';
 export * from './conversation';
+export * from './create-channel-request';
 export * from './create-comment-request';
 export * from './create-notification-request';
 export * from './follow';
@@ -16,6 +17,7 @@ export * from './post';
 export * from './put-message-seen-request';
 export * from './search-post-and-user200-response-inner';
 export * from './send-message-request';
+export * from './signup200-response';
 export * from './signup-request';
 export * from './update-user-info-request';
 export * from './update-user-password-request';

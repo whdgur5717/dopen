@@ -23,5 +23,5 @@ export interface FollowUserRequest {
    * @type {string}
    * @memberof FollowUserRequest
    */
-  userId: string;
+  userId?: string;
 }

@@ -23,17 +23,17 @@ export interface SignupRequest {
    * @type {string}
    * @memberof SignupRequest
    */
-  email: string;
+  email?: string;
   /**
    *
    * @type {string}
    * @memberof SignupRequest
    */
-  fullName: string;
+  fullName?: string;
   /**
    *
    * @type {string}
    * @memberof SignupRequest
    */
-  password: string;
+  password?: string;
 }

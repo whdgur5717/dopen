@@ -1,5 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
-import { getUserList } from 'shared/openapi';
+import { api } from 'shared/openapi';
 
 export const userListQuery = {
   keys: {
@@ -9,7 +9,7 @@ export const userListQuery = {
   userList({ offset, limit }: { offset?: number; limit?: number } = {}) {
     return queryOptions({
       queryKey: [...this.keys.root],
-      queryFn: () => getUserList({ offset, limit }),
+      queryFn: () => api.getUserList({ offset, limit }),
     });
   },
 };

@@ -1,31 +1,18 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
-import { postQueries } from 'entities/post/post.queries';
 
 interface BoardListPreviewItemProps {
   boardName: string;
-  channel: string;
-  channelId: string;
+  onClick: () => void;
+  title: string;
 }
 
 const BoardListPreviewItem = ({
   boardName,
-  channel,
-  channelId,
+  onClick,
+  title,
 }: BoardListPreviewItemProps) => {
-  const navigate = useNavigate();
-  const { data } = useSuspenseQuery({
-    ...postQueries.postList({ channelId }),
-  });
-
   return (
-    <Flex
-      alignItems="center"
-      cursor="pointer"
-      gap="5px"
-      onClick={() => navigate({ to: `/board/${channel}` })}
-    >
+    <Flex alignItems="center" cursor="pointer" gap="5px" onClick={onClick}>
       <Box width="140px" fontSize="xl" fontWeight="medium">
         {boardName}
       </Box>
@@ -37,7 +24,7 @@ const BoardListPreviewItem = ({
         overflow="hidden"
         textOverflow="ellipsis"
       >
-        {data[0]._title.title}
+        {title}
       </Box>
     </Flex>
   );

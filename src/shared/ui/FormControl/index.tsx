@@ -31,7 +31,7 @@ export const Form = styled.form`
   }
 `;
 
-export const Input = styled.input<{ bgColor: string }>`
+export const Input = styled.input<{ bgColor?: string }>`
   width: 100%;
   height: 50px;
   font-size: 14px;

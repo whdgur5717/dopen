@@ -1,47 +1,36 @@
-import { type MutationOptions, useMutation } from '@tanstack/react-query';
-import {
-  changePassword,
-  changeProfileImage,
-  changeUserName,
-} from 'shared/api/user';
+import { useMutation } from '@tanstack/react-query';
+import type { UserModel } from 'entities/auth/model/user.dto';
+import { api } from 'shared/openapi';
 
-import type { UserInfo } from '../type';
+import type { EditAccountFormData } from '../model/type';
 
-type Props = {
-  onSuccess: MutationOptions['onSuccess'];
-  profileImageFile: File | null;
-  newUserInfo: UserInfo;
-};
-export const useUpdateUserInfoMutation = ({
-  onSuccess,
-  profileImageFile,
-  newUserInfo,
-}: Props) => {
+export const useEditAccountMutation = () => {
   return useMutation({
-    mutationFn: async () => {
-      const { fullName, username, password } = newUserInfo;
-
-      const { name, timerChannelId } = JSON.parse(fullName);
+    mutationFn: async (
+      formData: EditAccountFormData & UserModel['_fullName'],
+    ) => {
+      const { name, username, password, image, timerChannelId } = formData;
 
       // 1차 내 정보 변경
-      await changeUserName({
-        fullName: JSON.stringify({
-          name,
-          timerChannelId,
-        }),
-        username,
+      await api.updateUserInfo({
+        updateUserInfoRequest: {
+          fullName: JSON.stringify({
+            name,
+            timerChannelId,
+          }),
+          username,
+        },
       });
       // // 2차 비밀번호 변경
-      await changePassword(password);
+      await api.updateUserPassword({ updateUserPasswordRequest: { password } });
 
       // 3차 프로필 이미지 변경
-      if (profileImageFile && !(profileImageFile instanceof File)) {
-        await changeProfileImage({
-          image: profileImageFile,
+      if (image) {
+        await api.postUserProfileImg({
+          image: image[0],
           isCover: false,
         });
       }
     },
-    onSuccess,
   });
 };

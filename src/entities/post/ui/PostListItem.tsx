@@ -11,11 +11,11 @@ import { DEFAULT_PAGE_PADDING } from 'shared/constants/style';
 import TextIconButton from 'shared/ui/TextIconButton';
 
 interface PostListItemProps extends FlexProps {
-  title: string;
-  author: string;
-  timeAgo: string;
-  likeCount: number;
-  commentCount: number;
+  title?: string;
+  author?: string;
+  timeAgo?: string;
+  likeCount?: number;
+  commentCount?: number;
 }
 
 const PostListItem = ({

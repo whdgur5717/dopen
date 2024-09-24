@@ -5,7 +5,7 @@ info:
   description: API for a social network service
 
 servers:
-  - url: https://kdt.frontend.5th.programmers.co.kr
+  - url: https://kdt.frontend.5th.programmers.co.kr:5011
 
 paths:
   /login:

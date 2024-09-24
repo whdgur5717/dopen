@@ -14,6 +14,7 @@
  * Do not edit the class manually.
  */
 import type { AxiosInstance, AxiosResponse } from 'axios';
+import { axiosInstance } from 'shared/axios/instance';
 
 import type { RequestArgs } from './base';
 import { RequiredError } from './base';
@@ -199,6 +200,6 @@ export const createRequestFunction = function (
         (axios.defaults.baseURL ? '' : (configuration?.basePath ?? basePath)) +
         axiosArgs.url,
     };
-    return axios.request<T, R>(axiosRequestArgs);
+    return axiosInstance.request<T, R>(axiosRequestArgs);
   };
 };

@@ -28,7 +28,6 @@ model/put-message-seen-request.ts
 model/search-post-and-user200-response-inner.ts
 model/send-message-request.ts
 model/signup-request.ts
-model/signup200-response.ts
 model/update-user-info-request.ts
 model/update-user-password-request.ts
 model/user-following-inner.ts

@@ -1,4 +1,4 @@
-import type { User } from 'shared/types/domain';
+import type { FieldPath } from 'react-hook-form';
 
 export interface SignupFormData {
   email: string;
@@ -8,7 +8,4 @@ export interface SignupFormData {
   passwordConfirm: string;
 }
 
-export interface SignupResponse {
-  user: User;
-  token: string;
-}
+export type SignupFormPath = FieldPath<SignupFormData>;

@@ -1,11 +1,11 @@
 import type { FieldPath } from 'react-hook-form';
 
-export interface SignupFormData {
+export type EditAccountFormData = {
   email: string;
   username: string;
-  fullName: string;
   password: string;
   passwordConfirm: string;
-}
+  image: FileList | null;
+};
 
-export type SignupFormPath = FieldPath<SignupFormData>;
+export type EditAccountInputPath = FieldPath<EditAccountFormData>;

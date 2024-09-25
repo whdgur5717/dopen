@@ -2,7 +2,7 @@ import { StackDivider, VStack } from '@chakra-ui/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useLoaderData } from '@tanstack/react-router';
 import { postQueries } from 'entities/post/post.queries';
-import PostListItem from 'src/components/PostList/PostListItem';
+import PostListItem from 'entities/post/ui/PostListItem';
 
 const BoardPage = () => {
   const channelId = useLoaderData({

@@ -5,7 +5,7 @@ import { LoginFormData } from 'features/login/model/type';
 import { SubmitHandler } from 'react-hook-form';
 import { Button, Input } from 'shared/ui/FormControl';
 
-import { LOGIN_INPUT_LIST } from '../lib/loginInputList';
+import { loginInputFields } from '../lib/loginInputFields';
 import { useLoginForm } from '../lib/useLoginForm';
 import { loginStorageModel } from '../model/LoginStorageModel';
 
@@ -30,7 +30,7 @@ const LoginForm = () => {
 
   const onLogin: SubmitHandler<LoginFormData> = async (data) => {
     mutate(
-      { loginRequest: { ...data } },
+      { loginRequest: { email: data.email, password: data.password } },
       {
         onSuccess: (res) => {
           loginStorageModel?.setEmail(data.email);
@@ -53,7 +53,7 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit(onLogin)}>
       <ul style={{ marginBottom: '0px' }}>
-        {LOGIN_INPUT_LIST.map(({ name, type, placeholder }) => (
+        {loginInputFields.map(({ name, type, placeholder }) => (
           <li key={name}>
             <label htmlFor={name}>{name}</label>
             <Input

@@ -1,215 +1,170 @@
-import {
-  Button,
-  Center,
-  CircularProgress,
-  CircularProgressLabel,
-  Flex,
-  Icon,
-  IconButton,
-  IconButtonProps,
-  VStack,
-  useDisclosure,
-} from '@chakra-ui/react';
-import { useLoaderData } from '@tanstack/react-router';
-import {
-  useCreatePostMutation,
-  useEditPostMutation,
-} from 'features/post/api/post.mutation';
-import { useEffect, useRef } from 'react';
-import { MdPause, MdPlayArrow } from 'react-icons/md';
-import { convertDateToString } from 'shared/utils/convertDateToString';
-import { getCurrentStringTime } from 'shared/utils/getCurrentStringTime';
-import { secondsToStringTime } from 'shared/utils/secondsToStringTime';
-import { getItem, setItem } from 'shared/utils/storage';
-import { stringTimeToSeconds } from 'shared/utils/stringTimeToSeconds';
-import { useTimer } from 'src/hooks/useTimer';
-import { useTodayTimePost } from 'src/hooks/useTodayTimePost';
+import { useMemo, useState } from 'react';
+import { useInterval } from 'shared/hook/useInterval';
 
-import TimerSettingModal from './TimerSettingModal';
+interface AnalogClockProps {
+  size?: number;
+  hourHandColor?: string;
+  minuteHandColor?: string;
+  secondHandColor?: string;
+  faceColor?: string;
+  markersColor?: string;
+  defaultValue: number;
+}
 
-const timerIconStyle: IconButtonProps = {
-  position: 'absolute',
-  left: '50%',
-  bottom: '35px',
-  transform: 'translate(-50%, -50%)',
-  boxSize: '100px',
-  borderRadius: '50%',
-  bg: 'pink.300',
-  _hover: { bg: 'pink.400' },
-  'aria-label': '',
-};
-
-export const TIME_OUT_VALUE = '23:45:00';
-
-const TimerPage = () => {
-  const { timer, isPlay, timerRef, startTimer, stopTimer, setTimer } = useTimer(
-    {
-      timerEndCallback: () => onPause(),
-      limitTime: TIME_OUT_VALUE,
-    },
-  );
-
-  const { timerChannelId } = useLoaderData({
-    from: '/_auth',
-    select: (data) => ({
-      ...data._fullName,
-    }),
-  });
-
-  const {
-    data: todayTimePost,
-    refetch,
-    isError: isTodayTimePostError,
-  } = useTodayTimePost(timerChannelId);
-
-  const currentTargetTime = useRef(timer);
-  const originTargetTime = useRef(timer);
-
-  const { isOpen, onClose, onOpen } = useDisclosure();
-
-  const { mutate: onCreatePost } = useCreatePostMutation();
-
-  const { mutate: onEditPost } = useEditPostMutation();
-
-  const onPause = () => {
-    //1초라도 경과했는지 판별 후 로직 실행합니다. 아무런 행동없이 새로고침하면 로직을 실행하지 않습니다
-    if (
-      stringTimeToSeconds(currentTargetTime.current) -
-        stringTimeToSeconds(timerRef.current) <=
-      0
-    ) {
-      return;
-    }
-
-    //로컬에 먼저 저장합니다
-
-    setItem('timer', {
-      time: timerRef.current,
-      originTime: originTargetTime.current,
-      date: convertDateToString(new Date()).date,
-    });
-
-    if (isTodayTimePostError) {
-      //오늘자 타이머 게시글 가져올때 성공하지 못했을때. 에러처리필요
-      stopTimer();
-      currentTargetTime.current = timer;
-      return;
-    }
-    const currentSpendTime =
-      stringTimeToSeconds(currentTargetTime.current) -
-      stringTimeToSeconds(timerRef.current); // 타이머를 이용한 시간.
-
-    //게시글 있다면 수정
-    if (todayTimePost) {
-      const { _id, title } = todayTimePost;
-      const totalSpendTime = currentSpendTime + stringTimeToSeconds(title);
-      onEditPost({ postId: _id, title: secondsToStringTime(totalSpendTime) });
-    } else {
-      //게시글이 없다면 생성
-      onCreatePost({
-        title: secondsToStringTime(currentSpendTime),
-        channelId: timerChannelId,
-        image: null,
-      });
-    }
-
-    stopTimer();
-    //circularProgress의 퍼센테이지가 잘 작동하기 위하여 0 초과일때만 할당.
-    //할당하지 않는다면 소비한시간 계산할때 처음 설정시간 - 지금시간을 계속 더해서 이상해집니다
-    if (stringTimeToSeconds(timerRef.current) > 0) {
-      currentTargetTime.current = timerRef.current;
-    }
+const degree = (seconds: number) => {
+  const getMinuteDegree = () => {
+    return (seconds / 60) * 6;
   };
 
-  //타이머 끝나면 실행
-
-  const preventEvent = (e: BeforeUnloadEvent) => e.preventDefault();
-
-  useEffect(() => {
-    //어제자 저장기록은 무시해야하는지...
-    const { time, originTime } = getItem('timer', {
-      time: '00:00:00',
-      originTime: '00:00:00',
-      date: convertDateToString(new Date()).date,
-    });
-    setTimer(time);
-
-    currentTargetTime.current = time;
-    originTargetTime.current = originTime;
-
-    window.addEventListener('beforeunload', preventEvent);
-
-    return () => window.removeEventListener('beforeunload', preventEvent);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return (
-    <Flex flexDir="column" align="center" w="100%" bg="pink.200" flex={1}>
-      <Center p="97px 0" position="relative" w="100%">
-        <CircularProgress
-          value={
-            stringTimeToSeconds(originTargetTime.current.toString()) -
-            stringTimeToSeconds(timer)
-          }
-          color="pink.300"
-          size="400px"
-          thickness="1px"
-          max={stringTimeToSeconds(originTargetTime.current)}
-        >
-          <CircularProgressLabel
-            fontWeight="bold"
-            color="white"
-            fontSize="6.6rem"
-          >
-            {timer}
-          </CircularProgressLabel>
-        </CircularProgress>
-        {isPlay ? (
-          <IconButton
-            {...timerIconStyle}
-            aria-label="멈춤"
-            icon={<Icon as={MdPause} color="white" boxSize="50px" />}
-            onClick={() => onPause()}
-          />
-        ) : (
-          <IconButton
-            {...timerIconStyle}
-            aria-label="재생"
-            icon={<Icon as={MdPlayArrow} color="white" boxSize="50px" />}
-            onClick={() => startTimer()}
-            isDisabled={
-              stringTimeToSeconds(timer) <= 0 ||
-              stringTimeToSeconds(TIME_OUT_VALUE) -
-                stringTimeToSeconds(getCurrentStringTime()) <=
-                0
-            }
-          />
-        )}
-      </Center>
-      <VStack pb="155px" spacing="22px">
-        <Button
-          color="white"
-          bg="pink.300"
-          w="388px"
-          h="70px"
-          _hover={{ bg: 'pink.400' }}
-          onClick={() => {
-            isPlay && onPause();
-            onOpen();
-          }}
-        >
-          타이머 설정
-        </Button>
-        <TimerSettingModal
-          isOpen={isOpen}
-          onClose={onClose}
-          setTimer={setTimer}
-          currentTargetTime={currentTargetTime}
-          originTargetTime={originTargetTime}
-        />
-      </VStack>
-    </Flex>
-  );
+  return { getMinuteDegree };
 };
 
-export default TimerPage;
+const getSectorPath = (
+  cx: number,
+  cy: number,
+  r: number,
+  startAngle: number,
+  endAngle: number,
+) => {
+  const start = {
+    x: cx + r * Math.sin(startAngle),
+    y: cy - r * Math.cos(startAngle),
+  };
+  const end = {
+    x: cx + r * Math.sin(endAngle),
+    y: cy - r * Math.cos(endAngle),
+  };
+  const largeArcFlag = endAngle - startAngle <= Math.PI ? '0' : '1';
+
+  return `M ${cx} ${cy} L ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 1 ${end.x} ${end.y} Z`;
+};
+
+export default function AnalogClock({
+  size = 400,
+  minuteHandColor = 'black',
+  faceColor = 'white',
+  markersColor = 'black',
+  defaultValue,
+}: AnalogClockProps) {
+  const [time, setTime] = useState(defaultValue || 0);
+  const [isRunning, setIsRunning] = useState(false);
+
+  useInterval(
+    () => {
+      setTime((_time) => _time - 1);
+    },
+    1000,
+    time > 0 && isRunning,
+  );
+
+  const d = useMemo(() => degree(time), [time]);
+  const r = size / 2;
+
+  const minuteDegrees = d.getMinuteDegree();
+
+  const clockFace = (
+    <circle
+      cx={r}
+      cy={r}
+      r={r - 5}
+      fill={faceColor}
+      stroke={markersColor}
+      strokeWidth="2"
+    />
+  );
+
+  // 0분부터 현재 분침 위치까지 색칠하기
+  const coloredSector = (
+    <path
+      d={getSectorPath(r, r, r - 5, 0, (minuteDegrees * Math.PI) / 180)} // 0도부터 분침 각도까지
+      fill="rgba(255, 0, 0, 0.3)" // 색상 및 투명도 설정
+    />
+  );
+
+  const hourMarkers = Array.from({ length: 60 }, (_, i) => {
+    const angle = (i * 6 * Math.PI) / 180;
+    const markerRadius = r * 0.9;
+    const x1 = r + (markerRadius - 10) * Math.sin(angle);
+    const y1 = r - (markerRadius - 10) * Math.cos(angle);
+    const x2 = r + markerRadius * Math.sin(angle);
+    const y2 = r - markerRadius * Math.cos(angle);
+
+    return (
+      <g key={i}>
+        <line
+          x1={x1}
+          y1={y1}
+          x2={x2}
+          y2={y2}
+          stroke={markersColor}
+          strokeWidth="2"
+          onPointerDown={() => {
+            setTime(i * 60); // 마커 클릭 시 시간을 초 단위로 설정
+          }}
+          style={{ cursor: 'pointer' }}
+        />
+      </g>
+    );
+  });
+
+  const minuteHand = (
+    <line
+      x1={r}
+      y1={r}
+      x2={r + size * 0.35 * Math.sin((minuteDegrees * Math.PI) / 180)}
+      y2={r - size * 0.35 * Math.cos((minuteDegrees * Math.PI) / 180)}
+      stroke={minuteHandColor}
+      strokeWidth="3"
+      strokeLinecap="round"
+    />
+  );
+
+  const handleClick = (event: React.PointerEvent<SVGSVGElement>) => {
+    const svg = event.currentTarget; // 클릭된 SVG 요소 참조
+    const rect = svg.getBoundingClientRect();
+
+    // 클릭한 위치의 SVG 내부 좌표 계산
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+
+    // 원의 중심 좌표
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    // 중심에서 클릭한 위치까지의 상대적인 x, y 차이 계산
+    const deltaX = clickX - centerX;
+    const deltaY = centerY - clickY; // y 축은 아래로 증가하기 때문에 중심에서 뺌
+
+    // 각도 계산 (라디안 단위)
+    let angleRadians = Math.atan2(deltaY, deltaX);
+
+    // 기준점을 12시 방향으로 변경 (270도, 즉 -90도 라디안)
+    angleRadians -= Math.PI / 2;
+
+    // 각도를 도(degree)로 변환
+    let angleDegrees = (angleRadians * 180) / Math.PI;
+
+    if (angleDegrees > 0 && angleDegrees <= 90) {
+      angleDegrees = 360 - angleDegrees;
+    }
+    // 분 단위 각도를 초로 변환하여 설정 (한 바퀴가 360도이므로 60분 -> 360도, 1분은 6도)
+    const seconds = (Math.abs(angleDegrees) / 6) * 60;
+
+    setTime(seconds);
+  };
+
+  return (
+    <div>
+      <svg width={size} height={size} onPointerUp={(e) => handleClick(e)}>
+        {clockFace}
+        {coloredSector}
+        {hourMarkers}
+        {minuteHand}
+        <circle cx={r} cy={r} r="5" fill={markersColor} />
+      </svg>
+      <button onClick={() => setIsRunning(true)}>시작</button>
+      <button onClick={() => setIsRunning(false)}>정지</button>
+      <p>{time}초</p>
+    </div>
+  );
+}

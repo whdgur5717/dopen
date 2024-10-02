@@ -5,6 +5,7 @@ import { useSignupMutation } from 'features/signup/api/signup.mutation';
 import { useSignupForm } from 'features/signup/lib/useSignupForm';
 import { signupInputFields } from 'features/signup/lib/userInputList';
 import type { SignupFormData } from 'features/signup/model/type';
+import supabase from 'shared/supabase';
 import { Button, Form, Input } from 'shared/ui/FormControl';
 
 const SignUp = () => {
@@ -48,7 +49,7 @@ const SignUp = () => {
           </Link>
         </Text>
       </Box>
-      <Form onSubmit={handleSubmit((data) => onSignupHandler(data))}>
+      <Form onSubmit={handleSubmit(async (data) => {})}>
         <ul>
           {signupInputFields.map(({ name, type, placeholder }) => (
             <li key={name}>
@@ -64,7 +65,17 @@ const SignUp = () => {
             </li>
           ))}
         </ul>
-        <Button style={{ backgroundColor: '#A8A8A8' }}>가입하기</Button>
+        <Button
+          style={{ backgroundColor: '#A8A8A8' }}
+          onClick={async () => {
+            const datas = await supabase.auth.signUp({
+              email: 'dlwhd5717@naver.com',
+              password: 'Tjsqlakdmf106!',
+            });
+          }}
+        >
+          가입하기
+        </Button>
       </Form>
     </Box>
   );

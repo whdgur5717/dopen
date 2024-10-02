@@ -2,12 +2,8 @@ import { ArrowDownIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Portal, Text } from '@chakra-ui/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useLoaderData, useParams, useRouter } from '@tanstack/react-router';
-import Comments from 'components/Comment';
 import { postQueries } from 'entities/post/post.queries';
 import { useDeleteCommentMutation } from 'features/post/api/comment.mutation';
-import { useLike } from 'hooks/useLike';
-import { usePushNotification } from 'hooks/useNotificationList';
-import { usePostDetail } from 'hooks/usePost';
 import Post from 'pages/PostViewPage/PostDetail/Container';
 import Settings from 'pages/PostViewPage/PostDetail/Settings';
 import { useRef, useState } from 'react';
@@ -43,8 +39,6 @@ const ReflectionDetail = () => {
 
   const { date, time } = convertDateToString(createdAt);
 
-  const { countLike, mutateAsync: setLike, clicked } = useLike(postId!);
-
   const [isFold, setIsFold] = useState(false);
 
   const reflectionLists = [
@@ -65,10 +59,6 @@ const ReflectionDetail = () => {
   const { isOpen, open, close, handleConfirm, message } = useConfirmModal();
 
   const { mutate: onDeletePost } = useDeleteCommentMutation();
-
-  const onClickLike = async () => {
-    const data = await setLike();
-  };
 
   const settingsOption = [
     {

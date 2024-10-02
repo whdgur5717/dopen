@@ -3,9 +3,8 @@ import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { authQueries } from 'entities/auth/api/auth.queries';
+import { loginStorageModel } from 'features/login/model/LoginStorageModel';
 import { useLogOutMutation } from 'features/logout/mutation';
-import { LOGIN_TOKEN } from 'shared/constants/user';
-import { removeItem } from 'shared/utils/storage';
 
 import MyPageListItem from './MyPageListItem';
 import { MYPAGE_LIST } from './myPageList';
@@ -14,15 +13,18 @@ const MyPage = () => {
   const navigator = useNavigate();
   const menuListBg = useColorModeValue('#fff', '#1c1c1c');
 
-  const { mutate: logout } = useLogOutMutation({
-    onSuccess: () => {
-      removeItem(LOGIN_TOKEN);
-      navigator({ to: '/', replace: true });
-    },
-  });
+  const { mutate } = useLogOutMutation();
+
+  const onLogout = () => {
+    mutate(undefined, {
+      onSuccess: () => {
+        loginStorageModel.removeToken();
+      },
+    });
+  };
 
   const {
-    data: { username, image },
+    data: { _username, _image },
   } = useSuspenseQuery({
     ...authQueries.auth(),
   });
@@ -35,12 +37,12 @@ const MyPage = () => {
           margin="15px auto 0"
           cursor="pointer"
           textAlign="center"
-          onClick={() => navigator({ to: `/${username}` })}
+          onClick={() => navigator({ to: `/${_username}` })}
         >
           <Box>
-            <Avatar w="118px" h="118px" src={image || ''} />
+            <Avatar w="118px" h="118px" src={_image || ''} />
           </Box>
-          <ProfileName>{username}</ProfileName>
+          <ProfileName>{_username}</ProfileName>
         </Box>
         {MYPAGE_LIST.map((mypage, index) => {
           return (
@@ -52,7 +54,7 @@ const MyPage = () => {
                     icon={icon}
                     title={title}
                     href={href}
-                    username={username}
+                    username={_username}
                   />
                 );
               })}
@@ -60,7 +62,7 @@ const MyPage = () => {
           );
         })}
         <MyPageUl menuListBg={menuListBg}>
-          <li onClick={() => logout()}>
+          <li onClick={() => onLogout()}>
             <Text as="strong" fontSize="lg" color="pink.400">
               로그아웃
             </Text>

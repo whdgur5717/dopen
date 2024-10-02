@@ -21,10 +21,8 @@ import { axiosInstance } from 'shared/axios/instance';
 
 import type { Configuration } from './configuration';
 
-export const BASE_PATH = 'https://kdt.frontend.5th.programmers.co.kr'.replace(
-  /\/+$/,
-  '',
-);
+export const BASE_PATH =
+  'https://kdt.frontend.5th.programmers.co.kr:5011'.replace(/\/+$/, '');
 
 /**
  *
@@ -58,11 +56,12 @@ export class BaseAPI {
   constructor(
     configuration?: Configuration,
     protected basePath: string = BASE_PATH,
-    protected axios: AxiosInstance = axiosInstance,
+    protected axios: AxiosInstance = globalAxios,
   ) {
     if (configuration) {
       this.configuration = configuration;
       this.basePath = configuration.basePath ?? basePath;
+      this.axios = axiosInstance;
     }
   }
 }

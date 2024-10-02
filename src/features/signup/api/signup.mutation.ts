@@ -3,13 +3,9 @@ import { api } from 'shared/openapi';
 
 import type { SignupFormData } from '../model/type';
 
-export const useSignupMutation = ({
-  signupFormData,
-}: {
-  signupFormData: SignupFormData;
-}) => {
+export const useSignupMutation = () => {
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async (signupFormData: SignupFormData) => {
       const { username, fullName } = signupFormData;
 
       const { _id: id } = await api.createChannel({

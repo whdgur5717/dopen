@@ -1,13 +1,13 @@
 import { Checkbox, Flex, Text } from '@chakra-ui/react';
 import { useRouter } from '@tanstack/react-router';
 import { useLoginMutation } from 'features/login/api/login.mutation';
-import { LoginFormData, LoginStorageModel } from 'features/login/model/type';
-import { useEffect, useState } from 'react';
+import { LoginFormData } from 'features/login/model/type';
 import { SubmitHandler } from 'react-hook-form';
 import { Button, Input } from 'shared/ui/FormControl';
 
-import { LOGIN_INPUT_LIST } from '../lib/loginInputList';
+import { loginInputFields } from '../lib/loginInputFields';
 import { useLoginForm } from '../lib/useLoginForm';
+import { loginStorageModel } from '../model/LoginStorageModel';
 
 const LoginForm = () => {
   const {
@@ -15,8 +15,6 @@ const LoginForm = () => {
     state: { location },
     history,
   } = useRouter();
-
-  const [storage, setStorage] = useState<LoginStorageModel | null>(null);
 
   const { registerField, errors, setError, handleSubmit, isValid } =
     useLoginForm();
@@ -32,11 +30,11 @@ const LoginForm = () => {
 
   const onLogin: SubmitHandler<LoginFormData> = async (data) => {
     mutate(
-      { loginRequest: { ...data } },
+      { loginRequest: { email: data.email, password: data.password } },
       {
         onSuccess: (res) => {
-          storage?.setEmail(data.email);
-          storage?.setToken(res.token);
+          loginStorageModel?.setEmail(data.email);
+          loginStorageModel?.setToken(res.token);
           navigateLocation();
         },
         onError: (error) => {
@@ -52,15 +50,10 @@ const LoginForm = () => {
     );
   };
 
-  useEffect(() => {
-    const storage = new LoginStorageModel();
-    setStorage(storage);
-  }, []);
-
   return (
     <form onSubmit={handleSubmit(onLogin)}>
       <ul style={{ marginBottom: '0px' }}>
-        {LOGIN_INPUT_LIST.map(({ name, type, placeholder }) => (
+        {loginInputFields.map(({ name, type, placeholder }) => (
           <li key={name}>
             <label htmlFor={name}>{name}</label>
             <Input

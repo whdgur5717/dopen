@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import MyBoardList from 'pages/MyPage/MyBoardList';
+import MyPostList from 'pages/MyPostList';
 
 export const Route = createLazyFileRoute('/_auth/mypage/myboardlist')({
-  component: () => <MyBoardList />,
+  component: () => <MyPostList />,
 });

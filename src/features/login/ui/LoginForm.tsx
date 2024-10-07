@@ -7,7 +7,6 @@ import { Button, Input } from 'shared/ui/FormControl';
 
 import { loginInputFields } from '../lib/loginInputFields';
 import { useLoginForm } from '../lib/useLoginForm';
-import { loginStorageModel } from '../model/LoginStorageModel';
 
 const LoginForm = () => {
   const {
@@ -30,11 +29,9 @@ const LoginForm = () => {
 
   const onLogin: SubmitHandler<LoginFormData> = async (data) => {
     mutate(
-      { loginRequest: { email: data.email, password: data.password } },
+      { email: data.email, password: data.password },
       {
-        onSuccess: (res) => {
-          loginStorageModel?.setEmail(data.email);
-          loginStorageModel?.setToken(res.token);
+        onSuccess: () => {
           navigateLocation();
         },
         onError: (error) => {

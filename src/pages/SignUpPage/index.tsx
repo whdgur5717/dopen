@@ -1,6 +1,5 @@
 import { Box, Heading, Image, Text, useColorModeValue } from '@chakra-ui/react';
-import { Link, useNavigate } from '@tanstack/react-router';
-import { loginStorageModel } from 'features/login/model/LoginStorageModel';
+import { Link, useRouter } from '@tanstack/react-router';
 import { useSignupMutation } from 'features/signup/api/signup.mutation';
 import { useSignupForm } from 'features/signup/lib/useSignupForm';
 import { signupInputFields } from 'features/signup/lib/userInputList';
@@ -8,8 +7,7 @@ import type { SignupFormData } from 'features/signup/model/type';
 import { Button, Form, Input } from 'shared/ui/FormControl';
 
 const SignUp = () => {
-  const navigate = useNavigate();
-
+  const { navigate } = useRouter();
   const inputBgColor = useColorModeValue('#F0F0F0F0', '#141414');
   const dopenLogo = useColorModeValue(
     '/assets/dopenLogo.svg',
@@ -22,10 +20,9 @@ const SignUp = () => {
 
   const onSignupHandler = (data: SignupFormData) => {
     mutate(data, {
-      onSuccess(data) {
-        loginStorageModel.setToken(data.token);
+      onSuccess() {
         alert('회원가입 성공');
-        setTimeout(() => navigate({ to: '/' }));
+        navigate({ to: '/' });
       },
       onError(error) {
         setError('email', { message: error.message }, { shouldFocus: true });

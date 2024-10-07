@@ -2,6 +2,8 @@ import { queryOptions } from '@tanstack/react-query';
 import { plainToInstance } from 'class-transformer';
 import { UserModel } from 'entities/auth/model/user.dto';
 import { api } from 'shared/openapi';
+import supabaseClient from 'shared/supabase';
+import type { Database } from 'shared/supabase/database';
 
 export const authQueries = {
   keys: {
@@ -13,8 +15,10 @@ export const authQueries = {
   auth() {
     return queryOptions({
       queryKey: [...this.keys.myInfo()],
-      queryFn: () => api.checkUserAuthentication(),
-      select: (data) => plainToInstance(UserModel, data),
+      queryFn: () => supabaseClient.auth.getUser(),
+      select: ({ data }) =>
+        data.user
+          ?.user_metadata as Database['public']['Tables']['profiles']['Row'],
     });
   },
 

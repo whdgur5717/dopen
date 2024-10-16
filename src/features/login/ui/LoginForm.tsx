@@ -33,8 +33,8 @@ const LoginForm = () => {
       { loginRequest: { email: data.email, password: data.password } },
       {
         onSuccess: (res) => {
-          loginStorageModel?.setEmail(data.email);
-          loginStorageModel?.setToken(res.token);
+          loginStorageModel.setEmail(data.email);
+          loginStorageModel.setToken(res.token);
           navigateLocation();
         },
         onError: (error) => {

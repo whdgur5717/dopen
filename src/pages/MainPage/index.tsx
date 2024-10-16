@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { authQueries } from 'entities/auth/api/auth.queries';
 import { Suspense } from 'react';
 import { DEFAULT_PAGE_PADDING } from 'shared/constants/style';
@@ -11,9 +11,8 @@ import BoardListPreview from './ui/Preview/BoardListPreview';
 import GuestProfile from './ui/Profile/GuestProfile';
 import UserProfile from './ui/Profile/UserProfile';
 
-//여기는 현재 유저정보가 있냐없냐에 따라 나뉘어야됨
 const MainPage = () => {
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     ...authQueries.auth(),
   });
 
@@ -56,9 +55,10 @@ const MainPageBody = styled.div`
   flex: 1;
   padding: 20px ${DEFAULT_PAGE_PADDING};
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  //   &::-webkit-scrollbar {
+  //     display: none;
+  //   }
+  //
 `;
 
 export default MainPage;

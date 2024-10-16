@@ -6,8 +6,8 @@ import MainPage from 'pages/MainPage';
 export const Route = createFileRoute('/')({
   loader: async ({ context: { queryClient } }) => {
     return await Promise.all([
-      queryClient.prefetchQuery({ ...authQueries.auth() }),
-      queryClient.prefetchQuery({ ...channelQueries.channelList() }),
+      queryClient.ensureQueryData({ ...authQueries.auth() }),
+      queryClient.ensureQueryData({ ...channelQueries.channelList() }),
     ]);
   },
   pendingComponent: () => <div>로딩중입니다</div>,

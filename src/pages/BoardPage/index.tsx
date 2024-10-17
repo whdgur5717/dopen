@@ -12,7 +12,6 @@ const BoardPage = () => {
   const { data } = useSuspenseQuery({
     ...postQueries.postList({ channelId }),
   });
-
   return (
     <VStack w="100%" spacing={0} divider={<StackDivider />}>
       {data.map((post) => {
@@ -20,7 +19,7 @@ const BoardPage = () => {
           <PostListItem
             key={post.title.content + post.createdAt}
             title={post.title.title}
-            author={post.author.fullName}
+            author={post.author._fullName.name}
             timeAgo={post.createdAt}
             likeCount={post.likes?.length || 0}
             commentCount={post.comments?.length || 0}

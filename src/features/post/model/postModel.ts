@@ -1,4 +1,5 @@
 import { Expose, Transform, plainToInstance } from 'class-transformer';
+import { UserModel } from 'entities/auth/model/user.dto';
 import type { Comment, Post } from 'shared/openapi/generate';
 
 export class PostModel {
@@ -53,8 +54,11 @@ export class PostViewModel {
   @Expose()
   @Transform(({ obj }: { obj: PostModel }) => obj._title)
   title: { title: string; content: string };
-
-  author: PostModel['_author'];
+  @Expose()
+  @Transform(({ obj }: { obj: PostModel }) =>
+    plainToInstance(UserModel, obj._author),
+  )
+  author: UserModel;
 
   @Expose()
   @Transform(({ obj }) => obj._createdAt)

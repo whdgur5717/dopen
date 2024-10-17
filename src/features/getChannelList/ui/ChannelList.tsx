@@ -16,12 +16,12 @@ const ChannelList = () => {
     <Box w={DEFAULT_WIDTH} h="100vh" p={`0 ${DEFAULT_PAGE_PADDING}`}>
       {channelListData?.map((board) => (
         <ChannelListItem
-          key={board._id}
-          name={board.description}
+          key={board.id}
+          name={board.name!}
           fontSize="2rem"
           fontWeight="midium"
           p="10px"
-          onClick={() => navigate({ to: `./${[board.name]}` })}
+          onClick={() => navigate({ to: `./${board.name}` })}
         />
       ))}
     </Box>

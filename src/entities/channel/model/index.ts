@@ -10,7 +10,7 @@ export class Channel {
   }
 
   async getChannelList() {
-    return await this.#channel.select(
+    const { data } = await this.#channel.select(
       `
         id,
         name,
@@ -22,5 +22,6 @@ export class Channel {
         )
       `,
     );
+    return data;
   }
 }

@@ -7,4 +7,7 @@ export class Post {
     this.#client = client;
     this.#post = this.#client.from('posts');
   }
+  temp() {
+    return this.#post;
+  }
 }

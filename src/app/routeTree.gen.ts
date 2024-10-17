@@ -15,7 +15,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthUserIdImport } from './routes/_auth/$userId'
 import { Route as AuthBoardBoardlayoutImport } from './routes/_auth/Board/_boardlayout'
 import { Route as AuthBoardBoardlayoutBoardNameIndexImport } from './routes/_auth/Board/_boardlayout/$boardName/index'
 import { Route as AuthBoardBoardlayoutReflectionWriteImport } from './routes/_auth/Board/_boardlayout/Reflection/write'
@@ -31,12 +30,6 @@ const LoginIndexLazyImport = createFileRoute('/Login/')()
 const AuthMypageIndexLazyImport = createFileRoute('/_auth/mypage/')()
 const AuthTimerIndexLazyImport = createFileRoute('/_auth/Timer/')()
 const AuthBoardIndexLazyImport = createFileRoute('/_auth/Board/')()
-const AuthMypageMycommentlistLazyImport = createFileRoute(
-  '/_auth/mypage/mycommentlist',
-)()
-const AuthMypageMyboardlistLazyImport = createFileRoute(
-  '/_auth/mypage/myboardlist',
-)()
 const AuthMypageAccountLazyImport = createFileRoute('/_auth/mypage/account')()
 const AuthBoardBoardlayoutReflectionPostIdLazyImport = createFileRoute(
   '/_auth/Board/_boardlayout/Reflection/$postId',
@@ -74,11 +67,6 @@ const LoginIndexLazyRoute = LoginIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/Login/index.lazy').then((d) => d.Route))
 
-const AuthUserIdRoute = AuthUserIdImport.update({
-  path: '/$userId',
-  getParentRoute: () => AuthRoute,
-} as any)
-
 const AuthMypageIndexLazyRoute = AuthMypageIndexLazyImport.update({
   path: '/mypage/',
   getParentRoute: () => AuthRoute,
@@ -98,21 +86,6 @@ const AuthBoardIndexLazyRoute = AuthBoardIndexLazyImport.update({
   getParentRoute: () => AuthBoardRoute,
 } as any).lazy(() =>
   import('./routes/_auth/Board/index.lazy').then((d) => d.Route),
-)
-
-const AuthMypageMycommentlistLazyRoute =
-  AuthMypageMycommentlistLazyImport.update({
-    path: '/mypage/mycommentlist',
-    getParentRoute: () => AuthRoute,
-  } as any).lazy(() =>
-    import('./routes/_auth/mypage/mycommentlist.lazy').then((d) => d.Route),
-  )
-
-const AuthMypageMyboardlistLazyRoute = AuthMypageMyboardlistLazyImport.update({
-  path: '/mypage/myboardlist',
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() =>
-  import('./routes/_auth/mypage/myboardlist.lazy').then((d) => d.Route),
 )
 
 const AuthMypageAccountLazyRoute = AuthMypageAccountLazyImport.update({
@@ -186,13 +159,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyBoardListLazyImport
       parentRoute: typeof rootRoute
     }
-    '/_auth/$userId': {
-      id: '/_auth/$userId'
-      path: '/$userId'
-      fullPath: '/$userId'
-      preLoaderRoute: typeof AuthUserIdImport
-      parentRoute: typeof AuthImport
-    }
     '/Login/': {
       id: '/Login/'
       path: '/Login'
@@ -226,20 +192,6 @@ declare module '@tanstack/react-router' {
       path: '/mypage/account'
       fullPath: '/mypage/account'
       preLoaderRoute: typeof AuthMypageAccountLazyImport
-      parentRoute: typeof AuthImport
-    }
-    '/_auth/mypage/myboardlist': {
-      id: '/_auth/mypage/myboardlist'
-      path: '/mypage/myboardlist'
-      fullPath: '/mypage/myboardlist'
-      preLoaderRoute: typeof AuthMypageMyboardlistLazyImport
-      parentRoute: typeof AuthImport
-    }
-    '/_auth/mypage/mycommentlist': {
-      id: '/_auth/mypage/mycommentlist'
-      path: '/mypage/mycommentlist'
-      fullPath: '/mypage/mycommentlist'
-      preLoaderRoute: typeof AuthMypageMycommentlistLazyImport
       parentRoute: typeof AuthImport
     }
     '/_auth/Board/': {
@@ -306,7 +258,6 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
   AuthRoute: AuthRoute.addChildren({
-    AuthUserIdRoute,
     AuthBoardRoute: AuthBoardRoute.addChildren({
       AuthBoardBoardlayoutRoute: AuthBoardBoardlayoutRoute.addChildren({
         AuthBoardBoardlayoutBoardNamePostIdRoute,
@@ -318,8 +269,6 @@ export const routeTree = rootRoute.addChildren({
       AuthBoardIndexLazyRoute,
     }),
     AuthMypageAccountLazyRoute,
-    AuthMypageMyboardlistLazyRoute,
-    AuthMypageMycommentlistLazyRoute,
     AuthTimerIndexLazyRoute,
     AuthMypageIndexLazyRoute,
   }),
@@ -349,21 +298,14 @@ export const routeTree = rootRoute.addChildren({
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
-        "/_auth/$userId",
         "/_auth/Board",
         "/_auth/mypage/account",
-        "/_auth/mypage/myboardlist",
-        "/_auth/mypage/mycommentlist",
         "/_auth/Timer/",
         "/_auth/mypage/"
       ]
     },
     "/MyBoardList": {
       "filePath": "MyBoardList.lazy.tsx"
-    },
-    "/_auth/$userId": {
-      "filePath": "_auth/$userId.tsx",
-      "parent": "/_auth"
     },
     "/Login/": {
       "filePath": "Login/index.lazy.tsx"
@@ -392,14 +334,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_auth/mypage/account": {
       "filePath": "_auth/mypage/account.lazy.tsx",
-      "parent": "/_auth"
-    },
-    "/_auth/mypage/myboardlist": {
-      "filePath": "_auth/mypage/myboardlist.lazy.tsx",
-      "parent": "/_auth"
-    },
-    "/_auth/mypage/mycommentlist": {
-      "filePath": "_auth/mypage/mycommentlist.lazy.tsx",
       "parent": "/_auth"
     },
     "/_auth/Board/": {

@@ -25,7 +25,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps) => {
         <Box width="100%" fontSize="2rem" mb="20px">
           권한이 없습니다
         </Box>
-        <Button ml="20px" onClick={() => navigate({ to: '/login' })}>
+        <Button ml="20px" onClick={() => navigate({ to: '/Login' })}>
           로그인 화면으로 이동하기
         </Button>
       </Box>

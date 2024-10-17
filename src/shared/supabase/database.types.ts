@@ -9,40 +9,58 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      monthly_timer_summary: {
+      channels: {
         Row: {
-          created_at: string | null
+          created_at: string
+          description: string | null
           id: string
-          modified_at: string | null
-          month: number
-          profile_id: string
-          total_seconds: number | null
-          year: number
+          name: string | null
         }
         Insert: {
-          created_at?: string | null
-          id: string
-          modified_at?: string | null
-          month: number
-          profile_id: string
-          total_seconds?: number | null
-          year: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string | null
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
+          description?: string | null
           id?: string
-          modified_at?: string | null
-          month?: number
-          profile_id?: string
-          total_seconds?: number | null
-          year?: number
+          name?: string | null
+        }
+        Relationships: []
+      }
+      posts: {
+        Row: {
+          channel_id: string | null
+          content: string | null
+          created_at: string
+          id: string
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          channel_id?: string | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          channel_id?: string | null
+          content?: string | null
+          created_at?: string
+          id?: string
+          title?: string | null
+          updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "monthly_timer_summary_profile_id_fkey"
-            columns: ["profile_id"]
+            foreignKeyName: "posts_channel_id_fkey"
+            columns: ["channel_id"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "channels"
             referencedColumns: ["id"]
           },
         ]
@@ -72,45 +90,31 @@ export type Database = {
           modified_at?: string | null
           user_name?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
-      timer_records: {
+      timerStamp: {
         Row: {
-          created_at: string | null
-          end_time: string | null
+          created_at: string
+          duration: number | null
           id: string
-          modified_at: string | null
-          profile_id: string
-          start_time: string
+          user_id: string | null
         }
         Insert: {
-          created_at?: string | null
-          end_time?: string | null
-          id: string
-          modified_at?: string | null
-          profile_id: string
-          start_time: string
+          created_at?: string
+          duration?: number | null
+          id?: string
+          user_id?: string | null
         }
         Update: {
-          created_at?: string | null
-          end_time?: string | null
+          created_at?: string
+          duration?: number | null
           id?: string
-          modified_at?: string | null
-          profile_id?: string
-          start_time?: string
+          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "timer_records_profile_id_fkey"
-            columns: ["profile_id"]
+            foreignKeyName: "timerStamp_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -122,7 +126,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_latest_posts_by_channel: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          post_id: string
+          channel_id: string
+          post_created_at: string
+          post_title: string
+          post_content: string
+          channel_title: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
@@ -213,4 +227,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

@@ -60,4 +60,10 @@ export const postQueries = {
         );
       },
     }),
+
+  // getLatestPosts: () =>
+  //   queryOptions({
+  //     queryKey: ['latest'],
+  //     queryFn: () => client.post.getPost(),
+  //   }),
 };

@@ -1,10 +1,7 @@
 import { EditIcon } from '@chakra-ui/icons';
 import { Box, Button } from '@chakra-ui/react';
-import { useNavigate } from '@tanstack/react-router';
 
 const WriteButton = () => {
-  const navigate = useNavigate();
-
   return (
     <Box
       position="fixed"
@@ -21,7 +18,6 @@ const WriteButton = () => {
         color="white"
         bg="pink.300"
         _hover={{ bg: 'pink.400' }}
-        onClick={() => navigate({ to: './write' })}
       >
         글쓰기
         <EditIcon ml="5px" />

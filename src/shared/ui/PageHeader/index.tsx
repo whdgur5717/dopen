@@ -8,8 +8,7 @@ import {
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-// import Badge from '../common/Badge';
-import { useNavigate, useRouter } from '@tanstack/react-router';
+import { useRouter } from '@tanstack/react-router';
 import {
   MdArrowBackIos,
   MdOutlineDarkMode,
@@ -27,7 +26,6 @@ interface PageHeaderProps extends FlexProps {
 }
 
 const PageHeader = ({ pageName, ...props }: PageHeaderProps) => {
-  const navigate = useNavigate();
   const router = useRouter();
   const goBack = () => router.history.back();
 
@@ -70,20 +68,13 @@ const PageHeader = ({ pageName, ...props }: PageHeaderProps) => {
           color="inherit"
           aria-label="search"
           bg="transparent"
-          onClick={() => navigate({ to: '/search' })}
           icon={<Icon as={MdOutlineSearch} boxSize="icon" />}
         />
         <IconButton
           color="inherit"
           aria-label="notify"
           bg="transparent"
-          onClick={() => navigate({ to: '/notification' })}
           icon={<Icon as={MdOutlineNotifications} boxSize="icon" />}
-          // icon={
-          //   <Badge count={1}>
-          //     <Icon as={MdOutlineNotifications} boxSize="icon" />
-          //   </Badge>
-          // }
         />
       </Flex>
     </Flex>

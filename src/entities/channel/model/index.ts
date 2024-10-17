@@ -6,11 +6,11 @@ export class Channel {
 
   constructor(client: SupabaseClientType) {
     this.#client = client;
-    this.#channel = client.from('channels');
+    this.#channel = this.#client.from('channels');
   }
 
   async getChannelList() {
-    return await this.#channel.select(
+    const { data } = await this.#channel.select(
       `
         id,
         name,
@@ -22,5 +22,6 @@ export class Channel {
         )
       `,
     );
+    return data;
   }
 }

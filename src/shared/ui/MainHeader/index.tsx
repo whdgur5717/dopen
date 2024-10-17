@@ -7,7 +7,6 @@ import {
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useNavigate } from '@tanstack/react-router';
 import {
   MdMailOutline,
   MdOutlineDarkMode,
@@ -28,7 +27,7 @@ const MainHeader = ({ ...props }: FlexProps) => {
     '/assets/dopenWhiteLogo.svg',
   );
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const mainHeaderIconPath = [
     {
@@ -39,17 +38,17 @@ const MainHeader = ({ ...props }: FlexProps) => {
     {
       icon: MdMailOutline,
       description: 'message',
-      onClick: () => navigate({ to: '/message' }),
+      // onClick: () => navigate({ to: '/message' }),
     },
     {
       icon: MdOutlineSearch,
       description: 'search',
-      onClick: () => navigate({ to: '/Search' }),
+      // onClick: () => navigate({ to: '/Search' }),
     },
     {
       icon: MdOutlineNotifications,
       description: 'notification',
-      onClick: () => navigate({ to: '/notification' }),
+      // onClick: () => navigate({ to: '/notification' }),
     },
   ];
 

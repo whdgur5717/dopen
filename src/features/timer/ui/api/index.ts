@@ -8,7 +8,7 @@ export class TimerStampClient {
 
   constructor(client: SupabaseClientType) {
     this.#client = client;
-    this.#timerStamp = client.from('timerStamp');
+    this.#timerStamp = this.#client.from('timerStamp');
   }
 
   async createTimerStamp({

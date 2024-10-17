@@ -8,5 +8,4 @@ export * from './getInteractiveMap';
 export * from './getRecentEightDates';
 export * from './isValueUniqueInArray';
 export * from './secondsToStringTime';
-export * from './storage';
 export * from './stringTimeToSeconds';

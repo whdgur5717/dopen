@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { Channel } from 'entities/channel/model';
 import { Post } from 'entities/post/model';
-import { TimerStampClient } from 'features/timer/ui/api';
+import { TimerStampClient } from 'entities/timer/model';
 
 import type { Database } from './database.types';
 

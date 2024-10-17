@@ -4,8 +4,8 @@ import { useRef, useState } from 'react';
 import { useInterval } from 'shared/hook/useInterval';
 import { BrowserStorageModel } from 'shared/utils/StorageModel';
 
+import { useTimerStampMutation } from '../api/timer.mutation';
 import Clock from './ClockRoot';
-import { useTimerStampMutation } from './api/timer.mutation';
 import { ClockProvder } from './context';
 import { getMinuteDegree } from './timer.util';
 

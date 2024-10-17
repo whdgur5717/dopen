@@ -1,4 +1,4 @@
-import TimerClock from 'features/timer/ui/TimerClock';
+import TimerClock from 'entities/timer/ui/TimerClock';
 
 const TimerPage = () => {
   return <TimerClock />;

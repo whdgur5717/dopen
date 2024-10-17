@@ -1,7 +1,9 @@
 import { Box, Button } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { useSession } from 'entities/auth/SessionContext';
 import { Suspense } from 'react';
+import { timerQueries } from 'src/entities/timer/api/timer.queries';
 
 import Dday from './ui/Dday/Dday';
 import BoardListPreview from './ui/Preview/BoardListPreview';
@@ -24,6 +26,18 @@ const MainPage = () => {
   const { navigate } = useRouter();
   const { session: userInfo, signOut } = useSession();
 
+  const { data, isLoading } = useQuery({
+    ...timerQueries.getUserTimerList(userInfo?.user.id || ''),
+    enabled: !!userInfo?.user.id,
+    select: (data) => {
+      if (data) {
+        return data.reduce((sum, v) => {
+          return sum + v.duration;
+        }, 0);
+      }
+    },
+  });
+
   return (
     <Box pos="relative">
       {userInfo == null ? (
@@ -34,6 +48,8 @@ const MainPage = () => {
           src={userInfo?.user.user_metadata.avatar_url}
         />
       )}
+      {!isLoading && <div>현재까지 총 {data}초 동안 공부했습니다</div>}
+
       <div style={{ position: 'relative', height: '400px' }}>
         <Suspense fallback={fallbackComponent}>
           <BoardListPreview />

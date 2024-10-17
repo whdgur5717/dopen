@@ -12,7 +12,8 @@
     "test": "vitest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "generate": "openapi-generator-cli generate --reserved-words-mappings delete=delete -g typescript-axios -i ./src/shared/openapi/openapi.yaml -o ./src/shared/openapi/generate -t ./src/shared/openapi/mustaches -c ./src/shared/openapi/openapitools.json --skip-validate-spec --global-property=debugModels,debugOperations > ./output.txt && npx prettier --write ."
+    "generate:openapi": "openapi-generator-cli generate --reserved-words-mappings delete=delete -g typescript-axios -i ./src/shared/openapi/openapi.yaml -o ./src/shared/openapi/generate -t ./src/shared/openapi/mustaches -c ./src/shared/openapi/openapitools.json --skip-validate-spec --global-property=debugModels,debugOperations > ./output.txt && npx prettier --write .",
+    "generate:supabase": "npx supabase login && npx supabase gen types --lang=typescript --project-id gasaggpnkceuwogvnyhb --schema public > ./src/shared/supabase/database.types.ts"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
@@ -21,6 +22,8 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fontsource/noto-sans-kr": "^5.0.17",
+    "@radix-ui/react-context": "^1.1.1",
+    "@supabase/supabase-js": "^2.45.4",
     "@suspensive/react": "^2.14.0",
     "@tanstack/react-query": "^5.52.0",
     "@tanstack/react-query-devtools": "^5.52.0",
@@ -28,7 +31,7 @@
     "axios": "^1.6.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "firebase": "^10.13.2",
+    "date-fns": "^4.1.0",
     "framer-motion": "^10.16.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -44,6 +44,15 @@ axiosInstance.interceptors.response.use((response) => {
   return response.data;
 });
 
+function replaceTemplateVariables(
+  template: string,
+  params: Record<string, any>,
+) {
+  return template.replace(/{(\w+)}/g, (_, key: string) => {
+    return params[key] || `{${key}}`;
+  });
+}
+
 export const getRequest = async <T>(
   url: string,
   params?: AxiosRequestConfig['params'],
@@ -93,4 +102,19 @@ export const deleteRequest = async <T>(
     data: { ...body },
     ...config,
   });
+};
+
+export const convert = (method, url, all, query, path) => {
+  if (method === 'post') {
+    return postRequest(url, flattenParams(all));
+  }
+  if (method === 'put') {
+    return putRequest(url, flattenParams(all));
+  }
+  if (method === 'get') {
+    return getRequest(replaceTemplateVariables(url, path), query);
+  }
+  if (method === 'delete') {
+    return deleteRequest(url, flattenParams(all));
+  }
 };

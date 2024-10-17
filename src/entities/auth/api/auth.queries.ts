@@ -1,7 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
-import { plainToInstance } from 'class-transformer';
-import { UserModel } from 'entities/auth/model/user.dto';
-import { api } from 'shared/openapi';
+import supabaseClient from 'shared/supabase';
 
 export const authQueries = {
   keys: {
@@ -12,17 +10,22 @@ export const authQueries = {
 
   auth() {
     return queryOptions({
-      queryKey: [...this.keys.myInfo()],
-      queryFn: () => api.checkUserAuthentication(),
-      select: (data) => plainToInstance(UserModel, data),
-    });
-  },
-
-  userInfo(userId: string) {
-    return queryOptions({
-      queryKey: authQueries.keys.userInfo(userId),
-      queryFn: () => api.getUserInfo({ userId }),
-      select: (data) => plainToInstance(UserModel, data),
+      queryKey: ['user'],
+      queryFn: async () => {
+        const { data, error } = await supabaseClient.auth.getSession();
+        console.log(data);
+        if (error) {
+          throw new Error(error.message);
+        }
+        if (data.session?.user) {
+          const { data: user } = await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id', data.session.user.id);
+          return user?.[0];
+        }
+        return null;
+      },
     });
   },
 };

@@ -1,71 +1,31 @@
-import { type ComponentProps, useState } from 'react';
+import { useLoaderData } from '@tanstack/react-router';
+import { differenceInMilliseconds } from 'date-fns';
+import { useRef, useState } from 'react';
 import { useInterval } from 'shared/hook/useInterval';
+import { BrowserStorageModel } from 'shared/utils/StorageModel';
 
-import { degreesToRadians, getMinuteDegree, getSectorPath } from './timer.util';
+import Clock from './ClockRoot';
+import { useTimerStampMutation } from './api/timer.mutation';
+import { ClockProvder } from './context';
+import { getMinuteDegree } from './timer.util';
 
-interface ClockFaceProps extends React.SVGProps<SVGCircleElement> {
-  r: number;
+class TimerStorageModel extends BrowserStorageModel<'timer_start'> {
+  private readonly timer = 'timer_start';
+  constructor() {
+    super();
+  }
+  getItem(): Date {
+    const data = this.get(this.timer);
+    if (!data) {
+      return new Date();
+    } else {
+      return new Date(JSON.parse(data));
+    }
+  }
+  setItem(date: string) {
+    this.set(this.timer, date);
+  }
 }
-
-const ClockFace = ({ r, ...props }: ClockFaceProps) => (
-  <circle cx={r} cy={r} r={r} {...props} />
-);
-
-interface ColoredSectorProps extends ComponentProps<'path'> {
-  r: number;
-  currentDegree: number;
-  fill: string;
-}
-
-const ColoredSector = ({ r, currentDegree, ...props }: ColoredSectorProps) => {
-  return (
-    <path
-      d={getSectorPath(r, r, r - 5, 0, currentDegree)} // 0도부터 분침 각도까지
-      {...props}
-    />
-  );
-};
-
-interface MarkersProps extends ComponentProps<'line'> {
-  nums: number;
-  r: number;
-  dist: number;
-  markerColor: string;
-}
-
-export const Markers = ({
-  nums,
-  r,
-  dist,
-  markerColor,
-  ...props
-}: MarkersProps) => {
-  return (
-    <g>
-      {Array.from({ length: nums }, (_, i) => {
-        const angle = degreesToRadians(i * dist);
-        const markerRadius = r * 0.9;
-        const x1 = r + (markerRadius - 10) * Math.sin(angle);
-        const y1 = r - (markerRadius - 10) * Math.cos(angle);
-        const x2 = r + markerRadius * Math.sin(angle);
-        const y2 = r - markerRadius * Math.cos(angle);
-
-        return (
-          <line
-            key={`${x1} ${x2} ${y1} ${y2}`}
-            x1={x1}
-            y1={y1}
-            x2={x2}
-            y2={y2}
-            stroke={markerColor}
-            strokeWidth="2"
-            {...props}
-          />
-        );
-      })}
-    </g>
-  );
-};
 
 interface TimerClockProps {
   size?: number;
@@ -78,114 +38,122 @@ interface TimerClockProps {
 }
 
 export default function TimerClock({
-  size = 400,
-  minuteHandColor = 'black',
-  markersColor = 'black',
-  defaultValue,
+  size = 300,
+  defaultValue = 0,
 }: TimerClockProps) {
+  const { id } = useLoaderData({ from: '/_auth' });
+  const storage = useRef(new TimerStorageModel());
+
   const [time, setTime] = useState(defaultValue || 0);
   const [isRunning, setIsRunning] = useState(false);
 
+  const { mutate } = useTimerStampMutation();
+
   useInterval(
     () => {
-      setTime((_time) => _time - 1);
+      setTime((_time) => _time + 1);
     },
     1000,
-    time > 0 && isRunning,
+    isRunning,
   );
 
   const r = size / 2;
 
   const minuteDegrees = getMinuteDegree(time);
 
-  const hourMarkers = Array.from({ length: 12 }, (_, i) => {
-    const angle = degreesToRadians(i * 30);
-    const markerRadius = r - 10;
-    const x1 = r + (markerRadius - 10) * Math.sin(angle);
-    const y1 = r - (markerRadius - 10) * Math.cos(angle);
-    const x2 = r + markerRadius * Math.sin(angle);
-    const y2 = r - markerRadius * Math.cos(angle);
-
-    return (
-      <g key={i}>
-        <line
-          onClick={() => console.log(i)}
-          x1={x1}
-          y1={y1}
-          x2={x2}
-          y2={y2}
-          stroke={markersColor}
-          strokeWidth="2"
-          style={{ cursor: 'pointer' }}
-        />
-        <text>{i}</text>
-      </g>
-    );
-  });
-
-  const minuteHand = (
-    <line
-      x1={r}
-      y1={r}
-      x2={r + size * 0.35 * Math.sin((minuteDegrees * Math.PI) / 180)}
-      y2={r - size * 0.35 * Math.cos((minuteDegrees * Math.PI) / 180)}
-      stroke={minuteHandColor}
-      strokeWidth="3"
-      strokeLinecap="round"
-    />
-  );
-
-  const handleClick = (event: React.PointerEvent<SVGSVGElement>) => {
-    const svg = event.currentTarget; // 클릭된 SVG 요소 참조
-    const rect = svg.getBoundingClientRect();
-
-    // 클릭한 위치의 SVG 내부 좌표 계산
-    const clickX = event.clientX - rect.left;
-    const clickY = event.clientY - rect.top;
-
-    // 원의 중심 좌표
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    // 중심에서 클릭한 위치까지의 상대적인 x, y 차이 계산
-    const deltaX = clickX - centerX;
-    const deltaY = centerY - clickY; // y 축은 아래로 증가하기 때문에 중심에서 뺌
-
-    // 각도 계산 (라디안 단위)
-    let angleRadians = Math.atan2(deltaY, deltaX);
-
-    // 기준점을 12시 방향으로 변경 (270도, 즉 -90도 라디안)
-    angleRadians -= Math.PI / 2;
-
-    // 각도를 도(degree)로 변환
-    let angleDegrees = (angleRadians * 180) / Math.PI;
-
-    if (angleDegrees > 0 && angleDegrees <= 90) {
-      angleDegrees = 360 - angleDegrees;
+  const onTimerStart = () => {
+    if (isRunning) {
+      return;
     }
-    // 분 단위 각도를 초로 변환하여 설정 (한 바퀴가 360도이므로 60분 -> 360도, 1분은 6도)
-    const seconds = (Math.abs(angleDegrees) / 6) * 60;
-
-    setTime(seconds);
+    storage.current.setItem(JSON.stringify(new Date()));
+    setIsRunning(true);
   };
 
+  const onTimerEnd = async () => {
+    setIsRunning(false);
+    //시작시간과 끝나는시간 계산해서 서버에 요청하기
+    const startTime = storage.current.getItem();
+    const endTime = new Date();
+    const diff = differenceInMilliseconds(endTime, startTime);
+    if (diff > 0) {
+      mutate(
+        {
+          user_id: id,
+          created_at: startTime.toISOString(),
+          duration: diff,
+        },
+        {
+          onSuccess: () => {
+            alert(diff);
+          },
+        },
+      );
+    }
+  };
+
+  // const handleClick = (event: React.PointerEvent<SVGSVGElement>) => {
+  //   const svg = event.currentTarget; // 클릭된 SVG 요소 참조
+  //   const rect = svg.getBoundingClientRect();
+
+  //   // 클릭한 위치의 SVG 내부 좌표 계산
+  //   const clickX = event.clientX - rect.left;
+  //   const clickY = event.clientY - rect.top;
+
+  //   // 원의 중심 좌표
+  //   const centerX = rect.width / 2;
+  //   const centerY = rect.height / 2;
+
+  //   // 중심에서 클릭한 위치까지의 상대적인 x, y 차이 계산
+  //   const deltaX = clickX - centerX;
+  //   const deltaY = centerY - clickY; // y 축은 아래로 증가하기 때문에 중심에서 뺌
+
+  //   // 각도 계산 (라디안 단위)
+  //   let angleRadians = Math.atan2(deltaY, deltaX);
+
+  //   // 기준점을 12시 방향으로 변경 (270도, 즉 -90도 라디안)
+  //   angleRadians -= Math.PI / 2;
+
+  //   // 각도를 도(degree)로 변환
+  //   let angleDegrees = (angleRadians * 180) / Math.PI;
+
+  //   if (angleDegrees > 0 && angleDegrees <= 90) {
+  //     angleDegrees = 360 - angleDegrees;
+  //   }
+  //   // 분 단위 각도를 초로 변환하여 설정 (한 바퀴가 360도이므로 60분 -> 360도, 1분은 6도)
+  //   const seconds = (Math.abs(angleDegrees) / 6) * 60;
+
+  //   function convertToMinuteUnits(seconds: number): number {
+  //     const minutes = Math.floor(seconds / 60); // 분으로 변환 (소수점 아래 버림)
+  //     const result = minutes * 60; // 분을 다시 초로 변환
+  //     return result;
+  //   }
+
+  //   setTime(convertToMinuteUnits(seconds));
+  // };
+
   return (
-    <div>
-      <svg width={size} height={size} onPointerUp={(e) => handleClick(e)}>
-        <ClockFace r={r} fill="white" stroke="black" />
-        <ColoredSector
-          r={r}
-          currentDegree={degreesToRadians(minuteDegrees)}
-          fill="rgba(255, 0, 0, 0.3)"
-        />
-        {/* <Markers nums={60} r={r} dist={6} markerColor="black" /> */}
-        {minuteHand}
-        {hourMarkers}
-        <circle cx={r} cy={r} r="5" fill={markersColor} />
-      </svg>
-      <button onClick={() => setIsRunning(true)}>시작</button>
-      <button onClick={() => setIsRunning(false)}>정지</button>
-      <p>{time}초</p>
-    </div>
+    <ClockProvder r={r} minuteDegree={minuteDegrees} time={time}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Clock size={size} time={time}>
+          <Clock.Face fill="white" stroke="black" strokeWidth={5} />
+          <Clock.Sector />
+          <Clock.Hand />
+          <Clock.Markers />
+          <circle cx={size / 2} cy={size / 2} r="5" fill="black" />
+        </Clock>
+        <button onClick={onTimerStart}>시작</button>
+        <button onClick={onTimerEnd}>정지</button>
+        <p>
+          {Math.floor(time / 60)} : {time % 60}
+        </p>
+      </div>
+    </ClockProvder>
   );
 }

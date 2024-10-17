@@ -13,7 +13,6 @@ export const authQueries = {
       queryKey: ['user'],
       queryFn: async () => {
         const { data, error } = await supabaseClient.auth.getSession();
-        console.log(data);
         if (error) {
           throw new Error(error.message);
         }

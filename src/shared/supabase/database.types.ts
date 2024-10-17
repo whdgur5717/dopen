@@ -95,21 +95,21 @@ export type Database = {
       timerStamp: {
         Row: {
           created_at: string
-          duration: number | null
+          duration: number
           id: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string
-          duration?: number | null
+          duration: number
           id?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string
-          duration?: number | null
+          duration?: number
           id?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {

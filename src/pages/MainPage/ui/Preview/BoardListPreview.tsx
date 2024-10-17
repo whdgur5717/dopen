@@ -11,7 +11,6 @@ const BoardListPreview = () => {
 
   const { data: channelList } = useSuspenseQuery({
     ...channelQueries.channelList(),
-    select: ({ data }) => data,
   });
 
   return (

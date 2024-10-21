@@ -16,6 +16,7 @@
     "generate:supabase": "npx supabase login && npx supabase gen types --lang=typescript --project-id gasaggpnkceuwogvnyhb --schema public > ./src/shared/supabase/database.types.ts"
   },
   "dependencies": {
+    "@ark-ui/react": "^4.1.2",
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/react": "^2.8.2",
     "@chakra-ui/theme-tools": "^2.1.2",
@@ -44,7 +45,9 @@
     "@babel/plugin-proposal-decorators": "^7.24.7",
     "@chakra-ui/storybook-addon": "^5.1.0",
     "@chromatic-com/storybook": "^1.9.0",
+    "@jongh/panda-preset": "^0.0.2",
     "@openapitools/openapi-generator-cli": "^2.13.5",
+    "@park-ui/panda-preset": "^0.42.0",
     "@storybook/addon-essentials": "^8.2.9",
     "@storybook/addon-interactions": "^8.2.9",
     "@storybook/addon-links": "^8.2.9",

@@ -4,11 +4,9 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import React from 'react';
-import { withRouter } from 'storybook-addon-react-router-v6';
 
-import { theme } from '../src/theme';
+import '../styled-system/styles.css';
 
 const queryclient = new QueryClient({
   defaultOptions: {
@@ -16,27 +14,10 @@ const queryclient = new QueryClient({
       retry: 0,
     },
   },
-  queryCache: new QueryCache({
-    onError: (error, query) => {
-      if (!query.meta?.errorMessage) {
-        return;
-      }
-
-      if (error instanceof AxiosError) {
-        if (error.response?.status === 401 || error.response?.status === 400) {
-          return;
-        }
-
-        alert(error.message);
-        alert(query.meta?.errorMessage);
-      }
-    },
-  }),
 });
 
 const preview: Preview = {
   decorators: [
-    withRouter,
     (Story) => (
       <QueryClientProvider client={queryclient}>
         <Story />
@@ -44,9 +25,6 @@ const preview: Preview = {
     ),
   ],
   parameters: {
-    chakra: {
-      theme,
-    },
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {

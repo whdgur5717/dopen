@@ -25,11 +25,11 @@ import { Route as AuthBoardBoardlayoutBoardNamePostIdImport } from './routes/_au
 
 const MyBoardListLazyImport = createFileRoute('/MyBoardList')()
 const AuthBoardImport = createFileRoute('/_auth/Board')()
-const SignupIndexLazyImport = createFileRoute('/Signup/')()
-const LoginIndexLazyImport = createFileRoute('/Login/')()
 const AuthMypageIndexLazyImport = createFileRoute('/_auth/mypage/')()
 const AuthTimerIndexLazyImport = createFileRoute('/_auth/Timer/')()
 const AuthBoardIndexLazyImport = createFileRoute('/_auth/Board/')()
+const authSignupIndexLazyImport = createFileRoute('/(auth)/Signup/')()
+const authLoginIndexLazyImport = createFileRoute('/(auth)/Login/')()
 const AuthMypageAccountLazyImport = createFileRoute('/_auth/mypage/account')()
 const AuthBoardBoardlayoutReflectionPostIdLazyImport = createFileRoute(
   '/_auth/Board/_boardlayout/Reflection/$postId',
@@ -57,16 +57,6 @@ const AuthBoardRoute = AuthBoardImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
-const SignupIndexLazyRoute = SignupIndexLazyImport.update({
-  path: '/Signup/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/Signup/index.lazy').then((d) => d.Route))
-
-const LoginIndexLazyRoute = LoginIndexLazyImport.update({
-  path: '/Login/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/Login/index.lazy').then((d) => d.Route))
-
 const AuthMypageIndexLazyRoute = AuthMypageIndexLazyImport.update({
   path: '/mypage/',
   getParentRoute: () => AuthRoute,
@@ -87,6 +77,20 @@ const AuthBoardIndexLazyRoute = AuthBoardIndexLazyImport.update({
 } as any).lazy(() =>
   import('./routes/_auth/Board/index.lazy').then((d) => d.Route),
 )
+
+const authSignupIndexLazyRoute = authSignupIndexLazyImport
+  .update({
+    path: '/Signup/',
+    getParentRoute: () => rootRoute,
+  } as any)
+  .lazy(() => import('./routes/(auth)/Signup/index.lazy').then((d) => d.Route))
+
+const authLoginIndexLazyRoute = authLoginIndexLazyImport
+  .update({
+    path: '/Login/',
+    getParentRoute: () => rootRoute,
+  } as any)
+  .lazy(() => import('./routes/(auth)/Login/index.lazy').then((d) => d.Route))
 
 const AuthMypageAccountLazyRoute = AuthMypageAccountLazyImport.update({
   path: '/mypage/account',
@@ -159,20 +163,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyBoardListLazyImport
       parentRoute: typeof rootRoute
     }
-    '/Login/': {
-      id: '/Login/'
-      path: '/Login'
-      fullPath: '/Login'
-      preLoaderRoute: typeof LoginIndexLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/Signup/': {
-      id: '/Signup/'
-      path: '/Signup'
-      fullPath: '/Signup'
-      preLoaderRoute: typeof SignupIndexLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/_auth/Board': {
       id: '/_auth/Board'
       path: '/Board'
@@ -193,6 +183,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/mypage/account'
       preLoaderRoute: typeof AuthMypageAccountLazyImport
       parentRoute: typeof AuthImport
+    }
+    '/(auth)/Login/': {
+      id: '/Login/'
+      path: '/Login'
+      fullPath: '/Login'
+      preLoaderRoute: typeof authLoginIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/(auth)/Signup/': {
+      id: '/Signup/'
+      path: '/Signup'
+      fullPath: '/Signup'
+      preLoaderRoute: typeof authSignupIndexLazyImport
+      parentRoute: typeof rootRoute
     }
     '/_auth/Board/': {
       id: '/_auth/Board/'
@@ -273,8 +277,8 @@ export const routeTree = rootRoute.addChildren({
     AuthMypageIndexLazyRoute,
   }),
   MyBoardListLazyRoute,
-  LoginIndexLazyRoute,
-  SignupIndexLazyRoute,
+  authLoginIndexLazyRoute,
+  authSignupIndexLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -307,12 +311,6 @@ export const routeTree = rootRoute.addChildren({
     "/MyBoardList": {
       "filePath": "MyBoardList.lazy.tsx"
     },
-    "/Login/": {
-      "filePath": "Login/index.lazy.tsx"
-    },
-    "/Signup/": {
-      "filePath": "Signup/index.lazy.tsx"
-    },
     "/_auth/Board": {
       "filePath": "_auth/Board",
       "parent": "/_auth",
@@ -335,6 +333,12 @@ export const routeTree = rootRoute.addChildren({
     "/_auth/mypage/account": {
       "filePath": "_auth/mypage/account.lazy.tsx",
       "parent": "/_auth"
+    },
+    "/Login/": {
+      "filePath": "(auth)/Login/index.lazy.tsx"
+    },
+    "/Signup/": {
+      "filePath": "(auth)/Signup/index.lazy.tsx"
     },
     "/_auth/Board/": {
       "filePath": "_auth/Board/index.lazy.tsx",

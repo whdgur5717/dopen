@@ -1,11 +1,10 @@
-import { Flex } from '@chakra-ui/react';
+import { flex } from 'styled-system/patterns';
 
 import { MainProfile } from './MainProfile';
 
 const UserProfile = ({
   src,
   username,
-  text,
 }: {
   src?: string;
   username: string;
@@ -14,12 +13,10 @@ const UserProfile = ({
   return (
     <MainProfile>
       <MainProfile.Thumbnail src={src} />
-      <Flex direction="column" marginLeft="20px">
-        <MainProfile.Header fontSize="2xl">
-          안녕하세요 {username}님!
-        </MainProfile.Header>
-        <MainProfile.SubHeader>{text}</MainProfile.SubHeader>
-      </Flex>
+      <div className={flex({ flexDir: 'column', gap: '5' })}>
+        <MainProfile.Header>{username}님 안녕하세요</MainProfile.Header>
+        <MainProfile.SubHeader>당신의 성장을 응원합니다</MainProfile.SubHeader>
+      </div>
     </MainProfile>
   );
 };

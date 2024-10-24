@@ -1,43 +1,36 @@
-import {
-  Avatar,
-  type AvatarProps,
-  Flex,
-  type FlexProps,
-  Text,
-  type TextProps,
-} from '@chakra-ui/react';
-import type { PropsWithChildren } from 'react';
+import { type FlexProps, type TextProps } from '@chakra-ui/react';
+import type { MouseEventHandler, PropsWithChildren } from 'react';
+import { css } from 'styled-system/css';
+
+import { Avatar } from '~/components/ui/avatar';
 
 type RootProps = PropsWithChildren<FlexProps>;
-const MainProfileRoot = ({ children, ...props }: RootProps) => {
+const MainProfileRoot = ({ children }: RootProps) => {
   return (
-    <Flex cursor="default" alignItems="center" w="100%" {...props}>
+    <div className={css({ backgroundColor: 'gray.2', padding: '5' })}>
       {children}
-    </Flex>
+    </div>
   );
 };
 
-type ThumbnailProps = PropsWithChildren<AvatarProps>;
-const MainThumbnail = ({ children, ...props }: ThumbnailProps) => {
-  return (
-    <Avatar size="2xl" {...props}>
-      {children}
-    </Avatar>
-  );
+type ThumbnailProps = {
+  src?: string;
+  onClick?: MouseEventHandler<HTMLDivElement>;
+};
+const MainThumbnail = ({ src, onClick }: ThumbnailProps) => {
+  return <Avatar src={src} onClick={onClick} color="gray.10" size="2xl" />;
 };
 
 type HeaderProps = PropsWithChildren<TextProps>;
-const MainHeander = ({ children, ...props }: HeaderProps) => {
-  return (
-    <Text as="h3" {...props}>
-      {children}
-    </Text>
-  );
+const MainHeander = ({ children }: HeaderProps) => {
+  return <div className={css({ textStyle: '3xl' })}>{children}</div>;
 };
 
 type SubHeaderProps = PropsWithChildren<TextProps>;
-const MainSubHeader = ({ children, ...props }: SubHeaderProps) => {
-  return <Text {...props}>{children}</Text>;
+const MainSubHeader = ({ children }: SubHeaderProps) => {
+  return (
+    <div className={css({ textStyle: '2xl', color: 'grey.5' })}>{children}</div>
+  );
 };
 
 export const MainProfile = Object.assign(MainProfileRoot, {

@@ -1,8 +1,15 @@
 import { defineConfig } from '@pandacss/dev';
+import { createPreset } from '@park-ui/panda-preset';
 
 export default defineConfig({
   preflight: true,
-  presets: ['@pandacss/preset-base', '@park-ui/panda-preset'],
+  presets: [
+    '@pandacss/preset-base',
+    createPreset({
+      accentColor: 'pink',
+      grayColor: 'sand',
+    }),
+  ],
   include: ['./src/**/*.{js,jsx,ts,tsx}'],
   exclude: [],
   globalCss: {
@@ -25,7 +32,21 @@ export default defineConfig({
       fontStyle: 'normal',
     },
   },
-
+  theme: {
+    extend: {
+      semanticTokens: {
+        colors: {
+          main: {
+            value: {
+              base: '{colors.accent.a4}',
+              _dark: '{colors.accent.a8}',
+            },
+          },
+        },
+      },
+    },
+  },
   jsxFramework: 'react', // or 'solid' or 'vue'
   outdir: 'styled-system',
+  watch: true,
 });

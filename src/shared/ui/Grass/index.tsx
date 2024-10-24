@@ -12,7 +12,7 @@ export const GrassRoot = ({
   const [currentDate] = useState(date || new Date()); //날짜 기준점
 
   return (
-    <div className={grid({ columns: 7, gap: '5px', width: '200px' })}>
+    <div className={grid({ columns: 7, gap: '5px' })}>
       {children(currentDate)}
     </div>
   );

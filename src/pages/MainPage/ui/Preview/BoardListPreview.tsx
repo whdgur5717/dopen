@@ -1,38 +1,37 @@
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import { Button, Flex, Text } from '@chakra-ui/react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { channelQueries } from 'entities/channel/api/channel.queries';
+import { css } from 'styled-system/css';
+import { flex } from 'styled-system/patterns';
+
+import { Button } from '~/components/ui/button';
 
 import BoardListPreviewItem from './BoardListPreviewItem';
 
 const BoardListPreview = () => {
   const { navigate } = useRouter();
 
-  const { data: channelList } = useSuspenseQuery({
+  const { data: channelList } = useQuery({
     ...channelQueries.channelList(),
+    staleTime: Infinity,
+    placeholderData: keepPreviousData,
   });
 
   return (
-    <Flex w="100%" marginTop="30px" direction="column">
-      <Flex
-        borderBottom="1px"
-        borderColor="gray.450"
-        paddingBottom="23px"
-        justifyContent="space-between"
-      >
-        <Text fontSize="3xl" fontWeight="medium" cursor="default">
-          게시판
-        </Text>
+    <div className={flex({ flexDirection: 'column', gap: '5px' })}>
+      <div className={flex({ justifyContent: 'space-between' })}>
+        <span className={css({ textStyle: 'body' })}>게시판</span>
         <Button
-          fontSize="md"
-          bg="transparent"
+          variant="outline"
           onClick={() => navigate({ to: '/Board' })}
+          textAlign="center"
+          width="auto"
         >
-          더 보기 <ChevronRightIcon />
+          <ChevronRightIcon />
         </Button>
-      </Flex>
-      <Flex paddingTop="23px" gap="10px" direction="column">
+      </div>
+      <div className={flex({ flexDirection: 'column', gap: '5px' })}>
         {channelList?.map((data) => (
           <BoardListPreviewItem
             key={data.id}
@@ -41,8 +40,8 @@ const BoardListPreview = () => {
             onClick={() => navigate({ to: '/Board' })}
           />
         ))}
-      </Flex>
-    </Flex>
+      </div>
+    </div>
   );
 };
 

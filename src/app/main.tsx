@@ -1,11 +1,16 @@
-import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import ReactDOM from 'react-dom/client';
+import 'styled-system/styles.css';
 
+import {
+  ModalContainer,
+  ModalProvider,
+} from '~/components/ui/Modal/ModalContext.tsx';
+
+// import '../../index.css';
 import { routeTree } from './routeTree.gen.ts';
-import { theme } from './theme/index.ts';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,11 +35,11 @@ declare module '@tanstack/react-router' {
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <ChakraProvider theme={theme}>
-    <ColorModeScript initialColorMode="light" />
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools />
+  <QueryClientProvider client={queryClient}>
+    <ReactQueryDevtools />
+    <ModalProvider>
       <RouterProvider router={router} />
-    </QueryClientProvider>
-  </ChakraProvider>,
+      <ModalContainer />
+    </ModalProvider>
+  </QueryClientProvider>,
 );

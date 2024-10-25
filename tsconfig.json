@@ -32,9 +32,10 @@
       "pages/*": ["./src/pages/*"],
       "widgets/*": ["./src/widgets/*"],
       "entities/*": ["./src/entities/*"],
-      "features/*": ["./src/features/*"]
+      "features/*": ["./src/features/*"],
+      "~/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "styled-system"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

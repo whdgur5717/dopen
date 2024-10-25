@@ -1,5 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
-import supabaseClient from 'shared/supabase';
+import supabaseClient, { client } from 'shared/supabase';
 
 export const authQueries = {
   keys: {
@@ -17,10 +17,9 @@ export const authQueries = {
           throw new Error(error.message);
         }
         if (data.session?.user) {
-          const { data: user } = await supabaseClient
-            .from('profiles')
-            .select('*')
-            .eq('id', data.session.user.id);
+          const user = await client.profile.getUserProfile(
+            data.session.user.id,
+          );
           return user?.[0];
         }
         return null;

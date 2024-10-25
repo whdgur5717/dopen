@@ -2,10 +2,14 @@ import type { SupabaseClientType } from 'shared/supabase';
 
 export class Profile {
   #client;
-  #channel;
+  #profile;
 
   constructor(client: SupabaseClientType) {
     this.#client = client;
-    this.#channel = this.#client.from('profiles');
+    this.#profile = this.#client.from('profiles');
+  }
+  async getUserProfile(id: string) {
+    const { data } = await this.#profile.select('*').eq('id', id);
+    return data;
   }
 }

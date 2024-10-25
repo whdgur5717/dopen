@@ -2,7 +2,7 @@ import type { SupabaseClientType } from 'shared/supabase';
 import type { Database } from 'shared/supabase/database.types';
 
 export type TimerStampType = Database['public']['Tables']['timerStamp']['Row'];
-export class TimerStampClient {
+export class TimerStamp {
   #client;
   #timerStamp;
 

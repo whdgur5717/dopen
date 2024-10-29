@@ -1,2 +1,1 @@
-npx lint-staged
-echo '왜안됨'
+lint-staged

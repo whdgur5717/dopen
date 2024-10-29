@@ -98,7 +98,7 @@
   "lint-staged": {
     "./src/**/*.{js,jsx,ts,tsx}": [
       "eslint --fix",
-      "tsc --noEmit",
+      "tsc-files --noEmit",
       "prettier --write"
     ]
   }

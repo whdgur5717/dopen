@@ -1,8 +1,7 @@
 import React from 'react';
+import { Avatar } from 'shared/ui/avatar';
 import { css } from 'styled-system/css';
 import { flex } from 'styled-system/patterns';
-
-import { Avatar } from '~/components/ui/avatar';
 
 interface CardProps {
   children: React.ReactNode;

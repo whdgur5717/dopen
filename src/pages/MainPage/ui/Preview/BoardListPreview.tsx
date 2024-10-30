@@ -34,7 +34,7 @@ const BoardListPreview = () => {
         {channelList?.map((data) => (
           <BoardListPreviewItem
             key={data.id}
-            boardName={data.name!}
+            boardName={data.display}
             title={data.posts[0].title!}
             onClick={() => navigate({ to: '/Board' })}
           />

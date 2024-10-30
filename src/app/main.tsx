@@ -2,11 +2,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import ReactDOM from 'react-dom/client';
-
 import {
   ModalContainer,
   ModalProvider,
-} from '~/components/ui/Modal/ModalContext.tsx';
+} from 'shared/ui/Modal/ModalContext.tsx';
 
 import './index.css';
 import { routeTree } from './routeTree.gen.ts';

@@ -2,10 +2,9 @@ import { ChevronRightIcon } from '@chakra-ui/icons';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { channelQueries } from 'entities/channel/api/channel.queries';
+import { Button } from 'shared/ui/button';
 import { css } from 'styled-system/css';
 import { flex } from 'styled-system/patterns';
-
-import { Button } from '~/components/ui/button';
 
 import BoardListPreviewItem from './BoardListPreviewItem';
 

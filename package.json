@@ -9,7 +9,7 @@
     "type-check": "tsc --noEmit --project ./tsconfig.json",
     "lint": "eslint . --ext ts,tsx --max-warnings 0 --fix",
     "preview": "vite preview",
-    "prepare": "husky",
+    "prepare": "husky && panda codegen",
     "test": "vitest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",

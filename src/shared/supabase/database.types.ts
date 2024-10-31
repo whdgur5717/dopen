@@ -11,49 +11,55 @@ export type Database = {
     Tables: {
       channels: {
         Row: {
+          board_name: string
           created_at: string
           description: string | null
+          display: string
           id: string
-          name: string | null
         }
         Insert: {
+          board_name?: string
           created_at?: string
           description?: string | null
+          display: string
           id?: string
-          name?: string | null
         }
         Update: {
+          board_name?: string
           created_at?: string
           description?: string | null
+          display?: string
           id?: string
-          name?: string | null
         }
         Relationships: []
       }
       posts: {
         Row: {
           channel_id: string | null
-          content: string | null
+          content: string
           created_at: string
           id: string
-          title: string | null
+          title: string
           updated_at: string | null
+          user_id: string
         }
         Insert: {
           channel_id?: string | null
-          content?: string | null
+          content: string
           created_at?: string
           id?: string
-          title?: string | null
+          title: string
           updated_at?: string | null
+          user_id: string
         }
         Update: {
           channel_id?: string | null
-          content?: string | null
+          content?: string
           created_at?: string
           id?: string
-          title?: string | null
+          title?: string
           updated_at?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -61,6 +67,13 @@ export type Database = {
             columns: ["channel_id"]
             isOneToOne: false
             referencedRelation: "channels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

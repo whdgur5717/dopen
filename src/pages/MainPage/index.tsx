@@ -1,9 +1,8 @@
 import { useRouter } from '@tanstack/react-router';
 import { useSession } from 'entities/auth/SessionContext';
+import { Button } from 'shared/ui/button';
 import { css } from 'styled-system/css';
 import { flex } from 'styled-system/patterns';
-
-import { Button } from '~/components/ui/button';
 
 import GrassSection from './ui/Grass/GrassSection';
 import BoardListPreview from './ui/Preview/BoardListPreview';

@@ -62,7 +62,6 @@ const Modal_ID = 'modal-dom';
 export const ModalContainer = () => {
   const modal = useModal();
   const TopComponent = modal.top;
-  console.log(TopComponent);
 
   React.useEffect(() => {
     if (document.getElementById(Modal_ID)) {

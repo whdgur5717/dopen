@@ -8,15 +8,19 @@ export const channelQueries = {
     channelInfo: (channel: string) =>
       [channelQueries.keys.list, channel] as const,
   },
-  /**
-   *
-   * @returns 전체 채널 리스트 중 게시글 업로드하는 채널만 필터링
-   */
 
   channelList() {
     return queryOptions({
       queryKey: [...channelQueries.keys.list],
       queryFn: async () => await client.channel.getChannelList(),
+      staleTime: Infinity,
+    });
+  },
+  postList(id: string) {
+    return queryOptions({
+      queryKey: [...channelQueries.keys.channelInfo(id)],
+      queryFn: async () => await client.channel.getPostList(id),
+      staleTime: Infinity,
     });
   },
 };

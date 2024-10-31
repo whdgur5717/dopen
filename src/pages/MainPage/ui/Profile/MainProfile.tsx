@@ -1,8 +1,7 @@
 import { type FlexProps, type TextProps } from '@chakra-ui/react';
 import type { MouseEventHandler, PropsWithChildren } from 'react';
+import { Avatar } from 'shared/ui/avatar';
 import { css } from 'styled-system/css';
-
-import { Avatar } from '~/components/ui/avatar';
 
 type RootProps = PropsWithChildren<FlexProps>;
 const MainProfileRoot = ({ children }: RootProps) => {

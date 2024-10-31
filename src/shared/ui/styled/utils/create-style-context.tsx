@@ -29,7 +29,7 @@ const shouldForwardProp = (
 export const createStyleContext = <R extends Recipe>(recipe: R) => {
   const StyleContext = createContext<Record<Slot<R>, string> | null>(null);
 
-  const withRootProvider = <P extends Record<string, unknown>>(
+  const withRootProvider = <P extends Record<string, never>>(
     Component: ElementType,
   ) => {
     const StyledComponent = (props: P) => {
@@ -72,8 +72,9 @@ export const createStyleContext = <R extends Recipe>(recipe: R) => {
         </StyleContext.Provider>
       );
     });
-    // @ts-expect-error error
-    StyledSlotProvider.displayName = Component.displayName || Component.name;
+    StyledSlotProvider.displayName =
+      (Component as React.ComponentType).displayName ||
+      (Component as React.ComponentType).name;
 
     return StyledSlotProvider;
   };
@@ -93,8 +94,9 @@ export const createStyleContext = <R extends Recipe>(recipe: R) => {
         />
       );
     });
-    // @ts-expect-error error
-    StyledSlotComponent.displayName = Component.displayName || Component.name;
+    StyledSlotComponent.displayName =
+      (Component as React.ComponentType).displayName ||
+      (Component as React.ComponentType).name;
 
     return StyledSlotComponent;
   };

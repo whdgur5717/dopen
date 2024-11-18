@@ -6,8 +6,6 @@ import {
 } from '@tanstack/react-query';
 import React from 'react';
 
-import '../styled-system/styles.css';
-
 const queryclient = new QueryClient({
   defaultOptions: {
     queries: {

@@ -1,6 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import AccountPage from 'pages/AccountPage';
 
 export const Route = createLazyFileRoute('/_auth/mypage/account')({
-  component: () => <AccountPage />,
+  component: () => <div>준비중입니다</div>,
 });

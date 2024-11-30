@@ -1,4 +1,4 @@
-import LoginForm from 'features/login/ui/LoginForm';
+import LoginForm from 'pages/LoginPage/ui/LoginForm';
 
 const LoginPage = () => {
   return <LoginForm />;

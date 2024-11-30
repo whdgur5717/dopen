@@ -1,14 +1,10 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
 import { Link } from '@tanstack/react-router';
 import { useSession } from 'entities/auth/SessionContext';
-
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '../../components/ui/avatar';
-import { Card, CardContent } from '../../components/ui/card';
-import { Separator } from '../../components/ui/separator';
 
 const boardItems = [
   { title: '인증 & 회고 게시판', content: '냐옹이가 냐옹냐옹 놀고 있습니다.' },
@@ -49,7 +45,7 @@ const MainPage = () => {
         </div>
       </div>
 
-      <Card className="mx-5 bg-[#f88585] text-white">
+      <Card>
         <CardContent className="flex items-center justify-between p-5">
           <div>
             <h3 className="text-xl font-bold">크리스마스</h3>
@@ -58,6 +54,11 @@ const MainPage = () => {
           <span className="text-xl font-bold">D-7</span>
         </CardContent>
       </Card>
+
+      <Dialog>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent></DialogContent>
+      </Dialog>
 
       <div className="space-y-5 p-5">
         <div className="text-center">
@@ -89,7 +90,7 @@ const MainPage = () => {
           </div>
         </div>
       </div>
-      <Button onClick={() => signOut()} className="w-full bg-[#f88585]">
+      <Button onClick={() => signOut()} className="w-full">
         로그아웃
       </Button>
     </div>

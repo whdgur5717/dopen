@@ -1,10 +1,7 @@
-import { useLoaderData } from '@tanstack/react-router';
-import { differenceInMilliseconds } from 'date-fns';
 import { useRef, useState } from 'react';
 import { useInterval } from 'shared/hook/useInterval';
 import { BrowserStorageModel } from 'shared/utils/StorageModel';
 
-import { useTimerStampMutation } from '../api/timer.mutation';
 import Clock from './ClockRoot';
 import { ClockProvder } from './context';
 import { getMinuteDegree } from './timer.util';
@@ -41,13 +38,10 @@ export default function TimerClock({
   size = 300,
   defaultValue = 0,
 }: TimerClockProps) {
-  const { id } = useLoaderData({ from: '/_auth' });
   const storage = useRef(new TimerStorageModel());
 
   const [time, setTime] = useState(defaultValue || 0);
   const [isRunning, setIsRunning] = useState(false);
-
-  const { mutate } = useTimerStampMutation();
 
   useInterval(
     () => {
@@ -71,24 +65,10 @@ export default function TimerClock({
 
   const onTimerEnd = async () => {
     setIsRunning(false);
-    //시작시간과 끝나는시간 계산해서 서버에 요청하기
-    const startTime = storage.current.getItem();
-    const endTime = new Date();
-    const diff = differenceInMilliseconds(endTime, startTime);
-    if (diff > 0) {
-      mutate(
-        {
-          user_id: id,
-          created_at: startTime.toISOString(),
-          duration: diff,
-        },
-        {
-          onSuccess: () => {
-            alert(diff);
-          },
-        },
-      );
-    }
+    //TODO : 시작시간과 끝나는시간 계산해서 서버에 요청하기
+    // const startTime = storage.current.getItem();
+    // const endTime = new Date();
+    // const diff = differenceInMilliseconds(endTime, startTime);
   };
 
   // const handleClick = (event: React.PointerEvent<SVGSVGElement>) => {

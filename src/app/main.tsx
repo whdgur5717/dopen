@@ -1,11 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import ReactDOM from 'react-dom/client';
-import {
-  ModalContainer,
-  ModalProvider,
-} from 'shared/ui/Modal/ModalContext.tsx';
 
 import '../index.css';
 import { routeTree } from './routeTree.gen.ts';
@@ -34,10 +29,6 @@ declare module '@tanstack/react-router' {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <QueryClientProvider client={queryClient}>
-    <ReactQueryDevtools />
-    <ModalProvider>
-      <RouterProvider router={router} />
-      <ModalContainer />
-    </ModalProvider>
+    <RouterProvider router={router} />
   </QueryClientProvider>,
 );

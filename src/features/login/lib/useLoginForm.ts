@@ -23,7 +23,7 @@ const registerOptions = {
 
 export const useLoginForm = () => {
   const {
-    formState: { errors, isValid },
+    formState: { errors, isSubmitting },
     reset,
     setError,
     handleSubmit,
@@ -35,7 +35,7 @@ export const useLoginForm = () => {
 
   return {
     errors,
-    isValid,
+    isSubmitting,
     reset,
     setError,
     handleSubmit,

@@ -3,7 +3,21 @@ import supabaseClient from 'shared/supabase';
 
 export const useLoginMutation = () => {
   return useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) =>
-      supabaseClient.auth.signInWithPassword({ email, password }),
+    mutationFn: async ({
+      email,
+      password,
+    }: {
+      email: string;
+      password: string;
+    }) => {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        throw error;
+      }
+      return data;
+    },
   });
 };

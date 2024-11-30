@@ -8,6 +8,9 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [TanStackRouterVite(), tsconfigPaths(), react()],
+  server: {
+    port: 3000,
+  },
   build: {
     minify: true,
     rollupOptions: {

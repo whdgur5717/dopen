@@ -90,9 +90,11 @@ const MainPage = () => {
           </div>
         </div>
       </div>
-      <Button onClick={() => signOut()} className="w-full">
-        로그아웃
-      </Button>
+      {session && (
+        <Button onClick={() => signOut()} className="w-full">
+          로그아웃
+        </Button>
+      )}
     </div>
   );
 };

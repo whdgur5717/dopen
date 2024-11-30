@@ -8,9 +8,9 @@ export const authQueries = {
     myInfo: () => [...authQueries.keys.root, 'me'] as const,
   },
 
-  auth() {
+  auth(userId: string) {
     return queryOptions({
-      queryKey: ['user'],
+      queryKey: authQueries.keys.userInfo(userId),
       queryFn: async () => {
         const { data, error } = await supabaseClient.auth.getSession();
         if (error) {

@@ -1,11 +1,5 @@
 import type { Session } from '@supabase/supabase-js';
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import supabaseClient from 'shared/supabase';
 
 // import type { Database } from 'shared/supabase/database.types';
@@ -33,32 +27,16 @@ export const SessionProvider = ({ children }: Props) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setLoading] = useState(true);
   useEffect(() => {
-    // const setData = async () => {
-    //   const {
-    //     data: { session },
-    //     error,
-    //   } = await supabaseClient.auth.getSession();
-    //   if (error) {
-    //     throw new Error(error.message);
-    //   }
-    //   setSession(session);
-    // };
-    //async로 쓸 경우 동작 일부 안됨
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
       async (_, session) => {
         setSession(session);
+        setLoading(false);
       },
     );
-
-    // setData();
 
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, []);
-
-  useLayoutEffect(() => {
-    setLoading(false);
   }, []);
 
   return (

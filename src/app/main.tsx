@@ -7,7 +7,7 @@ import {
   ModalProvider,
 } from 'shared/ui/Modal/ModalContext.tsx';
 
-import './index.css';
+import '../index.css';
 import { routeTree } from './routeTree.gen.ts';
 
 const queryClient = new QueryClient({

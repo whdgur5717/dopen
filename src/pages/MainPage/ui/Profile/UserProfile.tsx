@@ -1,5 +1,3 @@
-import { flex } from 'styled-system/patterns';
-
 import { MainProfile } from './MainProfile';
 
 const UserProfile = ({
@@ -13,7 +11,7 @@ const UserProfile = ({
   return (
     <MainProfile>
       <MainProfile.Thumbnail src={src} />
-      <div className={flex({ flexDir: 'column', gap: '5' })}>
+      <div>
         <MainProfile.Header>{username}님 안녕하세요</MainProfile.Header>
         <MainProfile.SubHeader>당신의 성장을 응원합니다</MainProfile.SubHeader>
       </div>

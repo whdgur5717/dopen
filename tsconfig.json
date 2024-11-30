@@ -33,10 +33,10 @@
       "widgets/*": ["./src/widgets/*"],
       "entities/*": ["./src/entities/*"],
       "features/*": ["./src/features/*"],
-      "~/*": ["./src/*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "styled-system"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

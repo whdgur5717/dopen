@@ -3,8 +3,6 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import { channelQueries } from 'entities/channel/api/channel.queries';
 import { Button } from 'shared/ui/button';
-import { css } from 'styled-system/css';
-import { flex } from 'styled-system/patterns';
 
 import BoardListPreviewItem from './BoardListPreviewItem';
 
@@ -18,19 +16,18 @@ const BoardListPreview = () => {
   });
 
   return (
-    <div className={flex({ flexDirection: 'column', gap: '5px' })}>
-      <div className={flex({ justifyContent: 'space-between' })}>
-        <span className={css({ textStyle: 'body' })}>게시판</span>
+    <div>
+      <div>
+        <span>게시판</span>
         <Button
           variant="outline"
           onClick={() => navigate({ to: '/Board' })}
           textAlign="center"
           width="auto"
-        >
-          <ChevronRightIcon />
-        </Button>
+        ></Button>
+        <ChevronRightIcon />
       </div>
-      <div className={flex({ flexDirection: 'column', gap: '5px' })}>
+      <div>
         {channelList?.map((data) => (
           <BoardListPreviewItem
             key={data.id}

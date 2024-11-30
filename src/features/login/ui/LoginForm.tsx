@@ -1,53 +1,17 @@
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
 import { useRouter } from '@tanstack/react-router';
-import { useLoginMutation } from 'features/login/api/login.mutation';
-import { LoginFormData } from 'features/login/model/type';
-import { LockIcon, MailCheckIcon } from 'lucide-react';
-import { SubmitHandler } from 'react-hook-form';
-
-import { loginInputFields } from '../lib/loginInputFields';
-import { useLoginForm } from '../lib/useLoginForm';
+import supabaseClient from 'shared/supabase';
 
 const LoginForm = () => {
-  const {
-    navigate,
-    state: { location },
-    history,
-  } = useRouter();
+  const { navigate } = useRouter();
 
-  const { registerField, errors, setError, handleSubmit, isSubmitting } =
-    useLoginForm();
-
-  const navigateLocation = () => {
-    alert('로그인 성공');
-    const searchParams = new URLSearchParams(location.href);
-    const redirectUrl = searchParams.get('redirect') || '/';
-    navigate({ to: redirectUrl });
-  };
-
-  const { mutate } = useLoginMutation();
-
-  const onLogin: SubmitHandler<LoginFormData> = async (data) => {
-    mutate(
-      { email: data.email, password: data.password },
-      {
-        onSuccess: () => {
-          navigateLocation();
-        },
-        onError: (error) => {
-          console.log(error);
-          if (error.response?.status === 400) {
-            setError(
-              'password',
-              { message: '비밀번호를 확인해주세요.' },
-              { shouldFocus: true },
-            );
-          }
-        },
-      },
-    );
+  const onLogin = async () => {
+    const data = await supabaseClient.auth.signInWithOAuth({
+      provider: 'kakao',
+    });
+    if (data.error) {
+      throw new Error('로그인 실패');
+    }
   };
 
   return (
@@ -60,61 +24,35 @@ const LoginForm = () => {
           onClick={() => navigate({ to: '/' })}
         />
 
-        <form
-          className="mt-[130px] space-y-[18px] px-[19px] text-sm text-neutral-700"
-          onSubmit={handleSubmit(onLogin)}
-        >
-          {loginInputFields.map(({ name, type, placeholder }) => (
-            <div key={name} className="relative">
-              <Input
-                className="h-[50px] rounded-[5px] bg-[#f0f0f099] pl-[15px]"
-                type={type}
-                placeholder={placeholder}
-                {...registerField(name)}
-              />
-              {name === 'email' ? (
-                <MailCheckIcon className="absolute right-[15px] top-1/2 size-5 -translate-y-1/2" />
-              ) : (
-                <LockIcon className="absolute right-[15px] top-1/2 size-5 -translate-y-1/2" />
-              )}
-              {errors[name] && (
-                <p
-                  className="mt-2 text-left text-sm text-[#f88585]"
-                  data-testid={name + 'errormessage'}
-                >
-                  {errors[name]?.message}
-                </p>
-              )}
-            </div>
-          ))}
-          <div className="ml-[18px] flex items-center gap-2">
-            <Checkbox
-              id="emailRemember"
-              className="size-5 bg-[#f88585]"
-              {...registerField('keepLoggedIn')}
-            />
-            <label
-              htmlFor="emailRemember"
-              className="font-['Noto_Sans_KR'] text-xs text-[#666666]"
-            >
-              아이디 저장하기
-            </label>
-          </div>
+        <form className="mt-[130px] space-y-[18px] px-[19px] text-sm text-neutral-700">
           <Button
             type="submit"
             data-action="login"
-            disabled={isSubmitting}
-            className="h-[50px] w-full cursor-pointer rounded-[50px] bg-[#f88585] font-bold text-white"
+            onClick={onLogin}
+            className="h-[50px] w-full cursor-pointer rounded-[50px] bg-[#fee500] font-bold text-neutral-700"
           >
-            로그인
-          </Button>
-          <Button
-            type="button"
-            data-action="signin"
-            onClick={() => history.back()}
-            className="h-[50px] w-full rounded-[50px] bg-[#f5c6c2] font-bold text-white"
-          >
-            회원가입 하기
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clipPath="url(#clip0_8307_22760)">
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M9.00002 0.600098C4.02917 0.600098 0 3.71306 0 7.55238C0 9.94012 1.5584 12.0451 3.93152 13.2971L2.93303 16.9446C2.84481 17.2669 3.21341 17.5238 3.49646 17.337L7.87334 14.4483C8.2427 14.4839 8.61808 14.5047 9.00002 14.5047C13.9705 14.5047 17.9999 11.3919 17.9999 7.55238C17.9999 3.71306 13.9705 0.600098 9.00002 0.600098Z"
+                  fill="black"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_8307_22760">
+                  <rect width="17.9999" height="18" fill="white"></rect>
+                </clipPath>
+              </defs>
+            </svg>
+            카카오로 로그인하기
           </Button>
         </form>
       </div>
